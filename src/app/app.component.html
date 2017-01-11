@@ -9,7 +9,15 @@
     [enableGhostResize]="true"
     (resizeEnd)="onResizeEnd($event)"
     >
-    <div class="workspace-item--header">Workspace item</div>
+    <div
+      class="workspace-item--header"
+      draggable
+      (dragStartEvent)="onDragStart($event)"
+      (dragEvent)="onDrag($event)"
+      (dragEndEvent)="onDragEnd($event)"
+      >
+      Workspace item
+    </div>
     <div class="workspace-item--content">
       <div class="workspace-item--content-component"></div>
     </div>

@@ -10,6 +10,7 @@ export class AppComponent {
   title = 'app works!';
 
   style = {};
+  dragStart = {};
 
   validate(event: ResizeEvent): boolean {
     const MIN_DIMENSIONS_PX: number = 50;
@@ -27,6 +28,26 @@ export class AppComponent {
       top: `${event.rectangle.top - 60}px`,
       width: `${event.rectangle.width}px`,
       height: `${event.rectangle.height}px`
+    };
+  }
+
+  onDrag(event) {
+
+    this.style = {
+      left: `${event.x}px`,
+      top: `${event.y - 60}px`,
+    }
+  }
+
+  onDragEnd(event) {
+
+  }
+
+  onDragStart(event) {
+
+    this.dragStart = {
+      x: event.x,
+      y: event.y
     };
   }
 }

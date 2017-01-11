@@ -5,10 +5,12 @@ import { HttpModule } from '@angular/http';
 import { ResizableModule } from 'angular2-resizable';
 
 import { AppComponent } from './app.component';
+import { DraggableDirective } from './draggable.directive';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    DraggableDirective
   ],
   imports: [
     BrowserModule,
