@@ -1,0 +1,16 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+
+.header {
+  height: 60px;
+  background: black;
+}
+
+.workspace {
+  flex: 1;
+  flex-flow: row wrap;
+}
