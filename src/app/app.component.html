@@ -1,25 +1,4 @@
 <div class="header" style="height: 60px"></div>
 <div class="workspace">
-  <div
-    class="workspace-item"
-    [ngStyle]="style"
-    mwlResizable
-    [validateResize]="validate"
-    [resizeEdges]="{bottom: true, right: true, top: true, left: true}"
-    [enableGhostResize]="true"
-    (resizeEnd)="onResizeEnd($event)"
-    >
-    <div
-      class="workspace-item--header"
-      draggable
-      (dragStartEvent)="onDragStart($event)"
-      (dragEvent)="onDrag($event)"
-      (dragEndEvent)="onDragEnd($event)"
-      >
-      Workspace item
-    </div>
-    <div class="workspace-item--content">
-      <div class="workspace-item--content-component"></div>
-    </div>
-  </div>
+  <workspace-panel></workspace-panel>
 </div>

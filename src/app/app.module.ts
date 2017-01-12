@@ -6,11 +6,15 @@ import { ResizableModule } from 'angular2-resizable';
 
 import { AppComponent } from './app.component';
 import { DraggableDirective } from './draggable.directive';
+import { WorkspacePanelComponent } from './workspace-panel/workspace-panel.component';
+import { WorkspaceComponent } from './workspace/workspace.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DraggableDirective
+    DraggableDirective,
+    WorkspacePanelComponent,
+    WorkspaceComponent
   ],
   imports: [
     BrowserModule,
