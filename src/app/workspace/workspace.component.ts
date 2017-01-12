@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, HostListener } from '@angular/core';
 
 @Component({
   selector: 'workspace',
@@ -7,9 +7,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WorkspaceComponent implements OnInit {
 
-  constructor() { }
+  private dimensions: ClientRect;
 
-  ngOnInit() {
+  constructor(private ref: ElementRef) {
   }
 
+  ngOnInit() {
+    this.setWorkspaceDimensions();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event): void {
+    this.setWorkspaceDimensions();
+  }
+
+  private setWorkspaceDimensions(): void {
+    this.dimensions =  this.ref.nativeElement.getBoundingClientRect();
+  }
 }

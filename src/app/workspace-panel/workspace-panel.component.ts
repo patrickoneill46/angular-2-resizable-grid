@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ResizeEvent } from 'angular2-resizable';
 
 
@@ -15,6 +15,8 @@ let initialStyle = {
   styleUrls: ['./workspace-panel.component.scss']
 })
 export class WorkspacePanelComponent implements OnInit {
+
+  @Input() workspaceDimensions: ClientRect;
 
   style = {
     left: `${initialStyle.left}px`,
@@ -33,7 +35,7 @@ export class WorkspacePanelComponent implements OnInit {
 
   validate(event: ResizeEvent): boolean {
     const MIN_DIMENSIONS_PX: number = 50;
-    if (event.rectangle.top < 60 || event.rectangle.left < 0 || event.rectangle.right > window.innerWidth || event.rectangle.bottom > window.innerHeight) {
+    if (event.rectangle.top < 60 || event.rectangle.left < 0 || event.rectangle.right > this.workspaceDimensions.width || event.rectangle.bottom > this.workspaceDimensions.height) {
       return false;
     }
     return true;
@@ -57,16 +59,16 @@ export class WorkspacePanelComponent implements OnInit {
     let previousStyle: any = Object.assign({}, this.styleIntegers);
     let newStyle: any = {};
 
-    if (event.x + previousStyle.width > window.innerWidth) {
-      newStyle.left = window.innerWidth - previousStyle.width;
+    if (event.x + previousStyle.width > this.workspaceDimensions.width) {
+      newStyle.left = this.workspaceDimensions.width - previousStyle.width;
     } else if (event.x < 0) {
       newStyle.left = 0;
     } else {
       newStyle.left = event.x;
     }
 
-    if (event.y + previousStyle.height > window.innerHeight) {
-      newStyle.top = window.innerHeight - previousStyle.height;
+    if (event.y + previousStyle.height > this.workspaceDimensions.bottom) {
+      newStyle.top = this.workspaceDimensions.bottom - previousStyle.height;
     } else if (event.y < 60) {
       newStyle.top = 60;
     } else {
@@ -76,7 +78,7 @@ export class WorkspacePanelComponent implements OnInit {
     Object.assign(this.styleIntegers, newStyle);
     this.style = {
       left: `${newStyle.left}px`,
-      top: `${newStyle.top - 60}px`,
+      top: `${newStyle.top - this.workspaceDimensions.top}px`,
       width: `${previousStyle.width}px`,
       height: `${previousStyle.height}px`
     }
