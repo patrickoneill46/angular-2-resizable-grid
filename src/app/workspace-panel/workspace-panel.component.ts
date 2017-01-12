@@ -81,7 +81,10 @@ export class WorkspacePanelComponent implements OnInit {
       newStyle.top = event.y;
     }
 
-    this.calculateRelativeStyle();
+    newStyle.height = previousStyle.height;
+    newStyle.width = previousStyle.width;
+
+    this.calculateRelativeStyle(newStyle);
 
     Object.assign(this.styleIntegers, newStyle);
     this.style = {
@@ -104,21 +107,20 @@ export class WorkspacePanelComponent implements OnInit {
     };
   }
 
-  calculateRelativeStyle() {
+  calculateRelativeStyle(style) {
 
     this.relativeStyle = {
-      top: 0,
-      left: 0,
-      height: 0,
-      width: 0
+      top: style.top / this.workspaceDimensions.height,
+      left: style.left / this.workspaceDimensions.width,
+      height: style.height / this.workspaceDimensions.height,
+      width: style.width / this.workspaceDimensions.width
     };
 
-    console.log('relative style', this.relativeStyle);
+    console.log(this.relativeStyle);
   };
 
   ngOnInit() {
-
-    this.calculateRelativeStyle();
+    this.calculateRelativeStyle(initialStyle);
   };
 
 }
