@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, HostListener } from '@angular/core';
 import { ResizeEvent } from 'angular2-resizable';
 
 
@@ -18,6 +18,8 @@ export class WorkspacePanelComponent implements OnInit {
 
   @Input() workspaceDimensions: ClientRect;
 
+  relativeStyle: any = {};
+
   style = {
     left: `${initialStyle.left}px`,
     top: `${initialStyle.top}px`,
@@ -35,7 +37,7 @@ export class WorkspacePanelComponent implements OnInit {
 
   validate(event: ResizeEvent): boolean {
     const MIN_DIMENSIONS_PX: number = 50;
-    if (event.rectangle.top < 60 || event.rectangle.left < 0 || event.rectangle.right > this.workspaceDimensions.width || event.rectangle.bottom > this.workspaceDimensions.height) {
+    if (event.rectangle.top < 60 || event.rectangle.left < 0 || event.rectangle.right > window.innerWidth || event.rectangle.bottom > window.innerHeight) {
       return false;
     }
     return true;
@@ -75,6 +77,8 @@ export class WorkspacePanelComponent implements OnInit {
       newStyle.top = event.y;
     }
 
+    this.calculateRelativeStyle();
+
     Object.assign(this.styleIntegers, newStyle);
     this.style = {
       left: `${newStyle.left}px`,
@@ -96,8 +100,21 @@ export class WorkspacePanelComponent implements OnInit {
     };
   }
 
+  calculateRelativeStyle() {
+
+    this.relativeStyle = {
+      top: 0,
+      left: 0,
+      height: 0,
+      width: 0
+    };
+
+    console.log('relative style', this.relativeStyle);
+  };
+
   ngOnInit() {
 
+    this.calculateRelativeStyle();
   };
 
 }
