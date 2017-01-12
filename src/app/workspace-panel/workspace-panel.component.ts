@@ -21,12 +21,7 @@ export class WorkspacePanelComponent implements OnInit {
 
   relativeStyle: any = {};
 
-  style = {
-    left: `${initialStyle.left}px`,
-    top: `${initialStyle.top}px`,
-    width: `${initialStyle.width}px`,
-    height: `${initialStyle.height}px`
-  };
+  style = {};
   styleIntegers = {
     left: initialStyle.left,
     top: initialStyle.top,
@@ -48,16 +43,14 @@ export class WorkspacePanelComponent implements OnInit {
   }
 
   onResizeEnd(event: ResizeEvent): void {
-    console.log(event, 'resizeEnd');
 
     Object.assign(this.styleIntegers, event.rectangle);
-
-    this.style = {
-      left: `${event.rectangle.left}px`,
-      top: `${event.rectangle.top - 60}px`,
-      width: `${event.rectangle.width}px`,
-      height: `${event.rectangle.height}px`
-    };
+    this.setStyle({
+      left: event.rectangle.left,
+      top: event.rectangle.top - this.workspaceDimensions.top,
+      width: event.rectangle.width,
+      height: event.rectangle.height
+    });
   }
 
   onDrag(event) {
@@ -78,7 +71,7 @@ export class WorkspacePanelComponent implements OnInit {
     } else if (event.y < this.workspaceDimensions.top) {
       newStyle.top = 0;
     } else {
-      newStyle.top = event.y  - this.workspaceDimensions.top;
+      newStyle.top = event.y - this.workspaceDimensions.top;
     }
 
     newStyle.height = previousStyle.height;
@@ -87,12 +80,12 @@ export class WorkspacePanelComponent implements OnInit {
     this.calculateRelativeStyle(newStyle);
 
     Object.assign(this.styleIntegers, newStyle);
-    this.style = {
-      left: `${newStyle.left}px`,
-      top: `${newStyle.top}px`,
-      width: `${previousStyle.width}px`,
-      height: `${previousStyle.height}px`
-    }
+    this.setStyle({
+      left: newStyle.left,
+      top: newStyle.top,
+      width: previousStyle.width,
+      height: previousStyle.height
+    });
   }
 
   onDragEnd(event) {
@@ -121,15 +114,15 @@ export class WorkspacePanelComponent implements OnInit {
 
   setStyle(style) {
     this.style = {
-      left: `${style.left}%`,
-      top: `${style.top}%`,
-      width: `${style.width}%`,
-      height: `${style.height}%`
+      left: `${style.left}px`,
+      top: `${style.top}px`,
+      width: `${style.width}px`,
+      height: `${style.height}px`
     }
   }
 
   ngOnInit() {
     this.calculateRelativeStyle(initialStyle);
-  };
-
+    this.setStyle(initialStyle);
+  }
 }
