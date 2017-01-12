@@ -17,6 +17,7 @@ let initialStyle = {
 export class WorkspacePanelComponent implements OnInit {
 
   @Input() workspaceDimensions: ClientRect;
+  validate: boolean;
 
   relativeStyle: any = {};
 
@@ -35,12 +36,15 @@ export class WorkspacePanelComponent implements OnInit {
   dragStart = {};
   workspaceRect;
 
-  validate(event: ResizeEvent): boolean {
-    const MIN_DIMENSIONS_PX: number = 50;
-    if (event.rectangle.top < 60 || event.rectangle.left < 0 || event.rectangle.right > window.innerWidth || event.rectangle.bottom > window.innerHeight) {
-      return false;
-    }
-    return true;
+  constructor() {
+
+    this.validate = function(event: ResizeEvent){
+
+      if (event.rectangle.top < this.workspaceDimensions.top || event.rectangle.left < 0 || event.rectangle.right > this.workspaceDimensions.width || event.rectangle.bottom > this.workspaceDimensions.height) {
+        return false;
+      }
+      return true;
+    }.bind(this);
   }
 
   onResizeEnd(event: ResizeEvent): void {
@@ -71,8 +75,8 @@ export class WorkspacePanelComponent implements OnInit {
 
     if (event.y + previousStyle.height > this.workspaceDimensions.bottom) {
       newStyle.top = this.workspaceDimensions.bottom - previousStyle.height;
-    } else if (event.y < 60) {
-      newStyle.top = 60;
+    } else if (event.y < this.workspaceDimensions.top) {
+      newStyle.top = this.workspaceDimensions.top;
     } else {
       newStyle.top = event.y;
     }
