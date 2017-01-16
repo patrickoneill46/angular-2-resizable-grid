@@ -22,12 +22,6 @@ export class WorkspacePanelComponent implements OnInit {
   relativeStyle: any = {};
 
   style = {};
-  styleIntegers = {
-    left: initialStyle.left,
-    top: initialStyle.top,
-    width: initialStyle.width,
-    height: initialStyle.height
-  };
   dragStart = {};
   workspaceRect;
 
@@ -42,9 +36,20 @@ export class WorkspacePanelComponent implements OnInit {
     }.bind(this);
   }
 
+  @HostListener('window:resize', ['$event'])
+  onWorkspaceChanged(event): void {
+
+    this.setStyle({
+      top: this.relativeStyle.top * this.workspaceDimensions.height,
+      left: this.relativeStyle.left * this.workspaceDimensions.width,
+      height: this.relativeStyle.height * this.workspaceDimensions.height,
+      width: this.relativeStyle.width * this.workspaceDimensions.width
+    });
+  };
+
   onResizeEnd(event: ResizeEvent): void {
 
-    Object.assign(this.styleIntegers, event.rectangle);
+    Object.assign(this.style, event.rectangle);
     this.setStyle({
       left: event.rectangle.left,
       top: event.rectangle.top - this.workspaceDimensions.top,
@@ -55,7 +60,7 @@ export class WorkspacePanelComponent implements OnInit {
 
   onDrag(event) {
 
-    let previousStyle: any = Object.assign({}, this.styleIntegers);
+    let previousStyle: any = Object.assign({}, this.style);
     let newStyle: any = {};
 
     if (event.x + previousStyle.width > this.workspaceDimensions.width) {
@@ -77,9 +82,6 @@ export class WorkspacePanelComponent implements OnInit {
     newStyle.height = previousStyle.height;
     newStyle.width = previousStyle.width;
 
-    // this.calculateRelativeStyle(newStyle);
-
-    Object.assign(this.styleIntegers, newStyle);
     this.setStyle({
       left: newStyle.left,
       top: newStyle.top,
