@@ -3,7 +3,7 @@
   [ngStyle]="style"
   [style.zIndex]="order"
   mwlResizable
-  (click)="setPanelActive()"
+  (mousedown)="setPanelActive()"
   [validateResize]="validate"
   [resizeEdges]="{bottom: true, right: true, top: true, left: true}"
   [enableGhostResize]="true"

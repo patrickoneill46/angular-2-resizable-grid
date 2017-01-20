@@ -2,6 +2,7 @@
   *ngFor="let config of workspacePanels"
   [workspaceDimensions]="dimensions"
   [initalConfig]="config"
+  [order]="workspaceZIndexMap[config.id]"
   (panelActive)="updateActivePanel($event)"
 >
 </workspace-panel>

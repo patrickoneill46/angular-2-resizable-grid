@@ -10,6 +10,7 @@ export class WorkspacePanelComponent implements OnInit {
 
   @Input() workspaceDimensions: ClientRect;
   @Input() initalConfig: any;
+  @Input() order;
 
   @Output() panelActive: EventEmitter<string> = new EventEmitter();
   private relativeStyle: any = {};
@@ -18,7 +19,7 @@ export class WorkspacePanelComponent implements OnInit {
   private panelId: string;
 
   style: any = {};
-  order: number;
+  // order: number;
   validate: boolean;
 
   constructor() {
@@ -35,7 +36,7 @@ export class WorkspacePanelComponent implements OnInit {
   ngOnInit() {
     this.setStyleByPercentage(this.initalConfig.dimensions);
     this.panelId = this.initalConfig.id;
-    this.order = this.initalConfig.order;
+    // this.order = this.initalConfig.order;
   }
 
   onResizeEnd(event: ResizeEvent): void {

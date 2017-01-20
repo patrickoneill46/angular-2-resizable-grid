@@ -8,14 +8,17 @@ import { Component, OnInit, ElementRef, HostListener } from '@angular/core';
 export class WorkspaceComponent implements OnInit {
 
   private dimensions: ClientRect;
+  private activePanel: string;
 
   workspacePanels: Array<any>;
+  workspaceZIndexMap: any;
   constructor(private ref: ElementRef) {
 
     this.workspacePanels = [];
   }
 
   ngOnInit() {
+    this.workspaceZIndexMap = {};
     this.setWorkspaceDimensions();
     this.initalizeWorkspacePanels();
   }
@@ -25,8 +28,20 @@ export class WorkspaceComponent implements OnInit {
     this.setWorkspaceDimensions();
   }
 
-  updateActivePanel($event) {
+  updateActivePanel(activePanelId) {
 
+    if (this.activePanel !== activePanelId) {
+
+      this.activePanel = activePanelId;
+      Object.keys(this.workspaceZIndexMap).forEach(panelKey => {
+
+        if (panelKey == activePanelId) {
+          this.workspaceZIndexMap[panelKey] = this.workspacePanels.length;
+        } else {
+          --this.workspaceZIndexMap[panelKey];
+        }
+      });
+    }
   }
 
   private setWorkspaceDimensions(): void {
@@ -34,6 +49,7 @@ export class WorkspaceComponent implements OnInit {
   }
 
   private initalizeWorkspacePanels(): void {
+
     this.workspacePanels = [
       {
         dimensions: {
@@ -42,8 +58,9 @@ export class WorkspaceComponent implements OnInit {
           top: 10,
           left: 10
         },
-        order: 1,
-        id: 'panel1'
+        order: 2,
+        id: 'panel1',
+        active: 1
       },
       {
         dimensions: {
@@ -52,9 +69,18 @@ export class WorkspaceComponent implements OnInit {
           top: 90,
           left: 90
         },
-        order: 2,
-        id: 'panel2'
+        order: 1,
+        id: 'panel2',
+        active: 0
       }
     ]
+
+    this.workspacePanels.forEach(panel => {
+      this.workspaceZIndexMap[panel.id] = panel.order;
+
+      if (panel.active){
+        this.activePanel = panel.id;
+      }
+    });
   }
 }
