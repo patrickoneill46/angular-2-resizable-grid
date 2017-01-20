@@ -1,13 +1,5 @@
-import { Component, OnInit, Input, HostListener } from '@angular/core';
+import { Component, OnInit, Input, Output, HostListener } from '@angular/core';
 import { ResizeEvent } from 'angular2-resizable';
-
-
-let initialStyle = {
-  height: 300,
-  width: 200,
-  top: 100,
-  left: 100
-}
 
 @Component({
   selector: 'workspace-panel',
@@ -17,11 +9,12 @@ let initialStyle = {
 export class WorkspacePanelComponent implements OnInit {
 
   @Input() workspaceDimensions: ClientRect;
+  @Input() initalConfig: any;
   private relativeStyle: any = {};
   private pixelStyle: any = {};
   private dragStart: any = {};
 
-  style = {};
+  style: any = {};
   validate: boolean;
 
   constructor() {
@@ -36,8 +29,7 @@ export class WorkspacePanelComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.calculateRelativeStyle(initialStyle);
-    this.setStyleByPixels(initialStyle);
+    this.setStyleByPercentage(this.initalConfig.dimensions);
   }
 
   onResizeEnd(event: ResizeEvent): void {

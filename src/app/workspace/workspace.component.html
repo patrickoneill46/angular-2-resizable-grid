@@ -1,1 +1,6 @@
-<workspace-panel [workspaceDimensions]="dimensions"></workspace-panel>
+<workspace-panel
+  *ngFor="let config of workspacePanels"
+  [workspaceDimensions]="dimensions"
+  [initalConfig]="config"
+>
+</workspace-panel>
