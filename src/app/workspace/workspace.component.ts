@@ -58,7 +58,7 @@ export class WorkspaceComponent implements OnInit {
           top: 10,
           left: 10
         },
-        order: 2,
+        order: 3,
         id: 'panel1',
         active: 1
       },
@@ -66,11 +66,22 @@ export class WorkspaceComponent implements OnInit {
         dimensions: {
           height: 20,
           width: 30,
-          top: 90,
-          left: 90
+          top: 80,
+          left: 70
+        },
+        order: 2,
+        id: 'panel2',
+        active: 0
+      },
+      {
+        dimensions: {
+          height: 32,
+          width: 61,
+          top: 21,
+          left: 11
         },
         order: 1,
-        id: 'panel2',
+        id: 'panel3',
         active: 0
       }
     ]
