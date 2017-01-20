@@ -19,7 +19,8 @@ export class WorkspacePanelComponent implements OnInit {
   @Input() workspaceDimensions: ClientRect;
   validate: boolean;
 
-  relativeStyle: any = {};
+  private relativeStyle: any = {};
+  private pixelStyle: any = {};
 
   style = {};
   styleIntegers = {
@@ -77,8 +78,6 @@ export class WorkspacePanelComponent implements OnInit {
     newStyle.height = previousStyle.height;
     newStyle.width = previousStyle.width;
 
-    // this.calculateRelativeStyle(newStyle);
-
     Object.assign(this.styleIntegers, newStyle);
     this.setStyleByPixels({
       left: newStyle.left,
@@ -100,17 +99,30 @@ export class WorkspacePanelComponent implements OnInit {
     };
   }
 
-  calculateRelativeStyle(style) {
+  private calculateRelativeStyle(style) {
 
-    this.relativeStyle = {
-      top: style.top / this.workspaceDimensions.height,
+    return {
+      top: Math.round(style.top / this.workspaceDimensions.height * 100),
+      left: Math.round(style.left / this.workspaceDimensions.width * 100),
+      height: Math.round(style.height / this.workspaceDimensions.height * 100),
+      width: Math.round(style.width / this.workspaceDimensions.width * 100)
+    };
+  };
+
+  private calculatePixelsStyle(style) {
+
+    return {
+      top: style.top * this.workspaceDimensions.height,
       left: style.left / this.workspaceDimensions.width,
       height: style.height / this.workspaceDimensions.height,
       width: style.width / this.workspaceDimensions.width
     };
-  };
+  }
 
   private setStyleByPixels(style) {
+
+    this.pixelStyle = style;
+    this.relativeStyle = this.calculateRelativeStyle(style);
 
     this.style = {
       left: `${style.left}px`,
@@ -119,6 +131,19 @@ export class WorkspacePanelComponent implements OnInit {
       height: `${style.height}px`
     };
     this.calculateRelativeStyle(this.style);
+  }
+
+  private setStyleByPercentage(style) {
+
+    this.relativeStyle = style;
+    this.pixelStyle = this.calculatePixelsStyle(style);
+
+    this.style = {
+      left: `${style.left}%`,
+      top: `${style.top}%`,
+      width: `${style.width}%`,
+      height: `${style.height}%`
+    };
   }
 
   ngOnInit() {
