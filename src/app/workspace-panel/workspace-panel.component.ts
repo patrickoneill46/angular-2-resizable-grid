@@ -17,20 +17,12 @@ let initialStyle = {
 export class WorkspacePanelComponent implements OnInit {
 
   @Input() workspaceDimensions: ClientRect;
-  validate: boolean;
-
   private relativeStyle: any = {};
   private pixelStyle: any = {};
+  private dragStart: any = {};
 
   style = {};
-  styleIntegers = {
-    left: initialStyle.left,
-    top: initialStyle.top,
-    width: initialStyle.width,
-    height: initialStyle.height
-  };
-  dragStart = {};
-  workspaceRect;
+  validate: boolean;
 
   constructor() {
 
@@ -43,9 +35,13 @@ export class WorkspacePanelComponent implements OnInit {
     }.bind(this);
   }
 
+  ngOnInit() {
+    this.calculateRelativeStyle(initialStyle);
+    this.setStyleByPixels(initialStyle);
+  }
+
   onResizeEnd(event: ResizeEvent): void {
 
-    Object.assign(this.styleIntegers, event.rectangle);
     this.setStyleByPixels({
       left: event.rectangle.left,
       top: event.rectangle.top - this.workspaceDimensions.top,
@@ -56,7 +52,7 @@ export class WorkspacePanelComponent implements OnInit {
 
   onDrag(event) {
 
-    let previousStyle: any = Object.assign({}, this.styleIntegers);
+    let previousStyle: any = Object.assign({}, this.pixelStyle);
     let newStyle: any = {};
 
     if (event.x + previousStyle.width > this.workspaceDimensions.width) {
@@ -78,7 +74,6 @@ export class WorkspacePanelComponent implements OnInit {
     newStyle.height = previousStyle.height;
     newStyle.width = previousStyle.width;
 
-    Object.assign(this.styleIntegers, newStyle);
     this.setStyleByPixels({
       left: newStyle.left,
       top: newStyle.top,
@@ -146,8 +141,5 @@ export class WorkspacePanelComponent implements OnInit {
     };
   }
 
-  ngOnInit() {
-    this.calculateRelativeStyle(initialStyle);
-    this.setStyleByPixels(initialStyle);
-  }
+
 }
