@@ -1,9 +1,6 @@
 <div
   class="workspace-item"
-  [style.width.px]="style.width"
-  [style.top.px]="style.top"
-  [style.left.px]="style.left"
-  [style.height.px]="style.height"
+  [ngStyle]="style"
   mwlResizable
   [validateResize]="validate"
   [resizeEdges]="{bottom: true, right: true, top: true, left: true}"

@@ -45,7 +45,7 @@ export class WorkspacePanelComponent implements OnInit {
   onResizeEnd(event: ResizeEvent): void {
 
     Object.assign(this.styleIntegers, event.rectangle);
-    this.setStyle({
+    this.setStyleByPixels({
       left: event.rectangle.left,
       top: event.rectangle.top - this.workspaceDimensions.top,
       width: event.rectangle.width,
@@ -80,7 +80,7 @@ export class WorkspacePanelComponent implements OnInit {
     // this.calculateRelativeStyle(newStyle);
 
     Object.assign(this.styleIntegers, newStyle);
-    this.setStyle({
+    this.setStyleByPixels({
       left: newStyle.left,
       top: newStyle.top,
       width: previousStyle.width,
@@ -110,19 +110,19 @@ export class WorkspacePanelComponent implements OnInit {
     };
   };
 
-  setStyle(style) {
+  private setStyleByPixels(style) {
 
     this.style = {
-      left: style.left,
-      top: style.top,
-      width: style.width,
-      height: style.height
+      left: `${style.left}px`,
+      top: `${style.top}px`,
+      width: `${style.width}px`,
+      height: `${style.height}px`
     };
     this.calculateRelativeStyle(this.style);
   }
 
   ngOnInit() {
     this.calculateRelativeStyle(initialStyle);
-    this.setStyle(initialStyle);
+    this.setStyleByPixels(initialStyle);
   }
 }
