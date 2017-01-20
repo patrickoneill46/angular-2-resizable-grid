@@ -83,11 +83,13 @@ export class WorkspacePanelComponent implements OnInit {
   }
 
   onDragEnd(event) {
-
+    this.setStyleByPercentage(this.calculateRelativeStyle(this.pixelStyle));
+    this.dragStart = null;
   }
 
   onDragStart(event) {
 
+    this.setStyleByPixels(this.calculatePixelsStyle(this.relativeStyle));
     this.dragStart = {
       x: event.x,
       y: event.y
@@ -107,10 +109,10 @@ export class WorkspacePanelComponent implements OnInit {
   private calculatePixelsStyle(style) {
 
     return {
-      top: style.top * this.workspaceDimensions.height,
-      left: style.left / this.workspaceDimensions.width,
-      height: style.height / this.workspaceDimensions.height,
-      width: style.width / this.workspaceDimensions.width
+      top: style.top * this.workspaceDimensions.height / 100,
+      left: style.left * this.workspaceDimensions.width / 100,
+      height: style.height * this.workspaceDimensions.height / 100,
+      width: style.width * this.workspaceDimensions.width / 100
     };
   }
 
@@ -140,6 +142,4 @@ export class WorkspacePanelComponent implements OnInit {
       height: `${style.height}%`
     };
   }
-
-
 }
