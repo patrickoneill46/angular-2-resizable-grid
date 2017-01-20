@@ -2,5 +2,6 @@
   *ngFor="let config of workspacePanels"
   [workspaceDimensions]="dimensions"
   [initalConfig]="config"
+  (panelActive)="updateActivePanel($event)"
 >
 </workspace-panel>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, HostListener } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output} from '@angular/core';
 import { ResizeEvent } from 'angular2-resizable';
 
 @Component({
@@ -10,11 +10,15 @@ export class WorkspacePanelComponent implements OnInit {
 
   @Input() workspaceDimensions: ClientRect;
   @Input() initalConfig: any;
+
+  @Output() panelActive: EventEmitter<string> = new EventEmitter();
   private relativeStyle: any = {};
   private pixelStyle: any = {};
   private dragStart: any = {};
+  private panelId: string;
 
   style: any = {};
+  order: number;
   validate: boolean;
 
   constructor() {
@@ -30,6 +34,8 @@ export class WorkspacePanelComponent implements OnInit {
 
   ngOnInit() {
     this.setStyleByPercentage(this.initalConfig.dimensions);
+    this.panelId = this.initalConfig.id;
+    this.order = this.initalConfig.order;
   }
 
   onResizeEnd(event: ResizeEvent): void {
@@ -86,6 +92,10 @@ export class WorkspacePanelComponent implements OnInit {
       x: event.x,
       y: event.y
     };
+  }
+
+  setPanelActive() {
+    this.panelActive.emit(this.panelId);
   }
 
   private calculateRelativeStyle(style) {
