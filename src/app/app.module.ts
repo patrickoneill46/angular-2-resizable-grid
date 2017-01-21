@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { DraggableDirective } from './draggable.directive';
 import { WorkspacePanelComponent } from './workspace-panel/workspace-panel.component';
 import { WorkspaceComponent } from './workspace/workspace.component';
+import { WorkspaceService } from './workspace.service';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,9 @@ import { WorkspaceComponent } from './workspace/workspace.component';
     HttpModule,
     ResizableModule
   ],
-  providers: [],
+  providers: [
+    WorkspaceService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

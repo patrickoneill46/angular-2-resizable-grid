@@ -1,5 +1,7 @@
 import { Component, OnInit, ElementRef, HostListener } from '@angular/core';
 
+import { WorkspaceService } from '../workspace.service';
+
 @Component({
   selector: 'workspace',
   templateUrl: './workspace.component.html',
@@ -12,9 +14,14 @@ export class WorkspaceComponent implements OnInit {
 
   workspacePanels: Array<any>;
   workspaceZIndexMap: any;
-  constructor(private ref: ElementRef) {
+  constructor(private ref: ElementRef, private workspaceService: WorkspaceService) {
 
     this.workspacePanels = [];
+
+    this.workspaceService.getWorkspace('default').then(workspaceConfig => {
+      this.workspacePanels = workspaceConfig;
+      this.initalizeWorkspacePanels();
+    });
   }
 
   ngOnInit() {
@@ -49,42 +56,6 @@ export class WorkspaceComponent implements OnInit {
   }
 
   private initalizeWorkspacePanels(): void {
-
-    this.workspacePanels = [
-      {
-        dimensions: {
-          height: 20,
-          width: 30,
-          top: 10,
-          left: 10
-        },
-        order: 3,
-        id: 'panel1',
-        active: 1
-      },
-      {
-        dimensions: {
-          height: 20,
-          width: 30,
-          top: 80,
-          left: 70
-        },
-        order: 2,
-        id: 'panel2',
-        active: 0
-      },
-      {
-        dimensions: {
-          height: 32,
-          width: 61,
-          top: 21,
-          left: 11
-        },
-        order: 1,
-        id: 'panel3',
-        active: 0
-      }
-    ]
 
     this.workspacePanels.forEach(panel => {
       this.workspaceZIndexMap[panel.id] = panel.order;
