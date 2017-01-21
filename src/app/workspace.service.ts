@@ -43,7 +43,19 @@ export class WorkspaceService {
   constructor() { }
 
   getWorkspace(id: string): Promise<any> {
-    return new Promise((resolve, reject) => resolve(panelConfig));
+
+    let cachedSettings = JSON.parse(localStorage.getItem('workspaceConfig'));
+
+    if (!cachedSettings) {
+      this.saveWorkspace('default', JSON.stringify(panelConfig));
+      cachedSettings = panelConfig;
+    }
+
+    return new Promise((resolve, reject) => resolve(cachedSettings));
+  }
+
+  saveWorkspace(id: string, config: any): void {
+    localStorage.setItem('workspaceConfig', config);
   }
 
 }
