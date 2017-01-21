@@ -47,15 +47,15 @@ export class WorkspaceService {
     let cachedSettings = JSON.parse(localStorage.getItem('workspaceConfig'));
 
     if (!cachedSettings) {
-      this.saveWorkspace('default', JSON.stringify(panelConfig));
+      this.saveWorkspace('default', panelConfig);
       cachedSettings = panelConfig;
     }
 
     return new Promise((resolve, reject) => resolve(cachedSettings));
   }
 
-  saveWorkspace(id: string, config: any): void {
-    localStorage.setItem('workspaceConfig', config);
+  saveWorkspace(id: string, config: Array<any>): void {
+    localStorage.setItem('workspaceConfig', JSON.stringify(config));
   }
 
 }

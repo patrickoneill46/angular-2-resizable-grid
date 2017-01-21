@@ -65,4 +65,16 @@ export class WorkspaceComponent implements OnInit {
       }
     });
   }
+
+  private onWorkspacePanelChanged(panelChanged): void {
+
+    this.workspacePanels.forEach(panel => {
+
+      if (panel.id == panelChanged.id) {
+        Object.assign(panel, panelChanged);
+      }
+    });
+
+    this.workspaceService.saveWorkspace('default', this.workspacePanels);
+  }
 }

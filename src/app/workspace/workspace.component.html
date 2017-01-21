@@ -4,5 +4,6 @@
   [initalConfig]="config"
   [order]="workspaceZIndexMap[config.id]"
   (panelActive)="updateActivePanel($event)"
+  (panelChanged)="onWorkspacePanelChanged($event)"
 >
 </workspace-panel>

@@ -13,14 +13,15 @@ export class WorkspacePanelComponent implements OnInit {
   @Input() order;
 
   @Output() panelActive: EventEmitter<string> = new EventEmitter();
+  @Output() panelChanged: EventEmitter<any> = new EventEmitter();
   private relativeStyle: any = {};
   private pixelStyle: any = {};
   private dragStart: any = {};
   private panelId: string;
 
   style: any = {};
-  // order: number;
   validate: boolean;
+  active: number;
 
   constructor() {
 
@@ -36,7 +37,7 @@ export class WorkspacePanelComponent implements OnInit {
   ngOnInit() {
     this.setStyleByPercentage(this.initalConfig.dimensions);
     this.panelId = this.initalConfig.id;
-    // this.order = this.initalConfig.order;
+    this.active = this.initalConfig.active;
   }
 
   onResizeEnd(event: ResizeEvent): void {
@@ -47,6 +48,7 @@ export class WorkspacePanelComponent implements OnInit {
       width: event.rectangle.width,
       height: event.rectangle.height
     });
+    this.handlePanelChanged();
   }
 
   onDrag(event) {
@@ -84,6 +86,7 @@ export class WorkspacePanelComponent implements OnInit {
   onDragEnd(event) {
     this.setStyleByPercentage(this.calculateRelativeStyle(this.pixelStyle));
     this.dragStart = null;
+    this.handlePanelChanged();
   }
 
   onDragStart(event) {
@@ -130,7 +133,6 @@ export class WorkspacePanelComponent implements OnInit {
       width: `${style.width}px`,
       height: `${style.height}px`
     };
-    this.calculateRelativeStyle(this.style);
   }
 
   private setStyleByPercentage(style) {
@@ -144,5 +146,20 @@ export class WorkspacePanelComponent implements OnInit {
       width: `${style.width}%`,
       height: `${style.height}%`
     };
+  }
+
+  private handlePanelChanged() {
+
+    this.panelChanged.emit({
+      dimensions: {
+        height: this.relativeStyle.height,
+        width: this.relativeStyle.width,
+        top: this.relativeStyle.top,
+        left: this.relativeStyle.left
+      },
+      order: this.order,
+      id: this.panelId,
+      active: 1
+    })
   }
 }
