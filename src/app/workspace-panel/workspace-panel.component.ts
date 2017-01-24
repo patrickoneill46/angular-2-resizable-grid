@@ -124,6 +124,14 @@ export class WorkspacePanelComponent implements OnInit {
     console.log('showing componentId');
   }
 
+  destroyComponent(componentId) {
+    console.log('destroying componentId');
+  }
+
+  addComponent(component) {
+
+  }
+
   destroyPanel() {
     console.log('destroy panel');
   }

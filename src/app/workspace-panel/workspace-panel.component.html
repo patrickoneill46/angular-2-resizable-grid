@@ -22,7 +22,7 @@
       (click)="showComponent(component.id)"
       >
       {{ component.header }}
-      <div class="workspace-item--header-component-destroy" (click)="destroyComponent()">
+      <div class="workspace-item--header-component-destroy" (click)="destroyComponent(component.id)">
         x
       </div>
     </div>
