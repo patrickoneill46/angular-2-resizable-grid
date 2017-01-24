@@ -1,4 +1,5 @@
 import { Component, OnInit, ElementRef, HostListener } from '@angular/core';
+import { DragulaService } from 'ng2-dragula';
 
 import { WorkspaceService } from '../workspace.service';
 
@@ -14,7 +15,11 @@ export class WorkspaceComponent implements OnInit {
 
   workspacePanels: Array<any>;
   workspaceZIndexMap: any;
-  constructor(private ref: ElementRef, private workspaceService: WorkspaceService) {
+  constructor(
+    private ref: ElementRef,
+    private workspaceService: WorkspaceService,
+    private dragulaService: DragulaService
+  ) {
 
     this.workspacePanels = [];
 
@@ -28,6 +33,9 @@ export class WorkspaceComponent implements OnInit {
     this.workspaceZIndexMap = {};
     this.setWorkspaceDimensions();
     this.initalizeWorkspacePanels();
+    this.dragulaService.setOptions('bag-one', {
+      removeOnSpill: true
+    });
   }
 
   @HostListener('window:resize', ['$event'])
@@ -74,6 +82,39 @@ export class WorkspaceComponent implements OnInit {
         Object.assign(panel, panelChanged);
       }
     });
+
+    this.workspaceService.saveWorkspace('default', this.workspacePanels);
+  }
+
+  private onPanelDraggedOntoWorkspace(panelConfig) {
+
+    if (panelConfig.component) {
+      //ToDo when event isn't being fired on each component
+      this.createNewPanelWithCompoonent(panelConfig.component);
+    }
+  }
+
+  private createNewPanelWithCompoonent(component) {
+
+    let panelId = 'panel-' + Math.random();
+    let zIndexOrder = this.workspacePanels.length + 1;
+
+    this.workspacePanels.push({
+      dimensions: {
+        height: 40,
+        width: 40,
+        top: 20,
+        left: 20
+      },
+      order: zIndexOrder,
+      id: panelId,
+      active: 0,
+      components: [
+        component
+      ]
+    });
+
+    this.workspaceZIndexMap[panelId] = zIndexOrder;
 
     this.workspaceService.saveWorkspace('default', this.workspacePanels);
   }

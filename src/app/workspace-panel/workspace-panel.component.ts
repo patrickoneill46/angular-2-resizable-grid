@@ -15,6 +15,7 @@ export class WorkspacePanelComponent implements OnInit {
 
   @Output() panelActive: EventEmitter<any> = new EventEmitter();
   @Output() panelChanged: EventEmitter<any> = new EventEmitter();
+  @Output() componentDraggedOutsidePanel: EventEmitter<any> = new EventEmitter();
   private relativeStyle: any = {};
   private pixelStyle: any = {};
   private dragStart: any = {};
@@ -35,6 +36,18 @@ export class WorkspacePanelComponent implements OnInit {
 
     dragulaService.dragend.subscribe(event => {
       this.onFinishDragPanelHeader();
+    });
+
+    dragulaService.remove.subscribe(event => {
+
+      let el = event[1];
+
+      this.componentDraggedOutsidePanel.emit({
+        panelId: this.panelId,
+        component: this.components.find(component => {
+          return el.dataset.componentId === component.id;
+        })
+      })
     });
 
     this.validate = function(event: ResizeEvent){
