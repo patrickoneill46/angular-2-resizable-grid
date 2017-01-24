@@ -35,17 +35,17 @@ export class WorkspaceComponent implements OnInit {
     this.setWorkspaceDimensions();
   }
 
-  updateActivePanel(activePanelId) {
+  updateActivePanel(activePanel) {
 
-    if (this.activePanel !== activePanelId) {
+    if (this.activePanel !== activePanel.panelId) {
 
-      this.activePanel = activePanelId;
+      this.activePanel = activePanel.panelId;
       Object.keys(this.workspaceZIndexMap).forEach(panelKey => {
 
-        if (panelKey == activePanelId) {
+        if (panelKey === activePanel.panelId) {
           this.workspaceZIndexMap[panelKey] = this.workspacePanels.length;
-        } else {
-          --this.workspaceZIndexMap[panelKey];
+        } else if (this.workspaceZIndexMap[panelKey] >= activePanel.order) {
+          --this.workspaceZIndexMap[panelKey]
         }
       });
     }

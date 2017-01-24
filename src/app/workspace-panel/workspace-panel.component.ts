@@ -99,7 +99,7 @@ export class WorkspacePanelComponent implements OnInit {
   }
 
   setPanelActive() {
-    this.panelActive.emit(this.panelId);
+    this.panelActive.emit({ panelId: this.panelId, order: this.order});
   }
 
   private calculateRelativeStyle(style) {

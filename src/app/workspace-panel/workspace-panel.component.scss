@@ -1,5 +1,6 @@
 .workspace-item {
   border: 2px red solid;
+  box-sizing: border-box;
   position: absolute;
   display: flex;
   flex-direction: column;
