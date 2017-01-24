@@ -1,5 +1,6 @@
 import { Component, EventEmitter, HostListener, Input, OnInit, Output} from '@angular/core';
 import { ResizeEvent } from 'angular2-resizable';
+import { DragulaService } from 'ng2-dragula';
 
 @Component({
   selector: 'workspace-panel',
@@ -19,12 +20,14 @@ export class WorkspacePanelComponent implements OnInit {
   private dragStart: any = {};
   private panelId: string;
 
+  private draggingHeader: boolean = false;
+
   style: any = {};
   validate: boolean;
   active: number;
   components: any[] = [];
 
-  constructor() {
+  constructor(private dragulaService: DragulaService) {
 
     this.components = [
       {
@@ -43,6 +46,15 @@ export class WorkspacePanelComponent implements OnInit {
         type: 'News'
       }
     ];
+
+    dragulaService.drag.subscribe(event => {
+      this.onDragPanelHeader(event.slice(1));
+    });
+
+    dragulaService.dragend.subscribe(event => {
+      this.onFinishDragPanelHeader();
+    });
+
     this.validate = function(event: ResizeEvent){
 
       if (event.rectangle.top < this.workspaceDimensions.top || event.rectangle.left < 0 || event.rectangle.right > this.workspaceDimensions.width || event.rectangle.bottom > this.workspaceDimensions.height) {
@@ -58,6 +70,16 @@ export class WorkspacePanelComponent implements OnInit {
     this.active = this.initalConfig.active;
   }
 
+  onDragPanelHeader(args) {
+    let [e, el] = args;
+    this.draggingHeader = true;
+    console.log('dragging panel header', e, el, this.dragulaService);
+  }
+
+  onFinishDragPanelHeader() {
+    this.draggingHeader = false;
+  }
+
   onResizeEnd(event: ResizeEvent): void {
 
     this.setStyleByPixels({
@@ -71,34 +93,39 @@ export class WorkspacePanelComponent implements OnInit {
 
   onDrag(event) {
 
-    let previousStyle: any = Object.assign({}, this.pixelStyle);
-    let newStyle: any = {};
+    if (!this.draggingHeader) {
 
-    if (event.x + previousStyle.width > this.workspaceDimensions.width) {
-      newStyle.left = this.workspaceDimensions.width - previousStyle.width;
-    } else if (event.x < 0) {
-      newStyle.left = 0;
-    } else {
-      newStyle.left = event.x;
+      let previousStyle: any = Object.assign({}, this.pixelStyle);
+      let newStyle: any = {};
+
+      if (event.x + previousStyle.width > this.workspaceDimensions.width) {
+        newStyle.left = this.workspaceDimensions.width - previousStyle.width;
+      } else if (event.x < 0) {
+        newStyle.left = 0;
+      } else {
+        newStyle.left = event.x;
+      }
+
+      if (event.y + previousStyle.height > this.workspaceDimensions.bottom) {
+        newStyle.top = this.workspaceDimensions.bottom - previousStyle.height - this.workspaceDimensions.top;
+      } else if (event.y < this.workspaceDimensions.top) {
+        newStyle.top = 0;
+      } else {
+        newStyle.top = event.y - this.workspaceDimensions.top;
+      }
+
+      newStyle.height = previousStyle.height;
+      newStyle.width = previousStyle.width;
+
+      this.setStyleByPixels({
+        left: newStyle.left,
+        top: newStyle.top,
+        width: previousStyle.width,
+        height: previousStyle.height
+      });
+
     }
 
-    if (event.y + previousStyle.height > this.workspaceDimensions.bottom) {
-      newStyle.top = this.workspaceDimensions.bottom - previousStyle.height - this.workspaceDimensions.top;
-    } else if (event.y < this.workspaceDimensions.top) {
-      newStyle.top = 0;
-    } else {
-      newStyle.top = event.y - this.workspaceDimensions.top;
-    }
-
-    newStyle.height = previousStyle.height;
-    newStyle.width = previousStyle.width;
-
-    this.setStyleByPixels({
-      left: newStyle.left,
-      top: newStyle.top,
-      width: previousStyle.width,
-      height: previousStyle.height
-    });
   }
 
   onDragEnd(event) {
@@ -109,11 +136,13 @@ export class WorkspacePanelComponent implements OnInit {
 
   onDragStart(event) {
 
-    this.setStyleByPixels(this.calculatePixelsStyle(this.relativeStyle));
-    this.dragStart = {
-      x: event.x,
-      y: event.y
-    };
+    if (!this.draggingHeader) {
+      this.setStyleByPixels(this.calculatePixelsStyle(this.relativeStyle));
+      this.dragStart = {
+        x: event.x,
+        y: event.y
+      };
+    }
   }
 
   setPanelActive() {

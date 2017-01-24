@@ -10,7 +10,11 @@
     height: 30px;
     display: flex;
 
-    &-component {
+    &-draggable-container {
+      display: flex;
+    }
+
+    &-draggable-item {
 
       display: flex;
       box-sizing: border-box;

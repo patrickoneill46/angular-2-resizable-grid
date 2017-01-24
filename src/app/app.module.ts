@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { ResizableModule } from 'angular2-resizable';
+import { DragulaModule } from 'ng2-dragula';
 
 import { AppComponent } from './app.component';
 import { DraggableDirective } from './draggable.directive';
@@ -19,6 +20,7 @@ import { WorkspaceService } from './workspace.service';
   ],
   imports: [
     BrowserModule,
+    DragulaModule,
     FormsModule,
     HttpModule,
     ResizableModule
