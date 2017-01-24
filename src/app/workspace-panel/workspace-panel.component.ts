@@ -12,7 +12,7 @@ export class WorkspacePanelComponent implements OnInit {
   @Input() initalConfig: any;
   @Input() order;
 
-  @Output() panelActive: EventEmitter<string> = new EventEmitter();
+  @Output() panelActive: EventEmitter<any> = new EventEmitter();
   @Output() panelChanged: EventEmitter<any> = new EventEmitter();
   private relativeStyle: any = {};
   private pixelStyle: any = {};
@@ -22,9 +22,27 @@ export class WorkspacePanelComponent implements OnInit {
   style: any = {};
   validate: boolean;
   active: number;
+  components: any[] = [];
 
   constructor() {
 
+    this.components = [
+      {
+        header: 'Watchlist Component',
+        id: 'firstComponent',
+        type: 'Watchlist'
+      },
+      {
+        header: 'Chart Component',
+        id: 'firstComponent',
+        type: 'Chart'
+      },
+      {
+        header: 'News Component',
+        id: 'firstComponent',
+        type: 'News'
+      }
+    ];
     this.validate = function(event: ResizeEvent){
 
       if (event.rectangle.top < this.workspaceDimensions.top || event.rectangle.left < 0 || event.rectangle.right > this.workspaceDimensions.width || event.rectangle.bottom > this.workspaceDimensions.height) {
@@ -100,6 +118,14 @@ export class WorkspacePanelComponent implements OnInit {
 
   setPanelActive() {
     this.panelActive.emit({ panelId: this.panelId, order: this.order});
+  }
+
+  showComponent(componentId) {
+    console.log('showing componentId');
+  }
+
+  destroyPanel() {
+    console.log('destroy panel');
   }
 
   private calculateRelativeStyle(style) {
