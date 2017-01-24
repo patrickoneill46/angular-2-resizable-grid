@@ -9,9 +9,11 @@
     background: grey;
     height: 30px;
     display: flex;
+    flex-direction: row;
 
     &-draggable-container {
       display: flex;
+      overflow: hidden;
     }
 
     &-draggable-item {
@@ -20,10 +22,13 @@
       box-sizing: border-box;
       border: 1px black solid;
 
-        &-destroy {
-          cursor: pointer;
-        }
     }
+  }
+
+  &--destroy {
+    cursor: pointer;
+    width: 30px;
+    margin-left: auto;
   }
 
   &--content {

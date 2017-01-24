@@ -71,9 +71,7 @@ export class WorkspacePanelComponent implements OnInit {
   }
 
   onDragPanelHeader(args) {
-    let [e, el] = args;
     this.draggingHeader = true;
-    console.log('dragging panel header', e, el, this.dragulaService);
   }
 
   onFinishDragPanelHeader() {
