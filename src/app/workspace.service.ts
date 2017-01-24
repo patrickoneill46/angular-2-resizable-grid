@@ -11,7 +11,24 @@ let panelConfig = [
     },
     order: 3,
     id: 'panel1',
-    active: 1
+    active: 1,
+    components: [
+      {
+        header: 'Watchlist Component',
+        id: 'firstComponent',
+        type: 'Watchlist'
+      },
+      {
+        header: 'Chart Component',
+        id: 'secondComponent',
+        type: 'Chart'
+      },
+      {
+        header: 'News Component',
+        id: 'thirdComponent',
+        type: 'News'
+      }
+    ]
   },
   {
     dimensions: {
@@ -22,7 +39,24 @@ let panelConfig = [
     },
     order: 2,
     id: 'panel2',
-    active: 0
+    active: 0,
+    components: [
+      {
+        header: 'Watchlist Component',
+        id: 'fourthComponent',
+        type: 'Watchlist'
+      },
+      {
+        header: 'Chart Component',
+        id: 'fifthComponent',
+        type: 'Chart'
+      },
+      {
+        header: 'News Component',
+        id: 'sixComponent',
+        type: 'News'
+      }
+    ]
   },
   {
     dimensions: {
@@ -33,7 +67,14 @@ let panelConfig = [
     },
     order: 1,
     id: 'panel3',
-    active: 0
+    active: 0,
+    components: [
+      {
+        header: 'Watchlist Component',
+        id: 'seventhComponent',
+        type: 'Watchlist'
+      }
+    ]
   }
 ];
 

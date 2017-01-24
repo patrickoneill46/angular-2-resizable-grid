@@ -29,24 +29,6 @@ export class WorkspacePanelComponent implements OnInit {
 
   constructor(private dragulaService: DragulaService) {
 
-    this.components = [
-      {
-        header: 'Watchlist Component',
-        id: 'firstComponent',
-        type: 'Watchlist'
-      },
-      {
-        header: 'Chart Component',
-        id: 'firstComponent',
-        type: 'Chart'
-      },
-      {
-        header: 'News Component',
-        id: 'firstComponent',
-        type: 'News'
-      }
-    ];
-
     dragulaService.drag.subscribe(event => {
       this.onDragPanelHeader(event.slice(1));
     });
@@ -68,6 +50,7 @@ export class WorkspacePanelComponent implements OnInit {
     this.setStyleByPercentage(this.initalConfig.dimensions);
     this.panelId = this.initalConfig.id;
     this.active = this.initalConfig.active;
+    this.components = this.initalConfig.components;
   }
 
   onDragPanelHeader(args) {
