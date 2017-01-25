@@ -99,4 +99,8 @@ export class WorkspaceService {
     localStorage.setItem('workspaceConfig', JSON.stringify(config));
   }
 
+
+  resetWorkspace() {
+    this.saveWorkspace('default', panelConfig);
+  }
 }
