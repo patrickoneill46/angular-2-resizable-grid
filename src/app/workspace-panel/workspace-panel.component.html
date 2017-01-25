@@ -26,6 +26,7 @@
         *ngFor="let component of components"
         (click)="showComponent(component.id)"
         [attr.data-component-id]="component.id"
+        [attr.data-panel-id]="panelId"
         >
         {{ component.header }}
         <div class="workspace-item--header-component-destroy" (click)="destroyComponent(component.id)">

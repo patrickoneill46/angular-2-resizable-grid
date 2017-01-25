@@ -15,6 +15,7 @@ export class WorkspaceComponent implements OnInit {
 
   workspacePanels: Array<any>;
   workspaceZIndexMap: any;
+  dragulaBag = 'bag-one';
   constructor(
     private ref: ElementRef,
     private workspaceService: WorkspaceService,
@@ -33,8 +34,25 @@ export class WorkspaceComponent implements OnInit {
     this.workspaceZIndexMap = {};
     this.setWorkspaceDimensions();
     this.initalizeWorkspacePanels();
-    this.dragulaService.setOptions('bag-one', {
+    this.dragulaService.setOptions(this.dragulaBag, {
       removeOnSpill: true
+    });
+
+    this.dragulaService.remove.subscribe(event => {
+
+      let el = event[1];
+      let panel = this.workspacePanels.find(panel => panel.id === el.dataset.panelId);
+      let component = panel.components.find(component => component.id === el.dataset.componentId);
+
+      this.createNewPanelWithCompoonent(Object.assign({}, component));
+    });
+
+    this.dragulaService.removeModel.subscribe(event => {
+      let panel = this.workspacePanels.find(panel => panel.id === event[1].dataset.panelId);
+      if (!panel.components.length) {
+        this.workspacePanels.splice(this.workspacePanels.indexOf(panel), 1);
+        this.workspaceService.saveWorkspace('default', this.workspacePanels);
+      }
     });
   }
 
@@ -58,6 +76,14 @@ export class WorkspaceComponent implements OnInit {
       });
     }
   }
+
+  private getComponentFromDragulaService(event): any {
+
+
+    let dragulaModel = this.dragulaService.find('bag-one').drake;
+
+    debugger;
+  };
 
   private setWorkspaceDimensions(): void {
     this.dimensions =  this.ref.nativeElement.getBoundingClientRect();
