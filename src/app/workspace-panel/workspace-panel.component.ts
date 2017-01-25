@@ -15,7 +15,7 @@ export class WorkspacePanelComponent implements OnInit {
 
   @Output() panelActive: EventEmitter<any> = new EventEmitter();
   @Output() panelChanged: EventEmitter<any> = new EventEmitter();
-  // @Output() componentDraggedOutsidePanel: EventEmitter<any> = new EventEmitter();
+  @Output() panelDestroyed: EventEmitter<any> = new EventEmitter();
   private relativeStyle: any = {};
   private pixelStyle: any = {};
   private dragStart: any = {};
@@ -137,6 +137,8 @@ export class WorkspacePanelComponent implements OnInit {
 
   destroyComponent(componentId) {
     console.log('destroying componentId');
+    // let component = this.components.find(component => component.id = componentId);
+    // this.components.splice(this.components.indexOf(component), 1);
   }
 
   addComponent(component) {
@@ -144,7 +146,7 @@ export class WorkspacePanelComponent implements OnInit {
   }
 
   destroyPanel() {
-    console.log('destroy panel');
+    this.panelDestroyed.emit(this.panelId);
   }
 
   private calculateRelativeStyle(style) {

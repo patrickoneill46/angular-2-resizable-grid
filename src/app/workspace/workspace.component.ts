@@ -87,13 +87,12 @@ export class WorkspaceComponent implements OnInit {
     }
   }
 
-  private getComponentFromDragulaService(event): any {
+  removeWorkspacePanel(panelId) {
 
-
-    let dragulaModel = this.dragulaService.find('bag-one').drake;
-
-    debugger;
-  };
+    let panel = this.workspacePanels.find(panel => panel.id === panelId);
+    this.workspacePanels.splice(this.workspacePanels.indexOf(panel), 1);
+    this.workspaceService.saveWorkspace('default', this.workspacePanels);
+  }
 
   private setWorkspaceDimensions(): void {
     this.dimensions =  this.ref.nativeElement.getBoundingClientRect();
