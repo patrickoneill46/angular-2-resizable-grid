@@ -47,7 +47,7 @@ export class WorkspaceComponent implements OnInit {
       this.createNewPanelWithCompoonent(Object.assign({}, component));
     });
 
-    this.dragulaService.removeModel.subscribe(event => {
+    this.dragulaService.dropModel.subscribe(event => {
       let panel = this.workspacePanels.find(panel => panel.id === event[1].dataset.panelId);
       if (!panel.components.length) {
         this.workspacePanels.splice(this.workspacePanels.indexOf(panel), 1);
