@@ -136,9 +136,15 @@ export class WorkspacePanelComponent implements OnInit {
   }
 
   destroyComponent(componentId) {
-    console.log('destroying componentId');
-    // let component = this.components.find(component => component.id = componentId);
-    // this.components.splice(this.components.indexOf(component), 1);
+    
+    let component = this.components.find(component => component.id = componentId);
+    this.components.splice(this.components.indexOf(component), 1);
+
+    if (this.components.length) {
+      this.handlePanelChanged();
+    } else {
+      this.destroyPanel();
+    }
   }
 
   addComponent(component) {
@@ -204,6 +210,7 @@ export class WorkspacePanelComponent implements OnInit {
         top: this.relativeStyle.top,
         left: this.relativeStyle.left
       },
+      components: this.components,
       order: this.order,
       id: this.panelId,
       active: 1
