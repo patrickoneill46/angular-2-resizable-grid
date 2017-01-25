@@ -18,5 +18,6 @@ export class AppComponent {
   resetWorkspace() {
 
     this.workspaceService.resetWorkspace();
+    location.reload();
   }
 }
