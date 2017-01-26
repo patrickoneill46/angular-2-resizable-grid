@@ -11,7 +11,7 @@ import { WorkspaceService } from '../workspace.service';
 export class WorkspaceComponent implements OnInit {
 
   private dimensions: ClientRect;
-  private activePanel: string;
+  private activePanel: any;
 
   workspacePanels: Array<any>;
   workspaceZIndexMap: any;
@@ -25,15 +25,16 @@ export class WorkspaceComponent implements OnInit {
     this.workspacePanels = [];
 
     this.workspaceService.getWorkspace('default').then(workspaceConfig => {
-      this.workspacePanels = workspaceConfig;
-      this.initalizeWorkspacePanels();
+      this.initalizeWorkspacePanels(workspaceConfig);
     });
   }
 
   ngOnInit() {
+
+    this.workspaceService.updatedWorkspace.subscribe(updatedWorkspace => this.changeWorkspace(updatedWorkspace));
     this.workspaceZIndexMap = {};
     this.setWorkspaceDimensions();
-    this.initalizeWorkspacePanels();
+
     this.dragulaService.setOptions(this.dragulaBag, {
       removeOnSpill: true
     });
@@ -60,7 +61,12 @@ export class WorkspaceComponent implements OnInit {
       let panel = this.workspacePanels.find(panel => panel.id === event[1].dataset.panelId);
       if (!panel.components.length) {
         this.workspacePanels.splice(this.workspacePanels.indexOf(panel), 1);
-        this.workspaceService.saveWorkspace('default', this.workspacePanels);
+
+        this.workspaceService.saveWorkspace('default', {
+          id: this.activePanel.id,
+          displayName: this.activePanel.displayName,
+          panels: this.workspacePanels
+        });
       }
     });
   }
@@ -90,15 +96,25 @@ export class WorkspaceComponent implements OnInit {
 
     let panel = this.workspacePanels.find(panel => panel.id === panelId);
     this.workspacePanels.splice(this.workspacePanels.indexOf(panel), 1);
-    this.workspaceService.saveWorkspace('default', this.workspacePanels);
+    this.workspaceService.saveWorkspace('default', {
+      id: this.activePanel.id,
+      displayName: this.activePanel.displayName,
+      panels: this.workspacePanels
+    });
+  }
+
+  changeWorkspace(workspaceConfig) {
+
   }
 
   private setWorkspaceDimensions(): void {
     this.dimensions =  this.ref.nativeElement.getBoundingClientRect();
   }
 
-  private initalizeWorkspacePanels(): void {
+  private initalizeWorkspacePanels(workspaceConfig): void {
 
+    this.activePanel = workspaceConfig;
+    this.workspacePanels = workspaceConfig.panels;
     this.workspacePanels.forEach(panel => {
       this.workspaceZIndexMap[panel.id] = panel.order;
 
@@ -117,7 +133,12 @@ export class WorkspaceComponent implements OnInit {
       }
     });
 
-    this.workspaceService.saveWorkspace('default', this.workspacePanels);
+
+    this.workspaceService.saveWorkspace('default', {
+      id: this.activePanel.id,
+      displayName: this.activePanel.displayName,
+      panels: this.workspacePanels
+    });
   }
 
   private onPanelDraggedOntoWorkspace(panelConfig) {
@@ -150,6 +171,10 @@ export class WorkspaceComponent implements OnInit {
 
     this.workspaceZIndexMap[panelId] = zIndexOrder;
 
-    this.workspaceService.saveWorkspace('default', this.workspacePanels);
+    this.workspaceService.saveWorkspace('default', {
+      id: this.activePanel.id,
+      displayName: this.activePanel.displayName,
+      panels: this.workspacePanels
+    });
   }
 }

@@ -9,9 +9,13 @@ import { WorkspaceService } from '../workspace.service';
 })
 export class HeaderComponent implements OnInit {
 
+  workspaces: any[];
+
   constructor(private workspaceService: WorkspaceService) { }
 
   ngOnInit() {
+    this.workspaces = [];
+    this.workspaceService.getWorkspaces().subscribe(workspaces => this.updateWorkspaceSelector(workspaces))
   }
 
   resetWorkspace() {
@@ -19,4 +23,20 @@ export class HeaderComponent implements OnInit {
     this.workspaceService.resetWorkspace();
     location.reload();
   }
+
+  showWorkspace(workspaceId) {
+    this.workspaceService.showWorkspace(workspaceId);
+  }
+
+  private updateWorkspaceSelector(workspaces) {
+
+    Object.keys(workspaces).forEach(workspaceKey => {
+      this.workspaces.push({
+        workspaceId: workspaceKey,
+        workspaceName: workspaces[workspaceKey].displayName
+      });
+    });
+  }
+
+
 }
