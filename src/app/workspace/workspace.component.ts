@@ -44,17 +44,16 @@ export class WorkspaceComponent implements OnInit {
       let panel = this.workspacePanels.find(panel => panel.id === el.dataset.panelId);
       let component = panel.components.find(component => component.id === el.dataset.componentId);
 
-      this.createNewPanelWithCompoonent(Object.assign({}, component));
-    });
-
-    this.dragulaService.removeModel.subscribe(event => {
-
-      let panel = this.workspacePanels.find(panel => panel.id === event[1].dataset.panelId);
+      let componentIndex = panel.components.indexOf(component);
+      if (componentIndex !== -1) {
+        panel.components.splice(componentIndex, 1);
+      }
 
       if (!panel.components.length) {
         this.workspacePanels.splice(this.workspacePanels.indexOf(panel), 1);
-        this.workspaceService.saveWorkspace('default', this.workspacePanels);
       }
+
+      this.createNewPanelWithCompoonent(Object.assign({}, component));
     });
 
     this.dragulaService.dropModel.subscribe(event => {

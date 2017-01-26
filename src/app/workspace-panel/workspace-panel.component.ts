@@ -136,7 +136,7 @@ export class WorkspacePanelComponent implements OnInit {
   }
 
   destroyComponent(componentId) {
-    
+
     let component = this.components.find(component => component.id = componentId);
     this.components.splice(this.components.indexOf(component), 1);
 
