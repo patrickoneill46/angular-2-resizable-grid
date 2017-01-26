@@ -81,26 +81,38 @@ let panelConfig = [
 @Injectable()
 export class WorkspaceService {
 
-  constructor() { }
+  private workspaces: any;
+  private localStorageKey: string = 'workspaces';
 
-  getWorkspace(id: string): Promise<any> {
+  constructor() {
 
-    let cachedSettings = JSON.parse(localStorage.getItem('workspaceConfig'));
+    this.workspaces = {};
+
+    let cachedSettings = JSON.parse(localStorage.getItem(this.localStorageKey));
 
     if (!cachedSettings) {
       this.saveWorkspace('default', panelConfig);
       cachedSettings = panelConfig;
+    } else {
+      this.workspaces = cachedSettings;
     }
+  }
 
-    return new Promise((resolve, reject) => resolve(cachedSettings));
+  getWorkspace(id: string): Promise<any> {
+    return new Promise((resolve, reject) => resolve(this.workspaces[id]));
   }
 
   saveWorkspace(id: string, config: Array<any>): void {
-    localStorage.setItem('workspaceConfig', JSON.stringify(config));
+    this.workspaces[id] = config;
+    localStorage.setItem(this.localStorageKey, JSON.stringify(this.workspaces));
   }
 
 
   resetWorkspace() {
     this.saveWorkspace('default', panelConfig);
+  }
+
+  getWorkspaces() {
+
   }
 }
