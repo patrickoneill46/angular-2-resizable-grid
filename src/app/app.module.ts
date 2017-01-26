@@ -10,13 +10,15 @@ import { DraggableDirective } from './draggable.directive';
 import { WorkspacePanelComponent } from './workspace-panel/workspace-panel.component';
 import { WorkspaceComponent } from './workspace/workspace.component';
 import { WorkspaceService } from './workspace.service';
+import { HeaderComponent } from './header/header.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DraggableDirective,
     WorkspacePanelComponent,
-    WorkspaceComponent
+    WorkspaceComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
