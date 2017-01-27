@@ -10,14 +10,13 @@ import { WorkspaceService } from './workspace.service';
 })
 export class AppComponent {
 
+  componentSelectorActive: boolean;
+
   constructor(private workspaceService: WorkspaceService) {
-
-
+    this.componentSelectorActive = false;
   }
 
-  resetWorkspace() {
-
-    this.workspaceService.resetWorkspace();
-    location.reload();
+  componentSelectorToggled(event) {
+    this.componentSelectorActive = !this.componentSelectorActive;
   }
 }

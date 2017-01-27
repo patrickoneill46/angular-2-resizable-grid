@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, Input } from '@angular/core';
+import { Component, OnInit, HostListener, Input, Output, EventEmitter } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
 import { WorkspaceService } from '../workspace.service';
@@ -11,7 +11,7 @@ import { WorkspaceService } from '../workspace.service';
 })
 export class HeaderComponent implements OnInit {
 
-  @Input() componentSelectorActive: boolean;
+  @Output() componentSelectorToggled: EventEmitter<null> = new EventEmitter();
 
   workspaces: any[];
   creatingWorkspace: boolean;
@@ -65,7 +65,7 @@ export class HeaderComponent implements OnInit {
   }
 
   openComponentPanel(): void {
-    this.workspaceService.toggleComponentSelector(!this.componentSelectorActive);
+    this.componentSelectorToggled.emit(null);
   };
 
   private updateWorkspaceSelector(workspaces): void {

@@ -143,8 +143,4 @@ export class WorkspaceService {
     this.showWorkspace(newWorkspace.id);
     this.availableWorkspaces.next(this.workspaces);
   }
-
-  toggleComponentSelector(state) {
-    this.componentSelectorActive.next(state);
-  }
 }

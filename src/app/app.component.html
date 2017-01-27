@@ -1,2 +1,8 @@
-<header></header>
+<header
+  (componentSelectorToggled)="componentSelectorToggled($event)"
+></header>
+<component-selector
+  *ngIf="componentSelectorActive"
+>
+</component-selector>
 <workspace></workspace>
