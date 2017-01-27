@@ -1,8 +1,7 @@
 <header
   (componentSelectorToggled)="componentSelectorToggled($event)"
 ></header>
-<component-selector
-  *ngIf="componentSelectorActive"
->
-</component-selector>
-<workspace></workspace>
+
+<workspace
+  [componentSelectorActive]="componentSelectorActive"
+></workspace>

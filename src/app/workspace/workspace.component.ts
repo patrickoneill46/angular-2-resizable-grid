@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, ElementRef, HostListener, Input } from '@angular/core';
 import { DragulaService } from 'ng2-dragula';
 
 import { WorkspaceService } from '../workspace.service';
@@ -13,11 +13,13 @@ export class WorkspaceComponent implements OnInit {
   private dimensions: ClientRect;
   private activePanel: any;
   private activeWorkspace: any;
-  private componentSelectorActive: boolean;
 
   workspacePanels: Array<any>;
   workspaceZIndexMap: any;
   dragulaBag = 'bag-one';
+
+  @Input() componentSelectorActive: boolean;
+  
   constructor(
     private ref: ElementRef,
     private workspaceService: WorkspaceService,
