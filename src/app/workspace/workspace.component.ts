@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, HostListener, Input } from '@angular/core';
+import { Component, OnInit, ElementRef, HostListener, Input, Output, EventEmitter } from '@angular/core';
 import { DragulaService } from 'ng2-dragula';
 
 import { WorkspaceService } from '../workspace.service';
@@ -19,7 +19,8 @@ export class WorkspaceComponent implements OnInit {
   dragulaBag = 'bag-one';
 
   @Input() componentSelectorActive: boolean;
-  
+  @Output() componentAdded: EventEmitter<null> = new EventEmitter();
+
   constructor(
     private ref: ElementRef,
     private workspaceService: WorkspaceService,
@@ -114,6 +115,8 @@ export class WorkspaceComponent implements OnInit {
       type: newComponent.type,
       id: Math.random().toString()
     });
+
+    this.componentAdded.emit();
   }
 
   private setWorkspaceDimensions(): void {
