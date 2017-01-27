@@ -97,6 +97,10 @@ export class WorkspaceComponent implements OnInit {
 
   changeWorkspace(workspaceConfig) {
 
+    this.activePanel = null;
+    this.workspacePanels = [];
+    this.activeWorkspace = null;
+    this.initalizeWorkspacePanels(workspaceConfig);
   }
 
   private setWorkspaceDimensions(): void {

@@ -1,5 +1,5 @@
 <div class="workspace-navigation">
-  <div class="workspace-navigation--item" *ngFor="let workspace of workspaces" (click)=showWorkspace(workspace.id)>
+  <div class="workspace-navigation--item" *ngFor="let workspace of workspaces" (click)=showWorkspace(workspace.workspaceId)>
     {{workspace.workspaceName}}
   </div>
 </div>
