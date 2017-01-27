@@ -13,6 +13,10 @@
     color: black;
     padding: 5px 10px;
     border: 1px solid black;
+
+    &.active {
+      border: 5px solid black;
+    }
   }
 
   &--create-workspace {

@@ -1,5 +1,10 @@
 <div class="workspace-navigation">
-  <div class="workspace-navigation--item" *ngFor="let workspace of workspaces" (click)=showWorkspace(workspace.workspaceId)>
+  <div
+    class="workspace-navigation--item"
+    [ngClass]="{ 'active': workspace.workspaceId === activeWorkspaceId }"
+    *ngFor="let workspace of workspaces"
+    (click)=showWorkspace(workspace.workspaceId)
+  >
     {{workspace.workspaceName}}
   </div>
   <div class="workspace-navigation--create-workspace" (click)=showNewWorkspaceForm()>

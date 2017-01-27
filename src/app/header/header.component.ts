@@ -14,6 +14,7 @@ export class HeaderComponent implements OnInit {
   workspaces: any[];
   creatingWorkspace: boolean;
   newWorkspaceName: string;
+  activeWorkspaceId: string;
 
   constructor(private workspaceService: WorkspaceService) { }
 
@@ -47,6 +48,7 @@ export class HeaderComponent implements OnInit {
 
   showWorkspace(workspaceId): void {
     this.workspaceService.showWorkspace(workspaceId);
+    this.setActiveWorkspace(workspaceId);
   }
 
   showNewWorkspaceForm(): void {
@@ -70,5 +72,9 @@ export class HeaderComponent implements OnInit {
 
   private createNewWorkspace(): void {
     console.log('creating new workspace');
+  }
+
+  private setActiveWorkspace (workspaceId) {
+    this.activeWorkspaceId = workspaceId;
   }
 }
