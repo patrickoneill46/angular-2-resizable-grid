@@ -2,6 +2,14 @@
   <div class="workspace-navigation--item" *ngFor="let workspace of workspaces" (click)=showWorkspace(workspace.workspaceId)>
     {{workspace.workspaceName}}
   </div>
+  <div class="workspace-navigation--create-workspace" (click)=showNewWorkspaceForm()>
+    <span *ngIf="!creatingWorkspace">
+    + Create a new workspace
+    </span>
+    <div *ngIf="creatingWorkspace" class="workspace-navigation-create-workspace-form">
+      <input type="text" [(ngModel)]="newWorkspaceName" (blur)=hideNewWorkspaceForm()>
+    </div>
+  </div>
 </div>
 
 <button (click)=resetWorkspace()>Reset Workspace</button>

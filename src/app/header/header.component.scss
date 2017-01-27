@@ -1,4 +1,24 @@
 :host {
   height: 60px;
   background: #272828;
+  display: flex;
+}
+
+.workspace-navigation {
+
+  display: flex;
+
+  &--item {
+    background: white;
+    color: black;
+    padding: 5px 10px;
+    border: 1px solid black;
+  }
+
+  &--create-workspace {
+    background: white;
+    color: black;
+    padding: 5px 10px;
+    border: 1px solid black;
+  }
 }
