@@ -53,6 +53,7 @@ export class HeaderComponent implements OnInit {
 
   showWorkspace(workspaceId): void {
 
+    this.hideNewWorkspaceForm();
     if (workspaceId !== this.activeWorkspaceId) {
       this.workspaceService.showWorkspace(workspaceId);
     }
@@ -81,7 +82,8 @@ export class HeaderComponent implements OnInit {
     Object.keys(workspaces).forEach(workspaceKey => {
       this.workspaces.push({
         workspaceId: workspaceKey,
-        workspaceName: workspaces[workspaceKey].displayName
+        workspaceName: workspaces[workspaceKey].displayName,
+        default: workspaces[workspaceKey].default
       });
     });
   }

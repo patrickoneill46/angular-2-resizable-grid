@@ -10,7 +10,7 @@
     (click)=showWorkspace(workspace.workspaceId)
   >
     <div>{{workspace.workspaceName}}</div>
-    <div class="workspace-navigation--item-delete" (click)=deleteWorkspace(workspace.workspaceId);>
+    <div class="workspace-navigation--item-delete" (click)="deleteWorkspace(workspace.workspaceId)" *ngIf="!workspace.default">
       Delete
     </div>
   </div>

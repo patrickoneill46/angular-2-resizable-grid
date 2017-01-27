@@ -6,6 +6,7 @@ let defaultWorkspaceConfig = {
   id: 'default',
   displayName: 'Default workspace',
   active: 1,
+  default: true,
   panels: [
     {
       dimensions: {
