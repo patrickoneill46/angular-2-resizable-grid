@@ -21,7 +21,8 @@ export class WorkspacePanelComponent implements OnInit {
   private dragStart: any = {};
   private panelId: string;
 
-  private draggingHeader: boolean = false;
+  private draggingHeaderItem: boolean = false;
+  private draggingPanel: boolean = false;
 
   style: any = {};
   validate: boolean;
@@ -55,11 +56,11 @@ export class WorkspacePanelComponent implements OnInit {
   }
 
   onDragPanelHeader(args) {
-    this.draggingHeader = true;
+    this.draggingHeaderItem = true;
   }
 
   onFinishDragPanelHeader() {
-    this.draggingHeader = false;
+    this.draggingHeaderItem = false;
   }
 
   onResizeEnd(event: ResizeEvent): void {
@@ -75,7 +76,7 @@ export class WorkspacePanelComponent implements OnInit {
 
   onDrag(event) {
 
-    if (this.draggingHeader) {
+    if (this.draggingPanel && !this.draggingHeaderItem) {
 
       let previousStyle: any = Object.assign({}, this.pixelStyle);
       let newStyle: any = {};
@@ -112,18 +113,18 @@ export class WorkspacePanelComponent implements OnInit {
 
   onDragEnd(event) {
 
-    if (this.draggingHeader) {
+    if (this.draggingPanel) {
       this.setStyleByPercentage(this.calculateRelativeStyle(this.pixelStyle));
       this.dragStart = null;
-      this.draggingHeader = false;
+      this.draggingPanel = false;
       this.handlePanelChanged();
     }
   }
 
   onDragStart(event) {
 
-    if (!this.draggingHeader) {
-      this.draggingHeader = true;
+    if (!this.draggingPanel && !this.draggingHeaderItem) {
+      this.draggingPanel = true;
       this.setStyleByPixels(this.calculatePixelsStyle(this.relativeStyle));
       this.dragStart = {
         x: event.x,
