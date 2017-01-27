@@ -27,9 +27,11 @@ export class HeaderComponent implements OnInit {
 
         case 27:
           this.hideNewWorkspaceForm();
-
+          break;
         case 13:
           this.createNewWorkspace();
+          break;
+        default:
       }
     }
   }
@@ -62,6 +64,7 @@ export class HeaderComponent implements OnInit {
 
   private updateWorkspaceSelector(workspaces): void {
 
+    this.workspaces = [];
     Object.keys(workspaces).forEach(workspaceKey => {
       this.workspaces.push({
         workspaceId: workspaceKey,
@@ -71,7 +74,8 @@ export class HeaderComponent implements OnInit {
   }
 
   private createNewWorkspace(): void {
-    console.log('creating new workspace');
+    this.workspaceService.createNewWorkspace(this.newWorkspaceName);
+    this.hideNewWorkspaceForm();
   }
 
   private setActiveWorkspace (workspaceId) {

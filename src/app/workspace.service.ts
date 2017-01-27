@@ -117,6 +117,7 @@ export class WorkspaceService {
   }
 
   resetWorkspace() {
+    this.workspaces = {};
     this.saveWorkspace('default', defaultWorkspaceConfig);
   }
 
@@ -126,5 +127,18 @@ export class WorkspaceService {
 
   showWorkspace(workspaceId) {
     this.updatedWorkspace.next(this.workspaces[workspaceId]);
+  }
+
+  createNewWorkspace(workspaceName) {
+
+    let newWorkspace = {
+      id: Math.random().toString(),
+      displayName: workspaceName,
+      panels: []
+    };
+
+    this.saveWorkspace(newWorkspace.id, newWorkspace);
+    this.showWorkspace(newWorkspace.id);
+    this.availableWorkspaces.next(this.workspaces);
   }
 }
