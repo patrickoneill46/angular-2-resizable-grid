@@ -13,6 +13,7 @@ export class WorkspaceComponent implements OnInit {
   private dimensions: ClientRect;
   private activePanel: any;
   private activeWorkspace: any;
+  private componentSelectorActive: boolean;
 
   workspacePanels: Array<any>;
   workspaceZIndexMap: any;
@@ -33,6 +34,7 @@ export class WorkspaceComponent implements OnInit {
   ngOnInit() {
 
     this.workspaceService.updatedWorkspace.subscribe(updatedWorkspace => this.changeWorkspace(updatedWorkspace));
+    this.workspaceService.componentSelectorActive.subscribe(state => this.componentSelectorActive = state);
     this.workspaceZIndexMap = {};
     this.setWorkspaceDimensions();
 

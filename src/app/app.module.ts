@@ -11,6 +11,7 @@ import { WorkspacePanelComponent } from './workspace-panel/workspace-panel.compo
 import { WorkspaceComponent } from './workspace/workspace.component';
 import { WorkspaceService } from './workspace.service';
 import { HeaderComponent } from './header/header.component';
+import { ComponentSelectorComponent } from './component-selector/component-selector.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { HeaderComponent } from './header/header.component';
     DraggableDirective,
     WorkspacePanelComponent,
     WorkspaceComponent,
-    HeaderComponent
+    HeaderComponent,
+    ComponentSelectorComponent
   ],
   imports: [
     BrowserModule,

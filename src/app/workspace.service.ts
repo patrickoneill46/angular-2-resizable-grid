@@ -90,12 +90,14 @@ export class WorkspaceService {
   private localStorageKey: string = 'workspaces';
   private availableWorkspaces: BehaviorSubject<any>;
 
+  componentSelectorActive: Subject<any>
   updatedWorkspace: Subject<any>;
 
   constructor() {
 
     this.workspaces = {};
     this.updatedWorkspace = new Subject();
+    this.componentSelectorActive = new Subject();
 
     let cachedSettings = JSON.parse(localStorage.getItem(this.localStorageKey));
 
@@ -140,5 +142,9 @@ export class WorkspaceService {
     this.saveWorkspace(newWorkspace.id, newWorkspace);
     this.showWorkspace(newWorkspace.id);
     this.availableWorkspaces.next(this.workspaces);
+  }
+
+  toggleComponentSelector(state) {
+    this.componentSelectorActive.next(state);
   }
 }
