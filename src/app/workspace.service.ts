@@ -107,6 +107,7 @@ export class WorkspaceService {
       this.workspaces = cachedSettings;
     }
     this.availableWorkspaces = new BehaviorSubject(this.workspaces);
+    this.showWorkspace('default');
   }
 
   getWorkspace(id: string): Promise<any> {
@@ -116,6 +117,14 @@ export class WorkspaceService {
   saveWorkspace(id: string, config: any): void {
     this.workspaces[id] = config;
     localStorage.setItem(this.localStorageKey, JSON.stringify(this.workspaces));
+  }
+
+  deleteWorkspace(id) {
+
+    delete this.workspaces[id];
+    let nextWorkspaceId = Object.keys(this.workspaces)[0];
+    this.showWorkspace(nextWorkspaceId);
+    this.availableWorkspaces.next(this.workspaces);
   }
 
   resetWorkspace() {

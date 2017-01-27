@@ -68,6 +68,10 @@ export class HeaderComponent implements OnInit {
     this.componentSelectorToggled.emit(null);
   };
 
+  deleteWorkspace(workspaceId) {
+    this.workspaceService.deleteWorkspace(workspaceId);
+  };
+
   private updateWorkspaceSelector(workspaces): void {
 
     this.workspaces = [];

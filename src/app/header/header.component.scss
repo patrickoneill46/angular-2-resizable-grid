@@ -17,6 +17,11 @@
     &.active {
       border: 5px solid black;
     }
+
+    &-delete {
+      font-size: 8px;
+      color: blue;
+    }
   }
 
   &--create-workspace {

@@ -9,7 +9,10 @@
     *ngFor="let workspace of workspaces"
     (click)=showWorkspace(workspace.workspaceId)
   >
-    {{workspace.workspaceName}}
+    <div>{{workspace.workspaceName}}</div>
+    <div class="workspace-navigation--item-delete" (click)=deleteWorkspace(workspace.workspaceId);>
+      Delete
+    </div>
   </div>
   <div
     class="workspace-navigation--create-workspace"
