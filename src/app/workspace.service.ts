@@ -113,6 +113,11 @@ export class WorkspaceService {
 
   saveWorkspace(id: string, config: any): void {
     this.workspaces[id] = config;
+    Object.keys(this.workspaces).forEach(key => {
+      if (key !== id) {
+        this.workspaces[key].active = 0;
+      }
+    });
     localStorage.setItem(this.localStorageKey, JSON.stringify(this.workspaces));
   }
 
@@ -142,7 +147,7 @@ export class WorkspaceService {
       } else {
         this.workspaces[key].active = 0;
       }
-    })
+    });
     this.updatedWorkspace.next(this.workspaces[workspaceId]);
     this.saveWorkspace(workspaceId, this.workspaces[workspaceId]);
   }

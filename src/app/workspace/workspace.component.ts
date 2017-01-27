@@ -179,7 +179,9 @@ export class WorkspaceComponent implements OnInit {
     this.workspaceService.saveWorkspace(this.activeWorkspace.id, {
       id: this.activeWorkspace.id,
       displayName: this.activeWorkspace.displayName,
-      panels: this.workspacePanels
+      panels: this.workspacePanels,
+      active: 1,
+      default: this.activeWorkspace.default
     });
   }
 }
