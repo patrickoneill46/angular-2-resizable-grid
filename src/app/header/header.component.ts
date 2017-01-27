@@ -41,7 +41,8 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.workspaces = [];
     this.newWorkspaceName = '';
-    this.workspaceService.getWorkspaces().subscribe(workspaces => this.updateWorkspaceSelector(workspaces))
+    this.workspaceService.getWorkspaces().subscribe(workspaces => this.updateWorkspaceSelector(workspaces));
+    this.workspaceService.updatedWorkspace.subscribe(workspace => this.setActiveWorkspace(workspace.id));
   }
 
   resetWorkspace(): void {
@@ -51,8 +52,10 @@ export class HeaderComponent implements OnInit {
   }
 
   showWorkspace(workspaceId): void {
-    this.workspaceService.showWorkspace(workspaceId);
-    this.setActiveWorkspace(workspaceId);
+
+    if (workspaceId !== this.activeWorkspaceId) {
+      this.workspaceService.showWorkspace(workspaceId);
+    }
   }
 
   showNewWorkspaceForm(): void {

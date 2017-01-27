@@ -26,19 +26,14 @@ export class WorkspaceComponent implements OnInit {
     private workspaceService: WorkspaceService,
     private dragulaService: DragulaService
   ) {
-
     this.workspacePanels = [];
-
-    this.workspaceService.getWorkspace('default').then(workspaceConfig => {
-      this.initalizeWorkspacePanels(workspaceConfig);
-    });
+    this.workspaceZIndexMap = {};
   }
 
   ngOnInit() {
 
     this.workspaceService.updatedWorkspace.subscribe(updatedWorkspace => this.changeWorkspace(updatedWorkspace));
     this.workspaceService.componentSelectorActive.subscribe(state => this.componentSelectorActive = state);
-    this.workspaceZIndexMap = {};
     this.setWorkspaceDimensions();
 
     this.dragulaService.setOptions(this.dragulaBag, {

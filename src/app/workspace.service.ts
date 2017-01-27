@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 let defaultWorkspaceConfig = {
   id: 'default',
   displayName: 'Default workspace',
+  active: 1,
   panels: [
     {
       dimensions: {
@@ -91,12 +92,11 @@ export class WorkspaceService {
   private availableWorkspaces: BehaviorSubject<any>;
 
   componentSelectorActive: Subject<any>
-  updatedWorkspace: Subject<any>;
+  updatedWorkspace: BehaviorSubject<any>;
 
   constructor() {
 
     this.workspaces = {};
-    this.updatedWorkspace = new Subject();
     this.componentSelectorActive = new Subject();
 
     let cachedSettings = JSON.parse(localStorage.getItem(this.localStorageKey));
@@ -106,12 +106,9 @@ export class WorkspaceService {
     } else {
       this.workspaces = cachedSettings;
     }
+    this.updatedWorkspace = new BehaviorSubject(this.getActiveWorkspace());
     this.availableWorkspaces = new BehaviorSubject(this.workspaces);
     this.showWorkspace('default');
-  }
-
-  getWorkspace(id: string): Promise<any> {
-    return new Promise((resolve, reject) => resolve(this.workspaces[id]));
   }
 
   saveWorkspace(id: string, config: any): void {
@@ -151,5 +148,12 @@ export class WorkspaceService {
     this.saveWorkspace(newWorkspace.id, newWorkspace);
     this.showWorkspace(newWorkspace.id);
     this.availableWorkspaces.next(this.workspaces);
+  }
+
+  private getActiveWorkspace() {
+
+    return this.workspaces[Object.keys(this.workspaces).find(workspaceId => {
+      return this.workspaces[workspaceId].active === 1;
+    })];
   }
 }
