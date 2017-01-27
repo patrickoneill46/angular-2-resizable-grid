@@ -1,5 +1,6 @@
 <component-selector
   *ngIf="componentSelectorActive"
+  (componentAdded)="addComponentToWorkspace($event)"
 >
 </component-selector>
 <workspace-panel

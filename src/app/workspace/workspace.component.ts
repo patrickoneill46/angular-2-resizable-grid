@@ -107,6 +107,15 @@ export class WorkspaceComponent implements OnInit {
     this.initalizeWorkspacePanels(workspaceConfig);
   }
 
+  addComponentToWorkspace(newComponent) {
+
+    this.createNewPanelWithCompoonent({
+      header: newComponent.header,
+      type: newComponent.type,
+      id: Math.random().toString()
+    });
+  }
+
   private setWorkspaceDimensions(): void {
     this.dimensions =  this.ref.nativeElement.getBoundingClientRect();
   }
