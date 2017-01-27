@@ -12,6 +12,7 @@ export class WorkspaceComponent implements OnInit {
 
   private dimensions: ClientRect;
   private activePanel: any;
+  private activeWorkspace: any;
 
   workspacePanels: Array<any>;
   workspaceZIndexMap: any;
@@ -61,12 +62,7 @@ export class WorkspaceComponent implements OnInit {
       let panel = this.workspacePanels.find(panel => panel.id === event[1].dataset.panelId);
       if (!panel.components.length) {
         this.workspacePanels.splice(this.workspacePanels.indexOf(panel), 1);
-
-        this.workspaceService.saveWorkspace('default', {
-          id: this.activePanel.id,
-          displayName: this.activePanel.displayName,
-          panels: this.workspacePanels
-        });
+        this.saveActiveWorkspace();
       }
     });
   }
@@ -96,11 +92,7 @@ export class WorkspaceComponent implements OnInit {
 
     let panel = this.workspacePanels.find(panel => panel.id === panelId);
     this.workspacePanels.splice(this.workspacePanels.indexOf(panel), 1);
-    this.workspaceService.saveWorkspace('default', {
-      id: this.activePanel.id,
-      displayName: this.activePanel.displayName,
-      panels: this.workspacePanels
-    });
+    this.saveActiveWorkspace();
   }
 
   changeWorkspace(workspaceConfig) {
@@ -113,7 +105,7 @@ export class WorkspaceComponent implements OnInit {
 
   private initalizeWorkspacePanels(workspaceConfig): void {
 
-    this.activePanel = workspaceConfig;
+    this.activeWorkspace = workspaceConfig;
     this.workspacePanels = workspaceConfig.panels;
     this.workspacePanels.forEach(panel => {
       this.workspaceZIndexMap[panel.id] = panel.order;
@@ -132,13 +124,7 @@ export class WorkspaceComponent implements OnInit {
         Object.assign(panel, panelChanged);
       }
     });
-
-
-    this.workspaceService.saveWorkspace('default', {
-      id: this.activePanel.id,
-      displayName: this.activePanel.displayName,
-      panels: this.workspacePanels
-    });
+    this.saveActiveWorkspace();
   }
 
   private onPanelDraggedOntoWorkspace(panelConfig) {
@@ -170,10 +156,14 @@ export class WorkspaceComponent implements OnInit {
     });
 
     this.workspaceZIndexMap[panelId] = zIndexOrder;
+    this.saveActiveWorkspace();
+  }
 
-    this.workspaceService.saveWorkspace('default', {
-      id: this.activePanel.id,
-      displayName: this.activePanel.displayName,
+  private saveActiveWorkspace(): void {
+
+    this.workspaceService.saveWorkspace(this.activeWorkspace.id, {
+      id: this.activeWorkspace.id,
+      displayName: this.activeWorkspace.displayName,
       panels: this.workspacePanels
     });
   }
