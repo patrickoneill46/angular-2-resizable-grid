@@ -62,6 +62,10 @@ export class HeaderComponent implements OnInit {
     this.newWorkspaceName = '';
   }
 
+  openComponentPanel(): void {
+    
+  };
+
   private updateWorkspaceSelector(workspaces): void {
 
     this.workspaces = [];

@@ -1,4 +1,8 @@
 <div class="workspace-navigation">
+  <div class="component-toggle" (click)=openComponentPanel()>
+    Add components
+  </div>
+
   <div
     class="workspace-navigation--item"
     [ngClass]="{ 'active': workspace.workspaceId === activeWorkspaceId }"
@@ -7,7 +11,11 @@
   >
     {{workspace.workspaceName}}
   </div>
-  <div class="workspace-navigation--create-workspace" (click)=showNewWorkspaceForm()>
+  <div
+    class="workspace-navigation--create-workspace"
+    (click)=showNewWorkspaceForm()
+    *ngIf="workspaces.length < 10"
+  >
     <span *ngIf="!creatingWorkspace">
     + Create a new workspace
     </span>
