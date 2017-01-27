@@ -42,7 +42,7 @@ export class HeaderComponent implements OnInit {
     this.workspaces = [];
     this.newWorkspaceName = '';
     this.workspaceService.getWorkspaces().subscribe(workspaces => this.updateWorkspaceSelector(workspaces));
-    this.workspaceService.updatedWorkspace.subscribe(workspace => this.setActiveWorkspace(workspace.id));
+    this.workspaceService.updatedWorkspace.subscribe(workspace => this.setActiveWorkspace(workspace));
   }
 
   resetWorkspace(): void {
@@ -91,7 +91,7 @@ export class HeaderComponent implements OnInit {
     this.hideNewWorkspaceForm();
   }
 
-  private setActiveWorkspace (workspaceId) {
-    this.activeWorkspaceId = workspaceId;
+  private setActiveWorkspace (workspace) {
+    this.activeWorkspaceId = workspace.id;
   }
 }

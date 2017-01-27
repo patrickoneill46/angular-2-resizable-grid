@@ -108,7 +108,6 @@ export class WorkspaceService {
     }
     this.updatedWorkspace = new BehaviorSubject(this.getActiveWorkspace());
     this.availableWorkspaces = new BehaviorSubject(this.workspaces);
-    this.showWorkspace('default');
   }
 
   saveWorkspace(id: string, config: any): void {
@@ -126,7 +125,7 @@ export class WorkspaceService {
 
   resetWorkspace() {
     this.workspaces = {};
-    this.saveWorkspace('default', defaultWorkspaceConfig);
+    localStorage.setItem(this.localStorageKey, null);
   }
 
   getWorkspaces() {
@@ -134,19 +133,29 @@ export class WorkspaceService {
   }
 
   showWorkspace(workspaceId) {
+
+    Object.keys(this.workspaces).forEach(key => {
+
+      if (key === workspaceId) {
+        this.workspaces[key].active = 1;
+      } else {
+        this.workspaces[key].active = 0;
+      }
+    })
     this.updatedWorkspace.next(this.workspaces[workspaceId]);
+    this.saveWorkspace(workspaceId, this.workspaces[workspaceId]);
   }
 
   createNewWorkspace(workspaceName) {
 
-    let newWorkspace = {
-      id: Math.random().toString(),
+    let newWorkspaceId = Math.random().toString();
+    this.workspaces[newWorkspaceId] = {
+      id: newWorkspaceId,
       displayName: workspaceName,
       panels: []
     };
 
-    this.saveWorkspace(newWorkspace.id, newWorkspace);
-    this.showWorkspace(newWorkspace.id);
+    this.showWorkspace(newWorkspaceId);
     this.availableWorkspaces.next(this.workspaces);
   }
 
