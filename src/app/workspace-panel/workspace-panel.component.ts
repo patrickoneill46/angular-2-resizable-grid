@@ -41,6 +41,7 @@ export class WorkspacePanelComponent implements OnInit {
 
   private draggingHeaderItem: boolean = false;
   private draggingPanel: boolean = false;
+  private resizing: boolean = false;
 
   style: any = {};
   transform: string;
@@ -54,6 +55,8 @@ export class WorkspacePanelComponent implements OnInit {
     'Chart': ChartComponent,
     'Watchlist': WatchlistComponent
   };
+  minHeight: number = 150;
+  minWidth: number = 300;
 
   @ViewChild('dynamicComponentContainer', { read: ViewContainerRef }) dynamicComponentContainer: ViewContainerRef;
 
@@ -69,7 +72,14 @@ export class WorkspacePanelComponent implements OnInit {
 
     this.validate = function(event: ResizeEvent){
 
-      if (event.rectangle.top < this.workspaceDimensions.top || event.rectangle.left < 0 || event.rectangle.right > this.workspaceDimensions.width || event.rectangle.bottom > this.workspaceDimensions.height) {
+      if (
+        event.rectangle.top < this.workspaceDimensions.top ||
+        event.rectangle.left < 0 ||
+        event.rectangle.right > this.workspaceDimensions.width ||
+        event.rectangle.bottom > this.workspaceDimensions.bottom ||
+        event.rectangle.height < this.minHeight ||
+        event.rectangle.width < this.minWidth
+      ) {
         return false;
       }
       return true;
@@ -123,8 +133,16 @@ export class WorkspacePanelComponent implements OnInit {
     this.draggingHeaderItem = false;
   }
 
+  onResizeStart(event: ResizeEvent): void {
+
+    console.log('start resizing');
+    this.resizing = true;
+    this.draggingPanel = false;
+  }
+
   onResizeEnd(event: ResizeEvent): void {
 
+    this.resizing = false;
     this.setStyleByPixels({
       left: event.rectangle.left,
       top: event.rectangle.top - this.workspaceDimensions.top,
@@ -136,7 +154,7 @@ export class WorkspacePanelComponent implements OnInit {
 
   onDrag(event) {
 
-    if (this.draggingPanel && !this.draggingHeaderItem) {
+    if (!this.draggingHeaderItem && !this.resizing && this.draggingPanel) {
 
       let transform: any = {};
       transform.y = event.y - this.pixelStyle.top - this.workspaceDimensions.top;
@@ -177,7 +195,7 @@ export class WorkspacePanelComponent implements OnInit {
 
   onDragStart(event) {
 
-    if (!this.draggingPanel && !this.draggingHeaderItem) {
+    if (!this.resizing && !this.draggingPanel && !this.draggingHeaderItem) {
       this.draggingPanel = true;
       this.setStyleByPixels(this.calculatePixelsStyle(this.relativeStyle));
       this.dragStart = {

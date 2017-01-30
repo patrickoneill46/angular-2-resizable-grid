@@ -3,12 +3,15 @@
   [ngStyle]="style"
   [style.zIndex]="order"
   [style.transform]="transform"
+  [style.minHeight.px]="minHeight"
+  [style.minWidth.px]="minWidth"
   mwlResizable
   (mousedown)="setPanelActive()"
   [validateResize]="validate"
   [resizeEdges]="{bottom: true, right: true, top: true, left: true}"
   [enableGhostResize]="true"
   (resizeEnd)="onResizeEnd($event)"
+  (resizeStart)="onResizeStart($event)"
   >
   <div
     class="workspace-item--header"

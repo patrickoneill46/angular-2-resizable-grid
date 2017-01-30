@@ -16,8 +16,11 @@ export class DraggableDirective implements OnInit {
 
   @HostListener('document:mouseup', ['$event'])
   onMouseup(event) {
-    this.onDragEnd(event);
-    this.dragging = false;
+
+    if (this.dragging) {
+      this.onDragEnd(event);
+      this.dragging = false;
+    }
   }
 
   @HostListener('mousedown', ['$event'])
