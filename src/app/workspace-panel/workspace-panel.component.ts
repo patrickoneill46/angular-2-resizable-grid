@@ -126,6 +126,7 @@ export class WorkspacePanelComponent implements OnInit {
 
   onDragPanelHeader(args) {
     this.draggingHeaderItem = true;
+    this.draggingPanel = false;
   }
 
   onFinishDragPanelHeader() {
