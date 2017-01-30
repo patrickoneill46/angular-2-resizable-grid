@@ -180,7 +180,7 @@ export class WorkspacePanelComponent implements OnInit {
 
   onDragEnd(event) {
 
-    if (this.draggingPanel) {
+    if (this.draggingPanel && (this.transformValues.hasOwnProperty('x') && this.transformValues.hasOwnProperty('y'))) {
 
       this.pixelStyle.left += this.transformValues.x;
       this.pixelStyle.top += this.transformValues.y;
