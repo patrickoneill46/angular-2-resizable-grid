@@ -30,7 +30,7 @@
         [attr.data-panel-id]="panelId"
         >
         {{ component.header }}
-        <div class="workspace-item--header-draggable-item--destroy" (click)="destroyComponent(component.id)">
+        <div class="workspace-item--header-draggable-item--destroy" (click)="destroyComponent(component.id, component.type)">
           x
         </div>
       </div>
@@ -40,6 +40,6 @@
     </div>
   </div>
   <div class="workspace-item--content">
-    <div class="workspace-item--content-component"></div>
+    <div class="workspace-item--content-component" #dynamicComponentContainer></div>
   </div>
 </div>

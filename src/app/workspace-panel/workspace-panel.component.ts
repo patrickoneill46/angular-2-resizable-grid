@@ -1,11 +1,16 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewContainerRef, ViewChild, ReflectiveInjector, ComponentFactoryResolver} from '@angular/core';
 import { ResizeEvent } from 'angular2-resizable';
 import { DragulaService } from 'ng2-dragula';
+
+import { WatchlistComponent } from '../watchlist/watchlist.component';
+import { ChartComponent } from '../chart/chart.component';
+import { NewsComponent } from '../news/news.component';
 
 @Component({
   selector: 'workspace-panel',
   templateUrl: './workspace-panel.component.html',
-  styleUrls: ['./workspace-panel.component.scss']
+  styleUrls: ['./workspace-panel.component.scss'],
+  entryComponents: [ChartComponent, NewsComponent, WatchlistComponent]
 })
 export class WorkspacePanelComponent implements OnInit {
 
@@ -29,8 +34,16 @@ export class WorkspacePanelComponent implements OnInit {
   active: number;
   components: any[] = [];
   activeComponentId: string;
+  currentComponent = null;
+  componentOptions: any = {
+    'News': NewsComponent,
+    'Chart': ChartComponent,
+    'Watchlist': WatchlistComponent
+  };
 
-  constructor(private dragulaService: DragulaService) {
+  @ViewChild('dynamicComponentContainer', { read: ViewContainerRef }) dynamicComponentContainer: ViewContainerRef;
+
+  constructor(private dragulaService: DragulaService, private resolver: ComponentFactoryResolver) {
 
     dragulaService.drag.subscribe(event => {
       this.onDragPanelHeader(event.slice(1));
@@ -49,12 +62,43 @@ export class WorkspacePanelComponent implements OnInit {
     }.bind(this);
   }
 
+  // component: Class for the component you want to create
+  // inputs: An object with key/value pairs mapped to input name/input value
+  @Input() set componentData(data: {component: any, inputs: any }) {
+    if (!data) {
+      return;
+    }
+
+    // Inputs need to be in the following format to be resolved properly
+    let inputProviders = Object.keys(data.inputs).map((inputName) => {return {provide: inputName, useValue: data.inputs[inputName]};});
+    let resolvedInputs = ReflectiveInjector.resolve(inputProviders);
+
+    // We create an injector out of the data we want to pass down and this components injector
+    let injector = ReflectiveInjector.fromResolvedProviders(resolvedInputs, this.dynamicComponentContainer.parentInjector);
+
+    // We create a factory out of the component we want to create
+    let factory = this.resolver.resolveComponentFactory(data.component);
+
+    // We create the component using the factory and the injector
+    let component = factory.create(injector);
+
+    // We insert the component into the dom container
+    this.dynamicComponentContainer.insert(component.hostView);
+
+    // Destroy the previously created component
+    if (this.currentComponent) {
+      this.currentComponent.destroy();
+    }
+
+    this.currentComponent = component;
+  }
+
   ngOnInit() {
     this.setStyleByPercentage(this.initalConfig.dimensions);
     this.panelId = this.initalConfig.id;
     this.active = this.initalConfig.active;
     this.components = this.initalConfig.components;
-    this.activeComponentId = this.initalConfig.activeComponentId || this.components[0].id;
+    this.showComponent(this.initalConfig.activeComponentId || this.components[0].id);
   }
 
   onDragPanelHeader(args) {
@@ -140,8 +184,16 @@ export class WorkspacePanelComponent implements OnInit {
   }
 
   showComponent(componentId) {
-    
+
+    let componentType = this.components.find(component => component.id === componentId).type;
+
     this.activeComponentId = componentId;
+    this.componentData = {
+      component: this.componentOptions[componentType],
+      inputs: {
+        showNum: 2
+      }
+    };
     this.handlePanelChanged();
   }
 
