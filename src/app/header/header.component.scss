@@ -1,0 +1,42 @@
+:host {
+  height: 60px;
+  background: #272828;
+  display: flex;
+}
+
+.component-toggle {
+  background: white;
+  font-size: 15px;
+  font-weight: bold;
+  color: navy;
+  padding: 0 10px;
+  border: 1px solid black;
+}
+
+.workspace-navigation {
+
+  display: flex;
+
+  &--item {
+    background: white;
+    color: black;
+    padding: 5px 10px;
+    border: 1px solid black;
+
+    &.active {
+      border: 5px solid black;
+    }
+
+    &-delete {
+      font-size: 8px;
+      color: blue;
+    }
+  }
+
+  &--create-workspace {
+    background: white;
+    color: black;
+    padding: 5px 10px;
+    border: 1px solid black;
+  }
+}

@@ -1,2 +1,7 @@
-<div class="header" style="height: 60px"></div>
-<workspace></workspace>
+<header
+  (componentSelectorToggled)="componentSelectorToggled($event)"
+></header>
+<workspace
+  [componentSelectorActive]="componentSelectorActive"
+  (componentAdded)="componentSelectorToggled(false)"
+></workspace>

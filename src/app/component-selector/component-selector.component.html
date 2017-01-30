@@ -1,0 +1,10 @@
+<h2>Add component to current workspace</h2>
+<ul class="component-list">
+  <li
+    class="component-list--item"
+    *ngFor="let component of components"
+    (click)="addComponentToWorkspace(component)"
+    >
+    {{ component.type }}
+  </li>
+</ul>

@@ -1,1 +1,16 @@
-<workspace-panel [workspaceDimensions]="dimensions"></workspace-panel>
+<component-selector
+  *ngIf="componentSelectorActive"
+  (componentAdded)="addComponentToWorkspace($event)"
+>
+</component-selector>
+<workspace-panel
+  *ngFor="let config of workspacePanels"
+  [workspaceDimensions]="dimensions"
+  [initalConfig]="config"
+  [order]="workspaceZIndexMap[config.id]"
+  (panelActive)="updateActivePanel($event)"
+  (panelChanged)="onWorkspacePanelChanged($event)"
+  (panelDestroyed)="removeWorkspacePanel($event)"
+  (componentDraggedOutsidePanel)="onPanelDraggedOntoWorkspace($event)"
+>
+</workspace-panel>

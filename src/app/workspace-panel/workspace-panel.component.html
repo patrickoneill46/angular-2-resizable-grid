@@ -1,10 +1,9 @@
 <div
   class="workspace-item"
-  [style.width.px]="style.width"
-  [style.top.px]="style.top"
-  [style.left.px]="style.left"
-  [style.height.px]="style.height"
+  [ngStyle]="style"
+  [style.zIndex]="order"
   mwlResizable
+  (mousedown)="setPanelActive()"
   [validateResize]="validate"
   [resizeEdges]="{bottom: true, right: true, top: true, left: true}"
   [enableGhostResize]="true"
@@ -17,9 +16,30 @@
     (dragEvent)="onDrag($event)"
     (dragEndEvent)="onDragEnd($event)"
     >
-    Workspace item
+    <div
+      class="workspace-item--header-draggable-container"
+      [dragula]='"bag-one"'
+      [dragulaModel]="components"
+    >
+      <div
+        class="workspace-item--header-draggable-item"
+        *ngFor="let component of components"
+        [ngClass]="{ 'active': component.id === activeComponentId }"
+        (click)="showComponent(component.id)"
+        [attr.data-component-id]="component.id"
+        [attr.data-panel-id]="panelId"
+        >
+        {{ component.header }}
+        <div class="workspace-item--header-draggable-item--destroy" (click)="destroyComponent(component.id, component.type)">
+          x
+        </div>
+      </div>
+    </div>
+    <div class="workspace-item--destroy" (click)="destroyPanel()">
+      x
+    </div>
   </div>
   <div class="workspace-item--content">
-    <div class="workspace-item--content-component"></div>
+    <div class="workspace-item--content-component" #dynamicComponentContainer></div>
   </div>
 </div>

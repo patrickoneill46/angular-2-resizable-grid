@@ -1,0 +1,31 @@
+<div class="workspace-navigation">
+  <div class="component-toggle" (click)=openComponentPanel()>
+    Add component
+  </div>
+
+  <div
+    class="workspace-navigation--item"
+    [ngClass]="{ 'active': workspace.workspaceId === activeWorkspaceId }"
+    *ngFor="let workspace of workspaces"
+    (click)=showWorkspace(workspace.workspaceId)
+  >
+    <div>{{workspace.workspaceName}}</div>
+    <div class="workspace-navigation--item-delete" (click)="deleteWorkspace(workspace.workspaceId)" *ngIf="!workspace.default">
+      Delete
+    </div>
+  </div>
+  <div
+    class="workspace-navigation--create-workspace"
+    (click)=showNewWorkspaceForm()
+    *ngIf="workspaces.length < 10"
+  >
+    <span *ngIf="!creatingWorkspace">
+    + Create a new workspace
+    </span>
+    <div *ngIf="creatingWorkspace" class="workspace-navigation-create-workspace-form">
+      <input type="text" [(ngModel)]="newWorkspaceName" (blur)=hideNewWorkspaceForm()>
+    </div>
+  </div>
+</div>
+
+<button (click)=resetWorkspace() style="margin-left: auto;">Reset Workspace</button>
