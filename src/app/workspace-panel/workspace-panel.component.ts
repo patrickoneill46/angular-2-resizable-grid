@@ -139,25 +139,6 @@ export class WorkspacePanelComponent implements OnInit {
     if (this.draggingPanel && !this.draggingHeaderItem) {
 
       let transform: any = {};
-      let previousStyle: any = Object.assign({}, this.pixelStyle);
-      let newStyle: any = {};
-
-      if (event.x + previousStyle.width > this.workspaceDimensions.width) {
-        newStyle.left = this.workspaceDimensions.width - previousStyle.width;
-      } else if (event.x < 0) {
-        newStyle.left = 0;
-      } else {
-        newStyle.left = event.x;
-      }
-
-      if (event.y + previousStyle.height > this.workspaceDimensions.bottom) {
-        newStyle.top = this.workspaceDimensions.bottom - previousStyle.height - this.workspaceDimensions.top;
-      } else if (event.y < this.workspaceDimensions.top) {
-        newStyle.top = 0;
-      } else {
-        newStyle.top = event.y - this.workspaceDimensions.top;
-      }
-
       transform.y = event.y - this.pixelStyle.top - this.workspaceDimensions.top;
       transform.x = event.x - this.pixelStyle.left;
 
@@ -173,18 +154,8 @@ export class WorkspacePanelComponent implements OnInit {
         transform.x = this.workspaceDimensions.width - this.pixelStyle.left - this.pixelStyle.width;
       }
 
-      newStyle.height = previousStyle.height;
-      newStyle.width = previousStyle.width;
       this.transformValues = transform;
-      this.transform = `translate3d(${transform.x}px, ${transform.y}px, 0px)`
-
-      // this.setStyleByPixels({
-      //   left: newStyle.left,
-      //   top: newStyle.top,
-      //   width: previousStyle.width,
-      //   height: previousStyle.height
-      // });
-
+      this.transform = `translate3d(${transform.x}px, ${transform.y}px, 0px)`;
     }
 
   }
