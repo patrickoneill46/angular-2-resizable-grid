@@ -24,6 +24,7 @@
       <div
         class="workspace-item--header-draggable-item"
         *ngFor="let component of components"
+        [ngClass]="{ 'active': component.id === activeComponentId }"
         (click)="showComponent(component.id)"
         [attr.data-component-id]="component.id"
         [attr.data-panel-id]="panelId"

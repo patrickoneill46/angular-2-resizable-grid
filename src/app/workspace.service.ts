@@ -18,16 +18,17 @@ let defaultWorkspaceConfig = {
       order: 3,
       id: 'panel1',
       active: 1,
+      activePanelId: 'firstComponent',
       components: [
         {
           header: 'Watchlist Component',
           id: 'firstComponent',
-          type: 'Watchlist'
+          type: 'Watchlist',
         },
         {
           header: 'Chart Component',
           id: 'secondComponent',
-          type: 'Chart'
+          type: 'Chart',
         },
         {
           header: 'News Component',

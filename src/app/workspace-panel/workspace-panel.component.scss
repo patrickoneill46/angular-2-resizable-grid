@@ -31,7 +31,8 @@
       color: #065ed0;
 
       &.active {
-        background-color: #1a1a1a;
+        color: #1a1a1a;
+        border-bottom: 1px black solid;
       }
 
       &--destroy {

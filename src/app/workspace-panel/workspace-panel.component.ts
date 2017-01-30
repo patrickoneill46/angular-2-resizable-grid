@@ -28,6 +28,7 @@ export class WorkspacePanelComponent implements OnInit {
   validate: boolean;
   active: number;
   components: any[] = [];
+  activeComponentId: string;
 
   constructor(private dragulaService: DragulaService) {
 
@@ -53,6 +54,7 @@ export class WorkspacePanelComponent implements OnInit {
     this.panelId = this.initalConfig.id;
     this.active = this.initalConfig.active;
     this.components = this.initalConfig.components;
+    this.activeComponentId = this.initalConfig.activeComponentId || this.components[0].id;
   }
 
   onDragPanelHeader(args) {
@@ -138,7 +140,9 @@ export class WorkspacePanelComponent implements OnInit {
   }
 
   showComponent(componentId) {
-    console.log('showing componentId');
+    
+    this.activeComponentId = componentId;
+    this.handlePanelChanged();
   }
 
   destroyComponent(componentId) {
@@ -216,6 +220,7 @@ export class WorkspacePanelComponent implements OnInit {
         top: this.relativeStyle.top,
         left: this.relativeStyle.left
       },
+      activeComponentId: this.activeComponentId,
       components: this.components,
       order: this.order,
       id: this.panelId,
