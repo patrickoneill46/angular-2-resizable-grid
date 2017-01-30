@@ -36,7 +36,6 @@ export class WorkspacePanelComponent implements OnInit {
   private relativeStyle: any = {};
   private pixelStyle: any = {};
   private transformValues: any = {};
-  private dragStart: any = {};
   private panelId: string;
 
   private draggingHeaderItem: boolean = false;
@@ -187,7 +186,6 @@ export class WorkspacePanelComponent implements OnInit {
       this.setStyleByPercentage(this.calculateRelativeStyle(this.pixelStyle));
       this.transformValues = {};
       this.transform = null;
-      this.dragStart = null;
       this.draggingPanel = false;
       this.handlePanelChanged();
     }
@@ -198,10 +196,6 @@ export class WorkspacePanelComponent implements OnInit {
     if (!this.resizing && !this.draggingPanel && !this.draggingHeaderItem) {
       this.draggingPanel = true;
       this.setStyleByPixels(this.calculatePixelsStyle(this.relativeStyle));
-      this.dragStart = {
-        x: event.x,
-        y: event.y
-      };
     }
   }
 
