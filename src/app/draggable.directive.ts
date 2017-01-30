@@ -1,4 +1,4 @@
-import { Directive, OnInit, HostListener, EventEmitter, ElementRef, Renderer, Output } from '@angular/core';
+import { Directive, Input, OnInit, HostListener, EventEmitter, ElementRef, Renderer, Output } from '@angular/core';
 
 @Directive({
   selector: '[draggable]'
@@ -6,6 +6,7 @@ import { Directive, OnInit, HostListener, EventEmitter, ElementRef, Renderer, Ou
 export class DraggableDirective implements OnInit {
   private dragging = false;
   private relativeOffset = { x: 0, y: 0};
+  @Input() containerElement: any;
   @Output() dragStartEvent = new EventEmitter();
   @Output() dragEvent = new EventEmitter();
   @Output() dragEndEvent = new EventEmitter();
@@ -45,16 +46,17 @@ export class DraggableDirective implements OnInit {
     }
   }
   public ngOnInit(): void {
-    // this.renderer.setElementAttribute(this.el.nativeElement, 'draggable', 'true');
+    console.log(this.containerElement);
   }
   onDragStart(event: MouseEvent) {
 
+    let rect = this.el.nativeElement.getBoundingClientRect();
     this.relativeOffset = {
-      x: event.layerX,
-      y: event.layerY
+      x: event.clientX - rect.left,
+      y: event.clientY - rect.top
     };
-    this.Δx = event.x  - this.el.nativeElement.offsetLeft;
-    this.Δy = event.y - this.el.nativeElement.offsetTop;
+    this.Δx = event.x;
+    this.Δy = event.y;
     this.dragStartEvent.emit({x: this.Δx, y: this.Δy});
   }
   onDrag(event: MouseEvent) {

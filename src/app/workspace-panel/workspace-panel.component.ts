@@ -1,4 +1,16 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output, ViewContainerRef, ViewChild, ReflectiveInjector, ComponentFactoryResolver} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostListener,
+  HostBinding,
+  Input,
+  OnInit,
+  Output,
+  ViewContainerRef,
+  ViewChild,
+  ReflectiveInjector,
+  ComponentFactoryResolver
+} from '@angular/core';
 import { ResizeEvent } from 'angular2-resizable';
 import { DragulaService } from 'ng2-dragula';
 
@@ -23,6 +35,7 @@ export class WorkspacePanelComponent implements OnInit {
   @Output() panelDestroyed: EventEmitter<any> = new EventEmitter();
   private relativeStyle: any = {};
   private pixelStyle: any = {};
+  private transformValues: any = {};
   private dragStart: any = {};
   private panelId: string;
 
@@ -30,6 +43,7 @@ export class WorkspacePanelComponent implements OnInit {
   private draggingPanel: boolean = false;
 
   style: any = {};
+  transform: string;
   validate: boolean;
   active: number;
   components: any[] = [];
@@ -124,6 +138,7 @@ export class WorkspacePanelComponent implements OnInit {
 
     if (this.draggingPanel && !this.draggingHeaderItem) {
 
+      let transform: any = {};
       let previousStyle: any = Object.assign({}, this.pixelStyle);
       let newStyle: any = {};
 
@@ -143,15 +158,32 @@ export class WorkspacePanelComponent implements OnInit {
         newStyle.top = event.y - this.workspaceDimensions.top;
       }
 
+      transform.y = event.y - this.pixelStyle.top - this.workspaceDimensions.top;
+      transform.x = event.x - this.pixelStyle.left;
+
+      if (-transform.y >= this.pixelStyle.top) {
+        transform.y = -this.pixelStyle.top;
+      } else if (transform.y + this.pixelStyle.height + this.pixelStyle.top >= this.workspaceDimensions.height) {
+        transform.y = this.workspaceDimensions.height - (this.pixelStyle.height + this.pixelStyle.top);
+      }
+
+      if (-transform.x >= this.pixelStyle.left) {
+        transform.x = -this.pixelStyle.left;
+      } else if (transform.x + this.pixelStyle.width + this.pixelStyle.left >= this.workspaceDimensions.width) {
+        transform.x = this.workspaceDimensions.width - this.pixelStyle.left - this.pixelStyle.width;
+      }
+
       newStyle.height = previousStyle.height;
       newStyle.width = previousStyle.width;
+      this.transformValues = transform;
+      this.transform = `translate3d(${transform.x}px, ${transform.y}px, 0px)`
 
-      this.setStyleByPixels({
-        left: newStyle.left,
-        top: newStyle.top,
-        width: previousStyle.width,
-        height: previousStyle.height
-      });
+      // this.setStyleByPixels({
+      //   left: newStyle.left,
+      //   top: newStyle.top,
+      //   width: previousStyle.width,
+      //   height: previousStyle.height
+      // });
 
     }
 
@@ -160,7 +192,12 @@ export class WorkspacePanelComponent implements OnInit {
   onDragEnd(event) {
 
     if (this.draggingPanel) {
+
+      this.pixelStyle.left += this.transformValues.x;
+      this.pixelStyle.top += this.transformValues.y;
       this.setStyleByPercentage(this.calculateRelativeStyle(this.pixelStyle));
+      this.transformValues = {};
+      this.transform = null;
       this.dragStart = null;
       this.draggingPanel = false;
       this.handlePanelChanged();
