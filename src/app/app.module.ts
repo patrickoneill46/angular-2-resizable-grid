@@ -12,6 +12,9 @@ import { WorkspaceComponent } from './workspace/workspace.component';
 import { WorkspaceService } from './workspace.service';
 import { HeaderComponent } from './header/header.component';
 import { ComponentSelectorComponent } from './component-selector/component-selector.component';
+import { WatchlistComponent } from './watchlist/watchlist.component';
+import { ChartComponent } from './chart/chart.component';
+import { NewsComponent } from './news/news.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +23,10 @@ import { ComponentSelectorComponent } from './component-selector/component-selec
     WorkspacePanelComponent,
     WorkspaceComponent,
     HeaderComponent,
-    ComponentSelectorComponent
+    ComponentSelectorComponent,
+    WatchlistComponent,
+    ChartComponent,
+    NewsComponent
   ],
   imports: [
     BrowserModule,
