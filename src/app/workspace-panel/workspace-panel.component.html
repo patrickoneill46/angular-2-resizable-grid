@@ -23,13 +23,16 @@
     <div
       class="workspace-item--header-draggable-container"
       dnd-sortable-container [sortableData]="components"
+      [dropZones]="['panel-zone', 'container-zone']"
     >
       <div
         class="workspace-item--header-draggable-item"
         *ngFor="let component of components; let i = index"
         [ngClass]="{ 'active': component.id === activeComponentId }"
         (click)="showComponent(component.id)"
-        dnd-sortable [sortableIndex]="i"
+        dnd-sortable
+        [sortableIndex]="i"
+        [dragData]= "{component: component, panelId: panelId, panelStyle: relativeStyle }"
         [attr.data-component-id]="component.id"
         [attr.data-panel-id]="panelId"
         >

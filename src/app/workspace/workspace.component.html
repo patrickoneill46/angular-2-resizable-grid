@@ -3,7 +3,14 @@
   (componentAdded)="addComponentToWorkspace($event)"
 >
 </component-selector>
-<workspace-panel
+<div
+  class="workspace"
+  dnd-droppable
+  [dropEnabled]="true"
+  (onDropSuccess)=handleComponentDropped($event)
+  [dropZones]="['container-zone']"
+>
+  <workspace-panel
   *ngFor="let config of workspacePanels"
   [workspaceDimensions]="dimensions"
   [initalConfig]="config"
@@ -12,5 +19,6 @@
   (panelChanged)="onWorkspacePanelChanged($event)"
   (panelDestroyed)="removeWorkspacePanel($event)"
   (componentDraggedOutsidePanel)="onPanelDraggedOntoWorkspace($event)"
->
+  >
 </workspace-panel>
+</div>

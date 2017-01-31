@@ -83,6 +83,23 @@ export class WorkspaceComponent implements OnInit {
     this.componentAdded.emit();
   }
 
+  handleComponentDropped($event) {
+
+    this.createNewPanelWithCompoonent($event.dragData.component, {
+      height: $event.dragData.panelStyle.height,
+      width: $event.dragData.panelStyle.width,
+      left: Math.round($event.mouseEvent.clientX * 100 / this.dimensions.width),
+      top: Math.round(($event.mouseEvent.clientY - this.dimensions.top) * 100 / (this.dimensions.height))
+    });
+
+    let previousContainingPanel = this.workspacePanels.find(panel => panel.id === $event.dragData.panelId);
+    let component = previousContainingPanel.components.find(component => component.id === $event.dragData.component.id);
+    previousContainingPanel.components.splice(previousContainingPanel.components.indexOf(component), 1));
+    if (!previousContainingPanel.components.length) {
+      this.workspacePanels.splice(this.workspacePanels.indexOf(previousContainingPanel), 1);
+    }
+  }
+
   private setWorkspaceDimensions(): void {
     this.dimensions =  this.ref.nativeElement.getBoundingClientRect();
   }
@@ -119,18 +136,18 @@ export class WorkspaceComponent implements OnInit {
     }
   }
 
-  private createNewPanelWithCompoonent(component) {
+  private createNewPanelWithCompoonent(component, style = {
+    height: 40,
+    width: 40,
+    top: 20,
+    left: 20
+  }) {
 
     let panelId = 'panel-' + Math.random();
     let zIndexOrder = this.workspacePanels.length + 1;
 
     this.workspacePanels.push({
-      dimensions: {
-        height: 40,
-        width: 40,
-        top: 20,
-        left: 20
-      },
+      dimensions: style,
       order: zIndexOrder,
       id: panelId,
       active: 0,

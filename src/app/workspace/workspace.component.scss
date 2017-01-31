@@ -2,4 +2,12 @@
   flex: 1;
   flex-flow: row wrap;
   position: relative;
+
+  .workspace {
+    // flex: 1;
+    height: 100%;
+    width: 100%;
+    flex-flow: row wrap;
+    position: relative;
+  }
 }
