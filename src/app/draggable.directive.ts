@@ -26,9 +26,11 @@ export class DraggableDirective implements OnInit {
   @HostListener('mousedown', ['$event'])
   onMousedown(event) {
 
+    //check we are not dragging on on one of the draggable headers
+    if (!event.target.attributes.getNamedItem('dnd-sortable')) {
       this.dragging = true;
       this.onDragStart(event);
-      return false; // Call preventDefault() on the event
+    }
   }
 
   @HostListener('document:mousemove', ['$event'])

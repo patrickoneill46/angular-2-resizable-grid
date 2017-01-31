@@ -24,7 +24,6 @@ export class WorkspaceComponent implements OnInit {
   constructor(
     private ref: ElementRef,
     private workspaceService: WorkspaceService,
-    private dragulaService: DragulaService
   ) {
     this.workspacePanels = [];
     this.workspaceZIndexMap = {};
@@ -35,36 +34,6 @@ export class WorkspaceComponent implements OnInit {
     this.workspaceService.updatedWorkspace.subscribe(updatedWorkspace => this.changeWorkspace(updatedWorkspace));
     this.workspaceService.componentSelectorActive.subscribe(state => this.componentSelectorActive = state);
     this.setWorkspaceDimensions();
-
-    this.dragulaService.setOptions(this.dragulaBag, {
-      removeOnSpill: true
-    });
-
-    this.dragulaService.remove.subscribe(event => {
-
-      let el = event[1];
-      let panel = this.workspacePanels.find(panel => panel.id === el.dataset.panelId);
-      let component = panel.components.find(component => component.id === el.dataset.componentId);
-
-      let componentIndex = panel.components.indexOf(component);
-      if (componentIndex !== -1) {
-        panel.components.splice(componentIndex, 1);
-      }
-
-      if (!panel.components.length) {
-        this.workspacePanels.splice(this.workspacePanels.indexOf(panel), 1);
-      }
-
-      this.createNewPanelWithCompoonent(Object.assign({}, component));
-    });
-
-    this.dragulaService.dropModel.subscribe(event => {
-      let panel = this.workspacePanels.find(panel => panel.id === event[1].dataset.panelId);
-      if (!panel.components.length) {
-        this.workspacePanels.splice(this.workspacePanels.indexOf(panel), 1);
-        this.saveActiveWorkspace();
-      }
-    });
   }
 
   @HostListener('window:resize', ['$event'])

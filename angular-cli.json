@@ -19,7 +19,7 @@
       "mobile": false,
       "styles": [
         "styles.css",
-        "../node_modules/dragula/dist/dragula.css"
+        "../node_modules/ng2-dnd/style.css"
       ],
       "scripts": [],
       "environments": {

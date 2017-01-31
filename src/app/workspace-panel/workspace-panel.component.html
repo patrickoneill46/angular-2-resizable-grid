@@ -22,14 +22,14 @@
     >
     <div
       class="workspace-item--header-draggable-container"
-      [dragula]='"bag-one"'
-      [dragulaModel]="components"
+      dnd-sortable-container [sortableData]="components"
     >
       <div
         class="workspace-item--header-draggable-item"
-        *ngFor="let component of components"
+        *ngFor="let component of components; let i = index"
         [ngClass]="{ 'active': component.id === activeComponentId }"
         (click)="showComponent(component.id)"
+        dnd-sortable [sortableIndex]="i"
         [attr.data-component-id]="component.id"
         [attr.data-panel-id]="panelId"
         >

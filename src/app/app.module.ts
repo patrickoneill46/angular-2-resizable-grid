@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { ResizableModule } from 'angular2-resizable';
-import { DragulaModule } from 'ng2-dragula';
+import { DndModule } from 'ng2-dnd';
 
 import { AppComponent } from './app.component';
 import { DraggableDirective } from './draggable.directive';
@@ -30,7 +30,7 @@ import { NewsComponent } from './news/news.component';
   ],
   imports: [
     BrowserModule,
-    DragulaModule,
+    DndModule.forRoot(),
     FormsModule,
     HttpModule,
     ResizableModule

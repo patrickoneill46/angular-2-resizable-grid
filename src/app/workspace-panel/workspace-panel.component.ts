@@ -13,6 +13,7 @@ import {
 } from '@angular/core';
 import { ResizeEvent } from 'angular2-resizable';
 import { DragulaService } from 'ng2-dragula';
+import { DragDropService } from 'ng2-dnd';
 
 import { WatchlistComponent } from '../watchlist/watchlist.component';
 import { ChartComponent } from '../chart/chart.component';
@@ -59,15 +60,7 @@ export class WorkspacePanelComponent implements OnInit {
 
   @ViewChild('dynamicComponentContainer', { read: ViewContainerRef }) dynamicComponentContainer: ViewContainerRef;
 
-  constructor(private dragulaService: DragulaService, private resolver: ComponentFactoryResolver) {
-
-    dragulaService.drag.subscribe(event => {
-      this.onDragPanelHeader(event.slice(1));
-    });
-
-    dragulaService.dragend.subscribe(event => {
-      this.onFinishDragPanelHeader();
-    });
+  constructor(private resolver: ComponentFactoryResolver, private dragDropService: DragDropService) {
 
     this.validate = function(event: ResizeEvent){
 
@@ -135,7 +128,6 @@ export class WorkspacePanelComponent implements OnInit {
 
   onResizeStart(event: ResizeEvent): void {
 
-    console.log('start resizing');
     this.resizing = true;
     this.draggingPanel = false;
   }
