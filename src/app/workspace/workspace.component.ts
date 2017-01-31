@@ -85,16 +85,20 @@ export class WorkspaceComponent implements OnInit {
 
   handleComponentDropped($event) {
 
+    let height = $event.dragData.panelStyle.height;
+    let width = $event.dragData.panelStyle.width;
+
+
     this.createNewPanelWithCompoonent($event.dragData.component, {
-      height: $event.dragData.panelStyle.height,
-      width: $event.dragData.panelStyle.width,
-      left: Math.round($event.mouseEvent.clientX * 100 / this.dimensions.width),
-      top: Math.round(($event.mouseEvent.clientY - this.dimensions.top) * 100 / (this.dimensions.height))
+      height: height,
+      width: width,
+      left: Math.min(100 - width, Math.round($event.mouseEvent.clientX * 100 / this.dimensions.width)),
+      top: Math.min(100 - height, Math.round(($event.mouseEvent.clientY - this.dimensions.top) * 100 / (this.dimensions.height)))
     });
 
     let previousContainingPanel = this.workspacePanels.find(panel => panel.id === $event.dragData.panelId);
     let component = previousContainingPanel.components.find(component => component.id === $event.dragData.component.id);
-    previousContainingPanel.components.splice(previousContainingPanel.components.indexOf(component), 1));
+    previousContainingPanel.components.splice(previousContainingPanel.components.indexOf(component), 1);
     if (!previousContainingPanel.components.length) {
       this.workspacePanels.splice(this.workspacePanels.indexOf(previousContainingPanel), 1);
     }
