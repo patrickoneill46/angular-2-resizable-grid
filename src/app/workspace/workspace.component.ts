@@ -88,7 +88,6 @@ export class WorkspaceComponent implements OnInit {
     let height = $event.dragData.panelStyle.height;
     let width = $event.dragData.panelStyle.width;
 
-
     this.createNewPanelWithCompoonent($event.dragData.component, {
       height: height,
       width: width,
@@ -97,10 +96,9 @@ export class WorkspaceComponent implements OnInit {
     });
 
     let previousContainingPanel = this.workspacePanels.find(panel => panel.id === $event.dragData.panelId);
-    let component = previousContainingPanel.components.find(component => component.id === $event.dragData.component.id);
-    previousContainingPanel.components.splice(previousContainingPanel.components.indexOf(component), 1);
+    previousContainingPanel.components.splice(previousContainingPanel.components.indexOf($event.dragData.component), 1);
     if (!previousContainingPanel.components.length) {
-      this.workspacePanels.splice(this.workspacePanels.indexOf(previousContainingPanel), 1);
+      this.removeWorkspacePanel(previousContainingPanel.id)
     }
   }
 
