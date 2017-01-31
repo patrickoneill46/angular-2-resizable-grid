@@ -34,6 +34,7 @@ export class WorkspacePanelComponent implements OnInit {
   @Output() panelActive: EventEmitter<any> = new EventEmitter();
   @Output() panelChanged: EventEmitter<any> = new EventEmitter();
   @Output() panelDestroyed: EventEmitter<any> = new EventEmitter();
+  @Output() componentDroppedOutsidePanel: EventEmitter<any> = new EventEmitter();
   private relativeStyle: any = {};
   private pixelStyle: any = {};
   private transformValues: any = {};
@@ -228,6 +229,11 @@ export class WorkspacePanelComponent implements OnInit {
 
   destroyPanel() {
     this.panelDestroyed.emit(this.panelId);
+  }
+
+  handleComponentDropped($event) {
+    console.log('component dropped', $event);
+    this.componentDroppedOutsidePanel.emit($event);
   }
 
   private calculateRelativeStyle(style) {

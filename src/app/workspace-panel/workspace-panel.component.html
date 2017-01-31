@@ -22,7 +22,8 @@
     >
     <div
       class="workspace-item--header-draggable-container"
-      dnd-sortable-container [sortableData]="components"
+      dnd-sortable-container
+      [sortableData]="components"
       [dropZones]="['panel-zone', 'container-zone']"
     >
       <div
@@ -31,6 +32,8 @@
         [ngClass]="{ 'active': component.id === activeComponentId }"
         (click)="showComponent(component.id)"
         dnd-sortable
+        [dragEnabled]="true"
+        (onDropSuccess)="handleComponentDropped($event)"
         [sortableIndex]="i"
         [dragData]= "{component: component, panelId: panelId, panelStyle: relativeStyle }"
         [attr.data-component-id]="component.id"

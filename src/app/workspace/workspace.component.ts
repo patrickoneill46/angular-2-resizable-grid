@@ -102,6 +102,13 @@ export class WorkspaceComponent implements OnInit {
     }
   }
 
+  handleComponentDroppedOntoAnotherPanel($event) {
+    let previousContainingPanel = this.workspacePanels.find(panel => panel.id === $event.panelId);
+    if (!previousContainingPanel.components.length) {
+      this.removeWorkspacePanel(previousContainingPanel.id)
+    }
+  }
+
   private setWorkspaceDimensions(): void {
     this.dimensions =  this.ref.nativeElement.getBoundingClientRect();
   }
