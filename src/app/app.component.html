@@ -2,6 +2,7 @@
   (componentSelectorToggled)="componentSelectorToggled($event)"
 ></header>
 <workspace
+  *ngIf="isAuthenticated"
   [componentSelectorActive]="componentSelectorActive"
   (componentAdded)="componentSelectorToggled(false)"
 ></workspace>

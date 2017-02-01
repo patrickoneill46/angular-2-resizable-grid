@@ -5,8 +5,9 @@ import { HttpModule } from '@angular/http';
 import { ResizableModule } from 'angular2-resizable';
 import { DragulaModule } from 'ng2-dragula';
 
-import { StreamingService } from './services/streaming/streaming.service';
 import { AuthenticationService } from './services/authentication/authentication.service';
+import { StreamingService } from './services/streaming/streaming.service';
+import { WatchlistService } from './services/watchlist/watchlist.service';
 
 import { AppComponent } from './app.component';
 import { DraggableDirective } from './draggable.directive';
@@ -41,6 +42,7 @@ import { NewsComponent } from './news/news.component';
   providers: [
     AuthenticationService,
     StreamingService,
+    WatchlistService,
     WorkspaceService
   ],
   bootstrap: [AppComponent]

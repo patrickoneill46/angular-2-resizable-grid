@@ -13,6 +13,7 @@ import { StreamingService } from './services/streaming/streaming.service';
 export class AppComponent {
 
   componentSelectorActive: boolean;
+  isAuthenticated: boolean;
 
   constructor(
     private workspaceService: WorkspaceService,
@@ -20,6 +21,7 @@ export class AppComponent {
     private streamingService: StreamingService
   ) {
     this.componentSelectorActive = false;
+    this.authenticationService.isAuthenticated.subscribe(status => this.isAuthenticated = status);
   }
 
   componentSelectorToggled(event) {
