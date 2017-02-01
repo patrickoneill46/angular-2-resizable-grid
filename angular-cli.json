@@ -21,7 +21,9 @@
         "styles.css",
         "../node_modules/dragula/dist/dragula.css"
       ],
-      "scripts": [],
+      "scripts": [
+        "../lib/lightstreamer_globals.js"
+      ],
       "environments": {
         "source": "environments/environment.ts",
         "dev": "environments/environment.ts",
