@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+import { AuthenticationService } from '../authentication/authentication.service';
+
 import {
   connect,
   subscribeToPrice,
@@ -16,9 +18,33 @@ import {
 @Injectable()
 export class StreamingService {
 
-  constructor() {
+  private lsUrl: string;
+  private lsAdapter: string;
 
-    console.log(connect);
+
+  constructor(private authenticationService: AuthenticationService) {
+
+    this.lsUrl = 'https://push.cityindex.com/';
+    this.lsAdapter = 'STREAMINGALL';
+    this.authenticationService.isAuthenticated.subscribe((value) => {
+      this.connect();
+    });
   }
 
+  connect() {
+
+    connect(
+      this.authenticationService.getUsername(),
+      this.authenticationService.getSessionKey(),
+      this.lsUrl,
+      this.lsAdapter,
+      (response) => {
+        this.connectionCallback(response);
+      }
+    );
+  }
+
+  private connectionCallback(response) {
+    console.log('connection', response);
+  }
 }
