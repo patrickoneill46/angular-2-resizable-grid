@@ -44,7 +44,26 @@ export class StreamingService {
     );
   }
 
+  subscribeToMarketPriceStream(marketId, onPricesItemUpdate) {
+
+    subscribeToPrice(
+      marketId,
+      update => {
+        onPricesItemUpdate(JSON.parse(update));
+      },
+      (action, status, message) => this.streamingStatusCallback(action, status, message)
+    );
+  }
+
   private connectionCallback(response) {
     console.log('connection', response);
+  }
+
+  private streamingStatusCallback(action, status, message, callback?) {
+    console.log('streaming status callback', action, status, message);
+
+    if (callback) {
+      callback(action, status, message);
+    }
   }
 }
