@@ -6,6 +6,7 @@ import { ResizableModule } from 'angular2-resizable';
 import { DragulaModule } from 'ng2-dragula';
 
 import { AuthenticationService } from './services/authentication/authentication.service';
+import { MarketInfoService } from './services/market-info/market-info.service';
 import { MarketPricesService } from './services/market-prices/market-prices.service';
 import { StreamingService } from './services/streaming/streaming.service';
 import { WatchlistService } from './services/watchlist/watchlist.service';
@@ -42,6 +43,7 @@ import { NewsComponent } from './news/news.component';
   ],
   providers: [
     AuthenticationService,
+    MarketInfoService,
     MarketPricesService,
     StreamingService,
     WatchlistService,
