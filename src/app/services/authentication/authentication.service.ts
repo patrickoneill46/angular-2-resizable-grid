@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
-import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Injectable()
 export class AuthenticationService {
 
-  isAuthenticated: Subject<any>;
+  isAuthenticated: BehaviorSubject<boolean>;
 
   private session;
   private username: string = 'DM241228';
 
   constructor(private http: Http) {
 
-    this.isAuthenticated = new Subject();
+    this.isAuthenticated = new BehaviorSubject(false);
 
     this.http.post('https://ciapi.cityindex.com/TradingAPI/session', {
       username: this.username,

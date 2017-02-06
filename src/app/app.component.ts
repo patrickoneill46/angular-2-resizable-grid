@@ -16,9 +16,7 @@ export class AppComponent {
   isAuthenticated: boolean;
 
   constructor(
-    private workspaceService: WorkspaceService,
-    private authenticationService: AuthenticationService,
-    private streamingService: StreamingService
+    private authenticationService: AuthenticationService
   ) {
     this.componentSelectorActive = false;
     this.authenticationService.isAuthenticated.subscribe(status => this.isAuthenticated = status);
