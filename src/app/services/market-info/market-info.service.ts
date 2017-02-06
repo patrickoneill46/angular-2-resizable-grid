@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
+import 'rxjs/add/operator/toPromise';
+
 import { AuthenticationService } from '../authentication/authentication.service';
 
 @Injectable()
@@ -14,7 +16,6 @@ export class MarketInfoService {
 
     this.marketInfoMap = {};
     this.marketSearchUrl = 'https://ciapi.cityindex.com/TradingAPI/market/{marketId}/information';
-    this.getMarketInfo(99500);
   }
 
   getMarketInfo(marketId: number) {
@@ -32,13 +33,11 @@ export class MarketInfoService {
     return marketInfo.toPromise();
   }
 
-
   private requestMarketInfo(marketId) {
 
     return this.http.get(this.marketSearchUrl.replace('{marketId}', marketId), this.authenticationService.getRequestHeaders())
       .map(response => response.json().MarketInformation)
       .subscribe(response => {
-        debugger;
         this.marketInfoMap[marketId].next({
           marketName: response.Name
         });

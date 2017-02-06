@@ -10,8 +10,8 @@ export class MarketPricesService {
 
   constructor(private streamingService: StreamingService) {
 
+    console.log('market prices constructor');
     this.priceSubscriptionMap = {};
-    this.subscribeToMarket(99500);
   }
 
 
@@ -48,7 +48,7 @@ export class MarketPricesService {
   private subscribeToPriceStream(marketId: number) {
 
     this.streamingService.subscribeToMarketPriceStream(marketId, response => {
-      this.priceSubscriptionMap[marketId].subscription.next({
+      this.priceSubscriptionMap[marketId].priceSubject.next({
         bid: parseFloat(response.BidPrice),
         offer: parseFloat(response.OfferPrice)
       });
