@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { AuthenticationService } from '../authentication/authentication.service';
 
@@ -20,10 +21,12 @@ export class StreamingService {
 
   private lsUrl: string;
   private lsAdapter: string;
+  private streamingStatus: BehaviorSubject;
 
 
   constructor(private authenticationService: AuthenticationService) {
 
+    this.streamingStatus = new BehaviorSubject(false);
     this.lsUrl = 'https://push.cityindex.com/';
     this.lsAdapter = 'STREAMINGALL';
     this.authenticationService.isAuthenticated.subscribe((value) => {
@@ -46,17 +49,23 @@ export class StreamingService {
 
   subscribeToMarketPriceStream(marketId, onPricesItemUpdate) {
 
-    subscribeToPrice(
-      marketId,
-      update => {
-        onPricesItemUpdate(JSON.parse(update));
-      },
-      (action, status, message) => this.streamingStatusCallback(action, status, message)
-    );
+    this.streamingStatus.subscribe(status => {
+
+        if (status) {
+          subscribeToPrice(
+            marketId,
+            update => {
+              onPricesItemUpdate(JSON.parse(update));
+            },
+            (action, status, message) => this.streamingStatusCallback(action, status, message)
+          );
+        }
+    });
   }
 
   private connectionCallback(response) {
     console.log('connection', response);
+    this.streamingStatus.next(true);
   }
 
   private streamingStatusCallback(action, status, message, callback?) {
