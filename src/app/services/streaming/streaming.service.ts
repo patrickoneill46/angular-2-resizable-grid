@@ -28,8 +28,11 @@ export class StreamingService {
     this.streamingStatus = new BehaviorSubject(false);
     this.lsUrl = 'https://push.cityindex.com/';
     this.lsAdapter = 'STREAMINGALL';
-    this.authenticationService.isAuthenticated.subscribe((value) => {
-      this.connect();
+    this.authenticationService.isAuthenticated.subscribe(value => {
+
+      if (value) {
+        this.connect();
+      }
     });
   }
 
@@ -48,29 +51,18 @@ export class StreamingService {
 
   subscribeToMarketPriceStream(marketId, onPricesItemUpdate) {
 
-    if (this.streamingStatus.getValue()) {
-      subscribeToPrice(
-        marketId,
-        update => {
-          onPricesItemUpdate(JSON.parse(update));
-        },
-        (action, status, message) => this.streamingStatusCallback(action, status, message)
-      );
-    } else {
-      let subscription = this.streamingStatus.subscribe(status => {
+    let subscription = this.streamingStatus.subscribe(status => {
 
-        if (status) {
-          subscribeToPrice(
-            marketId,
-            update => {
-              onPricesItemUpdate(JSON.parse(update));
-            },
-            (action, status, message) => this.streamingStatusCallback(action, status, message)
-          );
-          subscription.unsubscribe();
-        }
-      })
-    }
+      if (status) {
+        subscribeToPrice(
+          marketId,
+          update => {
+            onPricesItemUpdate(JSON.parse(update));
+          },
+          (action, status, message) => this.streamingStatusCallback(action, status, message)
+        );
+      }
+    });
   }
 
   private connectionCallback(response) {
