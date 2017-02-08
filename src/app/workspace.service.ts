@@ -98,6 +98,7 @@ export class WorkspaceService {
 
   constructor() {
 
+    console.log('workspace service constructor');
     this.workspaces = {};
     this.componentSelectorActive = new Subject();
 

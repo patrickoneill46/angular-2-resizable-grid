@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { WatchlistService } from '../services/watchlist/watchlist.service';
+
 @Component({
   selector: 'app-watchlist',
   templateUrl: './watchlist.component.html',
@@ -7,7 +9,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WatchlistComponent implements OnInit {
 
-  constructor() { }
+  constructor(private watchlistService: WatchlistService) {
+
+  }
 
   ngOnInit() {
   }

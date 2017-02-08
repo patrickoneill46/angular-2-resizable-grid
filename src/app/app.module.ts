@@ -16,6 +16,9 @@ import { WatchlistComponent } from './watchlist/watchlist.component';
 import { ChartComponent } from './chart/chart.component';
 import { NewsComponent } from './news/news.component';
 
+import { WatchlistService } from './services/watchlist/watchlist.service';
+import { StreamingService } from './services/streaming/streaming.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,7 +39,9 @@ import { NewsComponent } from './news/news.component';
     ResizableModule
   ],
   providers: [
-    WorkspaceService
+    StreamingService,
+    WorkspaceService,
+    WatchlistService
   ],
   bootstrap: [AppComponent]
 })
