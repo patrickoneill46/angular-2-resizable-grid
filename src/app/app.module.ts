@@ -18,6 +18,7 @@ import { NewsComponent } from './news/news.component';
 
 import { WatchlistService } from './services/watchlist/watchlist.service';
 import { StreamingService } from './services/streaming/streaming.service';
+import { AuthenticationService } from './services/authentication/authentication.service';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { StreamingService } from './services/streaming/streaming.service';
     ResizableModule
   ],
   providers: [
+    AuthenticationService,
     StreamingService,
     WorkspaceService,
     WatchlistService

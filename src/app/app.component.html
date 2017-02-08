@@ -1,7 +1,9 @@
 <header
+  *ngIf="isAuthenticated | async"
   (componentSelectorToggled)="componentSelectorToggled($event)"
 ></header>
 <workspace
+  *ngIf="isAuthenticated | async"
   [componentSelectorActive]="componentSelectorActive"
   (componentAdded)="componentSelectorToggled(false)"
 ></workspace>

@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
 import { ResizeEvent } from 'angular2-resizable';
 
 import { WorkspaceService } from './workspace.service';
+import { AuthenticationService } from './services/authentication/authentication.service';
 
 @Component({
   selector: 'app-root',
@@ -10,10 +12,12 @@ import { WorkspaceService } from './workspace.service';
 })
 export class AppComponent {
 
+  isAuthenticated;
   componentSelectorActive: boolean;
 
-  constructor(private workspaceService: WorkspaceService) {
+  constructor(private authenticationService: AuthenticationService) {
     this.componentSelectorActive = false;
+    this.isAuthenticated = this.authenticationService.isAuthenticated;
   }
 
   componentSelectorToggled(event) {
