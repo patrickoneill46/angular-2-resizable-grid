@@ -16,6 +16,8 @@ import { WatchlistComponent } from './watchlist/watchlist.component';
 import { ChartComponent } from './chart/chart.component';
 import { NewsComponent } from './news/news.component';
 
+import { MarketInfoService } from './services/market-info/market-info.service';
+import { MarketPricesService } from './services/market-prices/market-prices.service';
 import { WatchlistService } from './services/watchlist/watchlist.service';
 import { StreamingService } from './services/streaming/streaming.service';
 import { AuthenticationService } from './services/authentication/authentication.service';
@@ -41,6 +43,8 @@ import { AuthenticationService } from './services/authentication/authentication.
   ],
   providers: [
     AuthenticationService,
+    MarketInfoService,
+    MarketPricesService,
     StreamingService,
     WorkspaceService,
     WatchlistService

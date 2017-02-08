@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
 
-import { StreamingService } from '../streaming/streaming.service';
+import { MarketInfoService } from '../market-info/market-info.service';
+import { MarketPricesService } from '../market-prices/market-prices.service';
 
 @Injectable()
 export class WatchlistService {
 
-  constructor(private streamingService: StreamingService) {
+  constructor(
+    private marketInfoService: MarketInfoService,
+    private marketPricesService: MarketPricesService
+  ) {
     console.log('watchlist service constructor');
   }
 
