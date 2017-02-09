@@ -21,6 +21,7 @@ import { ComponentSelectorComponent } from './component-selector/component-selec
 import { WatchlistComponent } from './watchlist/watchlist.component';
 import { ChartComponent } from './chart/chart.component';
 import { NewsComponent } from './news/news.component';
+import { PricePipe } from './price.pipe';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { NewsComponent } from './news/news.component';
     ComponentSelectorComponent,
     WatchlistComponent,
     ChartComponent,
-    NewsComponent
+    NewsComponent,
+    PricePipe
   ],
   imports: [
     BrowserModule,
