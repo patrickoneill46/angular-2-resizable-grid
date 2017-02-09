@@ -9,9 +9,15 @@ import { WatchlistService } from '../services/watchlist/watchlist.service';
 })
 export class WatchlistComponent implements OnInit {
 
-  constructor(private watchlistService: WatchlistService) { }
+  watchlists: any;
+
+  constructor(private watchlistService: WatchlistService) {
+
+    this.watchlists = [];
+  }
 
   ngOnInit() {
+    this.watchlistService.watchlistSubject.subscribe(watchlists => this.watchlists = watchlists);
   }
 
 }

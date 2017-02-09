@@ -16,22 +16,21 @@ import {
   disconnect
 } from './streaming';
 
+declare var Subscription: any;
+declare var LightstreamerClient: any;
+
 @Injectable()
 export class StreamingService {
 
   private lsUrl: string;
   private lsAdapter: string;
-  private streamingStatus: BehaviorSubject;
-
+  private streamingStatus: BehaviorSubject<any>;
 
   constructor(private authenticationService: AuthenticationService) {
 
     this.streamingStatus = new BehaviorSubject(false);
     this.lsUrl = 'https://push.cityindex.com/';
     this.lsAdapter = 'STREAMINGALL';
-    this.authenticationService.isAuthenticated.subscribe((value) => {
-      this.connect();
-    });
   }
 
   connect() {

@@ -30,7 +30,7 @@ export class MarketInfoService {
       this.requestMarketInfo(marketId);
     }
 
-    return marketInfo.toPromise();
+    return marketInfo.asObservable();
   }
 
   private requestMarketInfo(marketId) {

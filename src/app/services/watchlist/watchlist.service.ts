@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http, RequestOptions } from '@angular/http';
 
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject } from 'rxjs/Subject';
+
 import { AuthenticationService } from '../authentication/authentication.service';
 import { MarketInfoService } from '../market-info/market-info.service';
 import { MarketPricesService } from '../market-prices/market-prices.service';
@@ -9,6 +12,7 @@ import { MarketPricesService } from '../market-prices/market-prices.service';
 export class WatchlistService {
 
   private watchlists: any;
+  watchlistSubject: BehaviorSubject<any>
 
   constructor(
     private http: Http,
@@ -17,6 +21,7 @@ export class WatchlistService {
     private marketInfoService: MarketInfoService
   ) {
     this.watchlists = [];
+    this.watchlistSubject = new BehaviorSubject(this.watchlists);
     this.http.get('https://ciapi.cityindex.com/TradingAPI/watchlists', this.authenticationService.getRequestHeaders())
       .map(response => response.json())
       .subscribe(response => this.saveWatchlists(response));
@@ -29,6 +34,7 @@ export class WatchlistService {
 
   private saveWatchlists(response: any) {
     response.ClientAccountWatchlists.forEach(config => this.createWatchlist(config));
+    this.watchlistSubject.next(this.watchlists);
   }
 
   private createWatchlist(watchlistConfig: any) {
@@ -41,15 +47,21 @@ export class WatchlistService {
 
     watchlistConfig.Items.forEach(marketConfig => {
 
-      let market: any = {};
+      let market: any = {
+        marketName: null,
+        bid: new BehaviorSubject(null),
+        offer: new BehaviorSubject(null)
+      };
 
-      this.marketInfoService.getMarketInfo(marketConfig.MarketId).then(marketInfo => {
-        market.marketName = marketInfo.marketName;
+      this.marketInfoService.getMarketInfo(marketConfig.MarketId).subscribe(marketInfo => {
+        if (marketInfo) {
+          market.marketName = marketInfo.marketName;
+        }
       });
 
       this.marketPricesService.subscribeToMarket(marketConfig.MarketId).subscribe(priceUpdate => {
-        market.bid = priceUpdate.bid;
-        market.offer = priceUpdate.offer;
+        market.bid.next(priceUpdate.bid);
+        market.offer.next(priceUpdate.offer);
       });
 
       watchlist.markets.push(market);

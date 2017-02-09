@@ -49,8 +49,8 @@ export class MarketPricesService {
 
     this.streamingService.subscribeToMarketPriceStream(marketId, response => {
       this.priceSubscriptionMap[marketId].priceSubject.next({
-        bid: parseFloat(response.BidPrice),
-        offer: parseFloat(response.OfferPrice)
+        bid: parseFloat(response.Bid),
+        offer: parseFloat(response.Offer)
       });
     });
   }

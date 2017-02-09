@@ -1,3 +1,7 @@
-<p>
-  watchlist works!
-</p>
+<div *ngFor="let watchlist of watchlists">
+  {{watchlist.watchlistName}}
+  <div *ngFor="let market of watchlist.markets">
+    {{market.bid | async}}
+    {{market.offer | async}}
+  </div>
+</div>
