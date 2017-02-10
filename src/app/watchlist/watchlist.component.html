@@ -2,7 +2,7 @@
   {{watchlist.watchlistName}}
   <div *ngFor="let market of watchlist.markets">
     {{ market.marketName }}
-    {{ market.bid | price }}
-    {{ market.offer | price }}
+    {{ market.bid | async }}
+    {{ market.offer | async }}
   </div>
 </div>
