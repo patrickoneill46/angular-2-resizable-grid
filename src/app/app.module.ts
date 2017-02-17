@@ -22,6 +22,7 @@ import { WatchlistComponent } from './watchlist/watchlist.component';
 import { ChartComponent } from './chart/chart.component';
 import { NewsComponent } from './news/news.component';
 import { PricePipe } from './price.pipe';
+import { ResizableDirective } from './resizable.directive';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { PricePipe } from './price.pipe';
     WatchlistComponent,
     ChartComponent,
     NewsComponent,
-    PricePipe
+    PricePipe,
+    ResizableDirective
   ],
   imports: [
     BrowserModule,

@@ -1,3 +1,29 @@
+.resize-handle {
+  position: absolute;
+  background: black;
+
+  &.n {
+    height: 5px;
+    top: 0;
+    width: 100%;
+
+    &:hover {
+      cursor: n-resize;
+    }
+  }
+
+  &.s {
+    height: 5px;
+    bottom: 0;
+    width: 100%;
+
+    &:hover {
+      cursor: s-resize;
+    }
+  }
+}
+
+
 .workspace-item {
   border: 1px #f5f5f5 solid;
   box-sizing: border-box;

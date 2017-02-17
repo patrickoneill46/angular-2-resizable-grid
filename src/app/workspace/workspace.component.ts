@@ -2,6 +2,7 @@ import { Component, OnInit, ElementRef, HostListener, Input, Output, EventEmitte
 import { DragulaService } from 'ng2-dragula';
 
 import { WorkspaceService } from '../workspace.service';
+import { ResizableDirective } from '../resizable.directive';
 
 @Component({
   selector: 'workspace',

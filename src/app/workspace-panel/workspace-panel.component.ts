@@ -17,6 +17,8 @@ import { DragulaService } from 'ng2-dragula';
 import { WatchlistComponent } from '../watchlist/watchlist.component';
 import { ChartComponent } from '../chart/chart.component';
 import { NewsComponent } from '../news/news.component';
+import { Subject } from 'rxjs/Subject';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'workspace-panel',
@@ -41,6 +43,10 @@ export class WorkspacePanelComponent implements OnInit {
   private draggingHeaderItem: boolean = false;
   private draggingPanel: boolean = false;
   private resizing: boolean = false;
+  private mouseMoveObs: Subject<any>;
+  private mouseUpObs: Subject<any>;
+  private mouseMoveSub: Subscription;
+  private mouseUpSub: Subscription;
 
   style: any = {};
   transform: string;
@@ -61,6 +67,8 @@ export class WorkspacePanelComponent implements OnInit {
 
   constructor(private dragulaService: DragulaService, private resolver: ComponentFactoryResolver) {
 
+    this.mouseMoveObs = new Subject();
+    this.mouseUpObs = new Subject();
     dragulaService.drag.subscribe(event => {
       this.onDragPanelHeader(event.slice(1));
     });
@@ -131,6 +139,37 @@ export class WorkspacePanelComponent implements OnInit {
 
   onFinishDragPanelHeader() {
     this.draggingHeaderItem = false;
+  }
+
+  @HostListener('window:mousemove', ['$event'])
+  onResize(event): void {
+    this.mouseMoveObs.next(event);
+  }
+
+  @HostListener('window:mouseup', ['$event'])
+  onMouseUp(event): void {
+    this.mouseUpObs.next(event);
+  }
+
+  resizeStart($event) {
+
+    console.log('dragging');
+    this.resizing = true;
+    this.mouseMoveSub = this.mouseMoveObs.subscribe(resizeEvent => this.resize(resizeEvent));
+    this.mouseUpSub = this.mouseUpObs.subscribe(resizeEvent => this.resizeEnd(resizeEvent));
+  }
+
+  resize($event) {
+    console.log('resizing', $event);
+  }
+
+  resizeEnd(event) {
+
+    if (this.resizing) {
+      this.resizing = false;
+      this.mouseMoveSub.unsubscribe();
+      this.mouseUpSub.unsubscribe();
+    }
   }
 
   onResizeStart(event: ResizeEvent): void {
