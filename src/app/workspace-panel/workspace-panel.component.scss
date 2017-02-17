@@ -41,6 +41,15 @@
       cursor: w-resize;
     }
   }
+
+  &.nw {
+    height: 5px;
+    width: 5px;
+
+    &:hover {
+      cursor: se-resize;
+    }
+  }
 }
 
 

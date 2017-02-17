@@ -187,6 +187,7 @@ export class WorkspacePanelComponent implements OnInit {
           };
           break;
         case 's':
+
           resizeChange = {
             height: Math.max(this.minHeight, initialStyle.height - yChange),
             width: initialStyle.width,
@@ -196,6 +197,7 @@ export class WorkspacePanelComponent implements OnInit {
           break;
 
         case 'e':
+
           resizeChange = {
             height: initialStyle.height,
             width: Math.max(this.minWidth, initialStyle.width - xChange),
@@ -205,6 +207,7 @@ export class WorkspacePanelComponent implements OnInit {
           break;
 
         case 'w':
+
           resizeChange = {
             height: initialStyle.height,
             width: Math.max(this.minWidth, initialStyle.width + xChange),
@@ -212,7 +215,29 @@ export class WorkspacePanelComponent implements OnInit {
             left: initialStyle.left - (initialStyle.width + xChange <= this.minWidth ? (initialStyle.width - this.minWidth) * -1 : xChange),
           };
           break;
+        //
+        // case 'nw':
+        //   resizeChange = {
+        //     height: Math.max(this.minHeight, initialStyle.height + yChange),
+        //     width: Math.max(this.minWidth, initialStyle.width + xChange),
+        //     top: initialStyle.top + (initialStyle.height + yChange <= this.minHeight ? (initialStyle.height - this.minHeight) : -yChange),
+        //     left: initialStyle.left - (initialStyle.width + xChange <= this.minWidth ? (initialStyle.width - this.minWidth) * -1 : xChange),
+        //   }
+        //   break;
     }
+
+    if (
+      resizeChange.top < 0 ||
+      resizeChange.left < 0 ||
+      resizeChange.height < this.minHeight ||
+      resizeChange.height + resizeChange.top < 0 ||
+      resizeChange.height + resizeChange.top > this.workspaceDimensions.height ||
+      resizeChange.width + resizeChange.left > this.workspaceDimensions.width ||
+      resizeChange.width < this.minWidth
+    ) {
+      return false;
+    }
+
     this.setStyleByPixels(resizeChange);
   }
 
