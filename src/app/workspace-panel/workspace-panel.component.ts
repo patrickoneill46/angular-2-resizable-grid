@@ -31,6 +31,8 @@ export class WorkspacePanelComponent implements OnInit {
   @Input() workspaceDimensions: ClientRect;
   @Input() initalConfig: any;
   @Input() order;
+  @Input() mouseMoveObs: Subject<any>;
+  @Input() mouseUpObs: Subject<any>;
 
   @Output() panelActive: EventEmitter<any> = new EventEmitter();
   @Output() panelChanged: EventEmitter<any> = new EventEmitter();
@@ -43,8 +45,6 @@ export class WorkspacePanelComponent implements OnInit {
   private draggingHeaderItem: boolean = false;
   private draggingPanel: boolean = false;
   private resizing: boolean = false;
-  private mouseMoveObs: Subject<any>;
-  private mouseUpObs: Subject<any>;
   private mouseMoveSub: Subscription;
   private mouseUpSub: Subscription;
 
@@ -67,8 +67,6 @@ export class WorkspacePanelComponent implements OnInit {
 
   constructor(private dragulaService: DragulaService, private resolver: ComponentFactoryResolver) {
 
-    this.mouseMoveObs = new Subject();
-    this.mouseUpObs = new Subject();
     dragulaService.drag.subscribe(event => {
       this.onDragPanelHeader(event.slice(1));
     });
@@ -139,16 +137,6 @@ export class WorkspacePanelComponent implements OnInit {
 
   onFinishDragPanelHeader() {
     this.draggingHeaderItem = false;
-  }
-
-  @HostListener('window:mousemove', ['$event.clientX', '$event.clientY'])
-  onResize(mouseX: number, mouseY: number): void {
-    this.mouseMoveObs.next({ mouseX, mouseY });
-  }
-
-  @HostListener('window:mouseup', ['$event'])
-  onMouseUp(event): void {
-    this.mouseUpObs.next(event);
   }
 
   resizeStart($event, direction) {
@@ -244,7 +232,7 @@ export class WorkspacePanelComponent implements OnInit {
           break;
 
         case 'sw':
-        
+
           resizeChange = {
             height: Math.max(this.minHeight, initialStyle.height - yChange),
             width: Math.max(this.minWidth, initialStyle.width + xChange),

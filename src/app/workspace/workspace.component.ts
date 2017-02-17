@@ -1,6 +1,8 @@
 import { Component, OnInit, ElementRef, HostListener, Input, Output, EventEmitter } from '@angular/core';
 import { DragulaService } from 'ng2-dragula';
 
+import { Subject } from 'rxjs/Subject';
+
 import { WorkspaceService } from '../workspace.service';
 import { ResizableDirective } from '../resizable.directive';
 
@@ -18,6 +20,8 @@ export class WorkspaceComponent implements OnInit {
   workspacePanels: Array<any>;
   workspaceZIndexMap: any;
   dragulaBag = 'bag-one';
+  mouseMoveObs: Subject<any>;
+  mouseUpObs: Subject<any>;
 
   @Input() componentSelectorActive: boolean;
   @Output() componentAdded: EventEmitter<null> = new EventEmitter();
@@ -29,6 +33,8 @@ export class WorkspaceComponent implements OnInit {
   ) {
     this.workspacePanels = [];
     this.workspaceZIndexMap = {};
+    this.mouseMoveObs = new Subject();
+    this.mouseUpObs = new Subject();
   }
 
   ngOnInit() {
@@ -71,6 +77,16 @@ export class WorkspaceComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
   onResize(event): void {
     this.setWorkspaceDimensions();
+  }
+
+  @HostListener('window:mousemove', ['$event.clientX', '$event.clientY'])
+  onMouseMove(mouseX: number, mouseY: number): void {
+    this.mouseMoveObs.next({ mouseX, mouseY });
+  }
+
+  @HostListener('window:mouseup', ['$event'])
+  onMouseUp(event): void {
+    this.mouseUpObs.next(event);
   }
 
   updateActivePanel(activePanel) {
