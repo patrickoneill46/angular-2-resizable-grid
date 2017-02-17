@@ -47,6 +47,8 @@ export class WorkspacePanelComponent implements OnInit {
   private mouseUpObs: Subject<any>;
   private mouseMoveSub: Subscription;
   private mouseUpSub: Subscription;
+  private resizeStartCoords: any;
+  private resizeDirection: string;
 
   style: any = {};
   transform: string;
@@ -141,9 +143,9 @@ export class WorkspacePanelComponent implements OnInit {
     this.draggingHeaderItem = false;
   }
 
-  @HostListener('window:mousemove', ['$event'])
-  onResize(event): void {
-    this.mouseMoveObs.next(event);
+  @HostListener('window:mousemove', ['$event.clientX', '$event.clientY'])
+  onResize(mouseX: number, mouseY: number): void {
+    this.mouseMoveObs.next({ mouseX, mouseY });
   }
 
   @HostListener('window:mouseup', ['$event'])
@@ -151,24 +153,59 @@ export class WorkspacePanelComponent implements OnInit {
     this.mouseUpObs.next(event);
   }
 
-  resizeStart($event) {
+  resizeStart($event, direction) {
 
-    console.log('dragging');
+    this.setStyleByPixels(this.pixelStyle);
+    this.resizeDirection = direction;
+    let resizeStartCoords = {
+      x: $event.clientX,
+      y: $event.clientY
+    };
+
+    let initialStyle = Object.assign({}, this.pixelStyle);
     this.resizing = true;
-    this.mouseMoveSub = this.mouseMoveObs.subscribe(resizeEvent => this.resize(resizeEvent));
+    this.mouseMoveSub = this.mouseMoveObs.subscribe(resizeEvent => this.resize(resizeEvent, resizeStartCoords, initialStyle));
     this.mouseUpSub = this.mouseUpObs.subscribe(resizeEvent => this.resizeEnd(resizeEvent));
   }
 
-  resize($event) {
-    console.log('resizing', $event);
+  resize(event, resizeStartCoords, initialStyle) {
+
+    console.log('initialStyle', initialStyle);
+
+    let resizeChange;
+    let yChange = resizeStartCoords.y - event.mouseY;
+    let xChange = resizeStartCoords.x - event.mouseX;
+
+    switch (this.resizeDirection) {
+        case 'n':
+
+          resizeChange = {
+            height: initialStyle.height + yChange,
+            width: initialStyle.width,
+            top: initialStyle.top - yChange,
+            left: initialStyle.left,
+          };
+          break;
+        case 's':
+          resizeChange = {
+            height: initialStyle.height - yChange,
+            width: initialStyle.width,
+            top: initialStyle.top,
+            left: initialStyle.left,
+          };
+          break;
+    }
+    this.setStyleByPixels(resizeChange);
   }
 
   resizeEnd(event) {
 
     if (this.resizing) {
       this.resizing = false;
+      this.resizeStartCoords = null;
       this.mouseMoveSub.unsubscribe();
       this.mouseUpSub.unsubscribe();
+      this.resizeDirection = '';
     }
   }
 
@@ -299,6 +336,7 @@ export class WorkspacePanelComponent implements OnInit {
 
   private setStyleByPixels(style) {
 
+    console.log('setting style', style);
     this.pixelStyle = style;
     this.relativeStyle = this.calculateRelativeStyle(style);
 

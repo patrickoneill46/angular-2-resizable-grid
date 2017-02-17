@@ -7,8 +7,8 @@
   [style.minWidth.px]="minWidth"
   (mousedown)="setPanelActive()"
   >
-  <div class="resize-handle n" (mousedown)="resizeStart($event)" (mouseup)="resizeEnd($event)"></div>
-  <div class="resize-handle s" (mousedown)="resizeStart($event)" (mouseup)="resizeEnd($event)"></div>
+  <div class="resize-handle n" (mousedown)="resizeStart($event, 'n')" (mouseup)="resizeEnd($event)"></div>
+  <div class="resize-handle s" (mousedown)="resizeStart($event, 's')" (mouseup)="resizeEnd($event)"></div>
   <div
     class="workspace-item--header"
     draggable
