@@ -194,6 +194,24 @@ export class WorkspacePanelComponent implements OnInit {
             left: initialStyle.left,
           };
           break;
+
+        case 'e':
+          resizeChange = {
+            height: initialStyle.height,
+            width: initialStyle.width - xChange,
+            top: initialStyle.top,
+            left: initialStyle.left,
+          };
+          break;
+
+        case 'w':
+          resizeChange = {
+            height: initialStyle.height,
+            width: initialStyle.width + xChange,
+            top: initialStyle.top,
+            left: initialStyle.left - xChange,
+          };
+          break;
     }
     this.setStyleByPixels(resizeChange);
   }
