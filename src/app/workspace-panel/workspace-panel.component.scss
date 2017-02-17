@@ -25,7 +25,7 @@
   &.e {
     height: 100%;
     width: 5px;
-    left: 100%;
+    right: 0;
 
     &:hover {
       cursor: e-resize;
@@ -48,6 +48,37 @@
 
     &:hover {
       cursor: se-resize;
+    }
+  }
+
+  &.ne {
+    height: 5px;
+    width: 5px;
+    right: 0;
+
+    &:hover {
+      cursor: sw-resize;
+    }
+  }
+
+  &.se {
+    height: 5px;
+    width: 5px;
+    bottom: 0;
+    right: 0;
+
+    &:hover {
+      cursor: nw-resize;
+    }
+  }
+
+  &.sw {
+    height: 5px;
+    width: 5px;
+    bottom: 0;
+
+    &:hover {
+      cursor: ne-resize;
     }
   }
 }

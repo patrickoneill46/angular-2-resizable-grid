@@ -215,15 +215,42 @@ export class WorkspacePanelComponent implements OnInit {
             left: initialStyle.left - (initialStyle.width + xChange <= this.minWidth ? (initialStyle.width - this.minWidth) * -1 : xChange),
           };
           break;
-        //
-        // case 'nw':
-        //   resizeChange = {
-        //     height: Math.max(this.minHeight, initialStyle.height + yChange),
-        //     width: Math.max(this.minWidth, initialStyle.width + xChange),
-        //     top: initialStyle.top + (initialStyle.height + yChange <= this.minHeight ? (initialStyle.height - this.minHeight) : -yChange),
-        //     left: initialStyle.left - (initialStyle.width + xChange <= this.minWidth ? (initialStyle.width - this.minWidth) * -1 : xChange),
-        //   }
-        //   break;
+
+        case 'nw':
+          resizeChange = {
+            height: Math.max(this.minHeight, initialStyle.height + yChange),
+            width: Math.max(this.minWidth, initialStyle.width - xChange),
+            top: initialStyle.top + (initialStyle.height + yChange <= this.minHeight ? (initialStyle.height - this.minHeight) : -yChange),
+            left: initialStyle.left - (initialStyle.width + xChange <= this.minWidth ? (initialStyle.width - this.minWidth) * -1 : xChange),
+          };
+          break;
+
+        case 'ne':
+          resizeChange = {
+            height: Math.max(this.minHeight, initialStyle.height + yChange),
+            width: Math.max(this.minWidth, initialStyle.width - xChange),
+            top: initialStyle.top + (initialStyle.height + yChange <= this.minHeight ? (initialStyle.height - this.minHeight) : -yChange),
+            left: initialStyle.left,
+          };
+          break;
+
+        case 'se':
+          resizeChange = {
+            height: Math.max(this.minHeight, initialStyle.height - yChange),
+            width: Math.max(this.minWidth, initialStyle.width - xChange),
+            left: initialStyle.left,
+            top: initialStyle.top
+          };
+          break;
+
+        case 'sw':
+          resizeChange = {
+            height: Math.max(this.minHeight, initialStyle.height - yChange),
+            width: Math.max(this.minWidth, initialStyle.width + xChange),
+            top: initialStyle.top,
+            left: initialStyle.left - (initialStyle.width + xChange <= this.minWidth ? (initialStyle.width - this.minWidth) * -1 : xChange)
+          };
+          break;
     }
 
     if (
