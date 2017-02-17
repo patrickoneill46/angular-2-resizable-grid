@@ -180,15 +180,15 @@ export class WorkspacePanelComponent implements OnInit {
         case 'n':
 
           resizeChange = {
-            height: initialStyle.height + yChange,
+            height: Math.max(this.minHeight, initialStyle.height + yChange),
             width: initialStyle.width,
-            top: initialStyle.top - yChange,
+            top: initialStyle.top + (initialStyle.height + yChange <= this.minHeight ? (initialStyle.height - this.minHeight) : -yChange),
             left: initialStyle.left,
           };
           break;
         case 's':
           resizeChange = {
-            height: initialStyle.height - yChange,
+            height: Math.max(this.minHeight, initialStyle.height - yChange),
             width: initialStyle.width,
             top: initialStyle.top,
             left: initialStyle.left,
@@ -198,7 +198,7 @@ export class WorkspacePanelComponent implements OnInit {
         case 'e':
           resizeChange = {
             height: initialStyle.height,
-            width: initialStyle.width - xChange,
+            width: Math.max(this.minWidth, initialStyle.width - xChange),
             top: initialStyle.top,
             left: initialStyle.left,
           };
@@ -207,9 +207,9 @@ export class WorkspacePanelComponent implements OnInit {
         case 'w':
           resizeChange = {
             height: initialStyle.height,
-            width: initialStyle.width + xChange,
+            width: Math.max(this.minWidth, initialStyle.width + xChange),
             top: initialStyle.top,
-            left: initialStyle.left - xChange,
+            left: initialStyle.left - (initialStyle.width + xChange <= this.minWidth ? (initialStyle.width - this.minWidth) * -1 : xChange),
           };
           break;
     }
