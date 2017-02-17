@@ -47,8 +47,6 @@ export class WorkspacePanelComponent implements OnInit {
   private mouseUpObs: Subject<any>;
   private mouseMoveSub: Subscription;
   private mouseUpSub: Subscription;
-  private resizeStartCoords: any;
-  private resizeDirection: string;
 
   style: any = {};
   transform: string;
@@ -156,27 +154,25 @@ export class WorkspacePanelComponent implements OnInit {
   resizeStart($event, direction) {
 
     this.setStyleByPixels(this.pixelStyle);
-    this.resizeDirection = direction;
+
     let resizeStartCoords = {
       x: $event.clientX,
       y: $event.clientY
     };
-
     let initialStyle = Object.assign({}, this.pixelStyle);
-    this.resizing = true;
-    this.mouseMoveSub = this.mouseMoveObs.subscribe(resizeEvent => this.resize(resizeEvent, resizeStartCoords, initialStyle));
+
+    this.mouseMoveSub = this.mouseMoveObs.subscribe(resizeEvent => this.resize(direction, resizeEvent, resizeStartCoords, initialStyle));
     this.mouseUpSub = this.mouseUpObs.subscribe(resizeEvent => this.resizeEnd(resizeEvent));
   }
 
-  resize(event, resizeStartCoords, initialStyle) {
-
-    console.log('initialStyle', initialStyle);
+  resize(resizeDirection, event, resizeStartCoords, initialStyle) {
 
     let resizeChange;
     let yChange = resizeStartCoords.y - event.mouseY;
     let xChange = resizeStartCoords.x - event.mouseX;
 
-    switch (this.resizeDirection) {
+    switch (resizeDirection) {
+
         case 'n':
 
           resizeChange = {
@@ -186,6 +182,7 @@ export class WorkspacePanelComponent implements OnInit {
             left: initialStyle.left,
           };
           break;
+
         case 's':
 
           resizeChange = {
@@ -217,6 +214,7 @@ export class WorkspacePanelComponent implements OnInit {
           break;
 
         case 'nw':
+
           resizeChange = {
             height: Math.max(this.minHeight, initialStyle.height + yChange),
             width: Math.max(this.minWidth, initialStyle.width - xChange),
@@ -226,6 +224,7 @@ export class WorkspacePanelComponent implements OnInit {
           break;
 
         case 'ne':
+
           resizeChange = {
             height: Math.max(this.minHeight, initialStyle.height + yChange),
             width: Math.max(this.minWidth, initialStyle.width - xChange),
@@ -235,6 +234,7 @@ export class WorkspacePanelComponent implements OnInit {
           break;
 
         case 'se':
+
           resizeChange = {
             height: Math.max(this.minHeight, initialStyle.height - yChange),
             width: Math.max(this.minWidth, initialStyle.width - xChange),
@@ -244,6 +244,7 @@ export class WorkspacePanelComponent implements OnInit {
           break;
 
         case 'sw':
+        
           resizeChange = {
             height: Math.max(this.minHeight, initialStyle.height - yChange),
             width: Math.max(this.minWidth, initialStyle.width + xChange),
@@ -270,13 +271,9 @@ export class WorkspacePanelComponent implements OnInit {
 
   resizeEnd(event) {
 
-    if (this.resizing) {
-      this.resizing = false;
-      this.resizeStartCoords = null;
-      this.mouseMoveSub.unsubscribe();
-      this.mouseUpSub.unsubscribe();
-      this.resizeDirection = '';
-    }
+    this.mouseMoveSub.unsubscribe();
+    this.mouseUpSub.unsubscribe();
+    this.handlePanelChanged();
   }
 
   onResizeStart(event: ResizeEvent): void {
