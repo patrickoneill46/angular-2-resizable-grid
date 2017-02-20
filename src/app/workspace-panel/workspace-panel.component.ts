@@ -11,7 +11,6 @@ import {
   ReflectiveInjector,
   ComponentFactoryResolver
 } from '@angular/core';
-import { ResizeEvent } from 'angular2-resizable';
 import { DragulaService } from 'ng2-dragula';
 
 import { WatchlistComponent } from '../watchlist/watchlist.component';

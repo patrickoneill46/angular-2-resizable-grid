@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { ResizableModule } from 'angular2-resizable';
 import { DragulaModule } from 'ng2-dragula';
 
 import { AuthenticationService } from './services/authentication/authentication.service';
@@ -43,7 +42,6 @@ import { ResizableDirective } from './resizable.directive';
     DragulaModule,
     FormsModule,
     HttpModule,
-    ResizableModule
   ],
   providers: [
     AuthenticationService,
