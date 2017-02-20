@@ -24,7 +24,16 @@ import { Subscription } from 'rxjs/Subscription';
   selector: 'workspace-panel',
   templateUrl: './workspace-panel.component.html',
   styleUrls: ['./workspace-panel.component.scss'],
-  entryComponents: [ChartComponent, NewsComponent, WatchlistComponent]
+  entryComponents: [ChartComponent, NewsComponent, WatchlistComponent],
+  host: {
+    '[style.height]': 'style.height',
+    '[style.width]': 'style.width',
+    '[style.left]': 'style.left',
+    '[style.top]': 'style.top',
+    '[style.minHeight]': 'minHeight',
+    '[style.minWidth]': 'minWidth',
+    '[style.transform]': 'transform'
+  }
 })
 export class WorkspacePanelComponent implements OnInit {
 
@@ -74,21 +83,6 @@ export class WorkspacePanelComponent implements OnInit {
     dragulaService.dragend.subscribe(event => {
       this.onFinishDragPanelHeader();
     });
-
-    this.validate = function(event: ResizeEvent){
-
-      if (
-        event.rectangle.top < this.workspaceDimensions.top ||
-        event.rectangle.left < 0 ||
-        event.rectangle.right > this.workspaceDimensions.width ||
-        event.rectangle.bottom > this.workspaceDimensions.bottom ||
-        event.rectangle.height < this.minHeight ||
-        event.rectangle.width < this.minWidth
-      ) {
-        return false;
-      }
-      return true;
-    }.bind(this);
   }
 
   // component: Class for the component you want to create
@@ -261,25 +255,6 @@ export class WorkspacePanelComponent implements OnInit {
 
     this.mouseMoveSub.unsubscribe();
     this.mouseUpSub.unsubscribe();
-    this.handlePanelChanged();
-  }
-
-  onResizeStart(event: ResizeEvent): void {
-
-    console.log('start resizing');
-    this.resizing = true;
-    this.draggingPanel = false;
-  }
-
-  onResizeEnd(event: ResizeEvent): void {
-
-    this.resizing = false;
-    this.setStyleByPixels({
-      left: event.rectangle.left,
-      top: event.rectangle.top - this.workspaceDimensions.top,
-      width: event.rectangle.width,
-      height: event.rectangle.height
-    });
     this.handlePanelChanged();
   }
 

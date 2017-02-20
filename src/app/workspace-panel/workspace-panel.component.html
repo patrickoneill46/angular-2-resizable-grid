@@ -1,51 +1,41 @@
+<div class="resize-handle n" (mousedown)="resizeStart($event, 'n')" (mouseup)="resizeEnd($event)"></div>
+<div class="resize-handle s" (mousedown)="resizeStart($event, 's')" (mouseup)="resizeEnd($event)"></div>
+<div class="resize-handle e" (mousedown)="resizeStart($event, 'e')" (mouseup)="resizeEnd($event)"></div>
+<div class="resize-handle w" (mousedown)="resizeStart($event, 'w')" (mouseup)="resizeEnd($event)"></div>
+<div class="resize-handle nw" (mousedown)="resizeStart($event, 'nw')" (mouseup)="resizeEnd($event)"></div>
+<div class="resize-handle ne" (mousedown)="resizeStart($event, 'ne')" (mouseup)="resizeEnd($event)"></div>
+<div class="resize-handle sw" (mousedown)="resizeStart($event, 'sw')" (mouseup)="resizeEnd($event)"></div>
+<div class="resize-handle se" (mousedown)="resizeStart($event, 'se')" (mouseup)="resizeEnd($event)"></div>
 <div
-  class="workspace-item"
-  [ngStyle]="style"
-  [style.zIndex]="order"
-  [style.transform]="transform"
-  [style.minHeight.px]="minHeight"
-  [style.minWidth.px]="minWidth"
-  (mousedown)="setPanelActive()"
+  class="workspace-item--header"
+  draggable
+  (dragStartEvent)="onDragStart($event)"
+  (dragEvent)="onDrag($event)"
+  (dragEndEvent)="onDragEnd($event)"
   >
-  <div class="resize-handle n" (mousedown)="resizeStart($event, 'n')" (mouseup)="resizeEnd($event)"></div>
-  <div class="resize-handle s" (mousedown)="resizeStart($event, 's')" (mouseup)="resizeEnd($event)"></div>
-  <div class="resize-handle e" (mousedown)="resizeStart($event, 'e')" (mouseup)="resizeEnd($event)"></div>
-  <div class="resize-handle w" (mousedown)="resizeStart($event, 'w')" (mouseup)="resizeEnd($event)"></div>
-  <div class="resize-handle nw" (mousedown)="resizeStart($event, 'nw')" (mouseup)="resizeEnd($event)"></div>
-  <div class="resize-handle ne" (mousedown)="resizeStart($event, 'ne')" (mouseup)="resizeEnd($event)"></div>
-  <div class="resize-handle sw" (mousedown)="resizeStart($event, 'sw')" (mouseup)="resizeEnd($event)"></div>
-  <div class="resize-handle se" (mousedown)="resizeStart($event, 'se')" (mouseup)="resizeEnd($event)"></div>
   <div
-    class="workspace-item--header"
-    draggable
-    (dragStartEvent)="onDragStart($event)"
-    (dragEvent)="onDrag($event)"
-    (dragEndEvent)="onDragEnd($event)"
-    >
+    class="workspace-item--header-draggable-container"
+    [dragula]='"bag-one"'
+    [dragulaModel]="components"
+  >
     <div
-      class="workspace-item--header-draggable-container"
-      [dragula]='"bag-one"'
-      [dragulaModel]="components"
-    >
-      <div
-        class="workspace-item--header-draggable-item"
-        *ngFor="let component of components"
-        [ngClass]="{ 'active': component.id === activeComponentId }"
-        (click)="showComponent(component.id)"
-        [attr.data-component-id]="component.id"
-        [attr.data-panel-id]="panelId"
-        >
-        {{ component.header }}
-        <div class="workspace-item--header-draggable-item--destroy" (click)="destroyComponent(component.id, component.type)">
-          x
-        </div>
+      class="workspace-item--header-draggable-item"
+      *ngFor="let component of components"
+      [ngClass]="{ 'active': component.id === activeComponentId }"
+      (click)="showComponent(component.id)"
+      [attr.data-component-id]="component.id"
+      [attr.data-panel-id]="panelId"
+      >
+      {{ component.header }}
+      <div class="workspace-item--header-draggable-item--destroy" (click)="destroyComponent(component.id, component.type)">
+        x
       </div>
     </div>
-    <div class="workspace-item--destroy" (click)="destroyPanel()">
-      x
-    </div>
   </div>
-  <div class="workspace-item--content">
-    <div class="workspace-item--content-component" #dynamicComponentContainer></div>
+  <div class="workspace-item--destroy" (click)="destroyPanel()">
+    x
   </div>
+</div>
+<div class="workspace-item--content">
+  <div class="workspace-item--content-component" #dynamicComponentContainer></div>
 </div>
