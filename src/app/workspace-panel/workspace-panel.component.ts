@@ -31,7 +31,8 @@ import { Subscription } from 'rxjs/Subscription';
     '[style.top]': 'style.top',
     '[style.minHeight]': 'minHeight',
     '[style.minWidth]': 'minWidth',
-    '[style.transform]': 'transform'
+    '[style.transform]': 'transform',
+    '[style.zIndex]': 'order'
   }
 })
 export class WorkspacePanelComponent implements OnInit {
@@ -135,7 +136,7 @@ export class WorkspacePanelComponent implements OnInit {
   resizeStart($event, direction) {
 
     this.setStyleByPixels(this.pixelStyle);
-
+    this.setPanelActive();
     let resizeStartCoords = {
       x: $event.clientX,
       y: $event.clientY
@@ -234,23 +235,6 @@ export class WorkspacePanelComponent implements OnInit {
           };
           break;
     }
-
-    // resizeChange.height = Math.min(Math.max(resizeChange.height, this.minHeight), this.workspaceDimensions.height - resizeChange.top);
-    // resizeChange.width = Math.min(Math.max(resizeChange.width, this.minWidth), this.workspaceDimensions.width - resizeChange.left);
-    // resizeChange.top = Math.max(resizeChange.top, 0);
-    // resizeChange.left = Math.max(resizeChange.left, 0);
-
-    // if (
-    //   resizeChange.top < 0 ||
-    //   resizeChange.left < 0 ||
-    //   resizeChange.height < this.minHeight ||
-    //   resizeChange.height + resizeChange.top < 0 ||
-    //   resizeChange.height + resizeChange.top > this.workspaceDimensions.height ||
-    //   resizeChange.width + resizeChange.left > this.workspaceDimensions.width ||
-    //   resizeChange.width < this.minWidth
-    // ) {
-    //   return false;
-    // }
 
     this.setStyleByPixels(resizeChange);
   }
