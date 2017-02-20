@@ -135,6 +135,7 @@ export class WorkspacePanelComponent implements OnInit {
 
   resizeStart($event, direction) {
 
+    $event.preventDefault();
     this.setStyleByPixels(this.pixelStyle);
     this.setPanelActive();
     let resizeStartCoords = {
