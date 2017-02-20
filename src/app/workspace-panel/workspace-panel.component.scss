@@ -1,6 +1,6 @@
 .resize-handle {
   position: absolute;
-  background: black;
+  background: transparent;
 
   &.n {
     height: 5px;
@@ -8,7 +8,7 @@
     width: 100%;
 
     &:hover {
-      cursor: n-resize;
+      cursor: ns-resize;
     }
   }
 
@@ -18,7 +18,7 @@
     width: 100%;
 
     &:hover {
-      cursor: s-resize;
+      cursor: ns-resize;
     }
   }
 
@@ -28,7 +28,7 @@
     right: 0;
 
     &:hover {
-      cursor: e-resize;
+      cursor: ew-resize;
     }
   }
 
@@ -38,7 +38,7 @@
     left: 0;
 
     &:hover {
-      cursor: w-resize;
+      cursor: ew-resize;
     }
   }
 
@@ -47,7 +47,7 @@
     width: 5px;
 
     &:hover {
-      cursor: se-resize;
+      cursor: nwse-resize;
     }
   }
 
@@ -57,7 +57,7 @@
     right: 0;
 
     &:hover {
-      cursor: sw-resize;
+      cursor: nesw-resize;
     }
   }
 
@@ -68,7 +68,7 @@
     right: 0;
 
     &:hover {
-      cursor: nw-resize;
+      cursor: nwse-resize;
     }
   }
 
@@ -78,7 +78,7 @@
     bottom: 0;
 
     &:hover {
-      cursor: ne-resize;
+      cursor: nesw-resize;
     }
   }
 }
@@ -138,6 +138,7 @@
     &--content {
       flex: 1;
       flex-flow: row wrap;
+      overflow: scroll;
     }
   }
 }
