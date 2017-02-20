@@ -197,7 +197,7 @@ export class WorkspacePanelComponent implements OnInit {
     this.setStyleByPixels(resizeChange);
   }
 
-  resizeEnd(event) {
+  resizeEnd() {
 
     this.mouseMoveSub.unsubscribe();
     this.mouseUpSub.unsubscribe();
@@ -313,7 +313,6 @@ export class WorkspacePanelComponent implements OnInit {
 
   private setStyleByPixels(style) {
 
-    console.log('setting style', style);
     this.pixelStyle = style;
     this.relativeStyle = this.calculateRelativeStyle(style);
 
