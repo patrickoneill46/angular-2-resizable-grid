@@ -157,9 +157,9 @@ export class WorkspacePanelComponent implements OnInit {
         case 'n':
 
           resizeChange = {
-            height: Math.max(this.minHeight, initialStyle.height + yChange),
+            height: Math.max(this.minHeight, Math.min(initialStyle.height + yChange, initialStyle.height + initialStyle.top)),
             width: initialStyle.width,
-            top: initialStyle.top + (initialStyle.height + yChange <= this.minHeight ? (initialStyle.height - this.minHeight) : -yChange),
+            top: Math.max(0, initialStyle.top + (initialStyle.height + yChange <= this.minHeight ? (initialStyle.height - this.minHeight) : -yChange)),
             left: initialStyle.left,
           };
           break;
@@ -167,7 +167,7 @@ export class WorkspacePanelComponent implements OnInit {
         case 's':
 
           resizeChange = {
-            height: Math.max(this.minHeight, initialStyle.height - yChange),
+            height: Math.max(this.minHeight, Math.min(initialStyle.height - yChange, this.workspaceDimensions.height - initialStyle.top)),
             width: initialStyle.width,
             top: initialStyle.top,
             left: initialStyle.left,
@@ -178,7 +178,7 @@ export class WorkspacePanelComponent implements OnInit {
 
           resizeChange = {
             height: initialStyle.height,
-            width: Math.max(this.minWidth, initialStyle.width - xChange),
+            width: Math.max(this.minWidth, Math.min(initialStyle.width - xChange, this.workspaceDimensions.width - initialStyle.left)),
             top: initialStyle.top,
             left: initialStyle.left,
           };
@@ -188,28 +188,28 @@ export class WorkspacePanelComponent implements OnInit {
 
           resizeChange = {
             height: initialStyle.height,
-            width: Math.max(this.minWidth, initialStyle.width + xChange),
+            width: Math.max(this.minWidth, Math.min(initialStyle.width + xChange, initialStyle.width + initialStyle.left)),
             top: initialStyle.top,
-            left: initialStyle.left - (initialStyle.width + xChange <= this.minWidth ? (initialStyle.width - this.minWidth) * -1 : xChange),
+            left: Math.max(0, initialStyle.left - (initialStyle.width + xChange <= this.minWidth ? (initialStyle.width - this.minWidth) * -1 : xChange)),
           };
           break;
 
         case 'nw':
 
           resizeChange = {
-            height: Math.max(this.minHeight, initialStyle.height + yChange),
-            width: Math.max(this.minWidth, initialStyle.width - xChange),
-            top: initialStyle.top + (initialStyle.height + yChange <= this.minHeight ? (initialStyle.height - this.minHeight) : -yChange),
-            left: initialStyle.left - (initialStyle.width + xChange <= this.minWidth ? (initialStyle.width - this.minWidth) * -1 : xChange),
+            height: Math.max(this.minHeight, Math.min(initialStyle.height + yChange, initialStyle.height + initialStyle.top)),
+            width: Math.max(this.minWidth, Math.min(initialStyle.width + xChange, initialStyle.width + initialStyle.left)),
+            top: Math.max(0, initialStyle.top + (initialStyle.height + yChange <= this.minHeight ? (initialStyle.height - this.minHeight) : -yChange)),
+            left: Math.max(0, initialStyle.left - (initialStyle.width + xChange <= this.minWidth ? (initialStyle.width - this.minWidth) * -1 : xChange)),
           };
           break;
 
         case 'ne':
 
           resizeChange = {
-            height: Math.max(this.minHeight, initialStyle.height + yChange),
-            width: Math.max(this.minWidth, initialStyle.width - xChange),
-            top: initialStyle.top + (initialStyle.height + yChange <= this.minHeight ? (initialStyle.height - this.minHeight) : -yChange),
+            height: Math.max(this.minHeight, Math.min(initialStyle.height + yChange, initialStyle.height + initialStyle.top)),
+            width: Math.max(this.minWidth, Math.min(initialStyle.width - xChange, this.workspaceDimensions.width - initialStyle.left)),
+            top: Math.max(0, initialStyle.top + (initialStyle.height + yChange <= this.minHeight ? (initialStyle.height - this.minHeight) : -yChange)),
             left: initialStyle.left,
           };
           break;
@@ -217,8 +217,8 @@ export class WorkspacePanelComponent implements OnInit {
         case 'se':
 
           resizeChange = {
-            height: Math.max(this.minHeight, initialStyle.height - yChange),
-            width: Math.max(this.minWidth, initialStyle.width - xChange),
+            height: Math.max(this.minHeight, Math.min(initialStyle.height - yChange, this.workspaceDimensions.height - initialStyle.top)),
+            width: Math.max(this.minWidth, Math.min(initialStyle.width - xChange, this.workspaceDimensions.width - initialStyle.left)),
             left: initialStyle.left,
             top: initialStyle.top
           };
@@ -227,25 +227,30 @@ export class WorkspacePanelComponent implements OnInit {
         case 'sw':
 
           resizeChange = {
-            height: Math.max(this.minHeight, initialStyle.height - yChange),
-            width: Math.max(this.minWidth, initialStyle.width + xChange),
+            height: Math.max(this.minHeight, Math.min(initialStyle.height - yChange, this.workspaceDimensions.height - initialStyle.top)),
+            width: Math.max(this.minWidth, Math.min(initialStyle.width + xChange, initialStyle.width + initialStyle.left)),
             top: initialStyle.top,
-            left: initialStyle.left - (initialStyle.width + xChange <= this.minWidth ? (initialStyle.width - this.minWidth) * -1 : xChange)
+            left: Math.max(0, initialStyle.left - (initialStyle.width + xChange <= this.minWidth ? (initialStyle.width - this.minWidth) * -1 : xChange)),
           };
           break;
     }
 
-    if (
-      resizeChange.top < 0 ||
-      resizeChange.left < 0 ||
-      resizeChange.height < this.minHeight ||
-      resizeChange.height + resizeChange.top < 0 ||
-      resizeChange.height + resizeChange.top > this.workspaceDimensions.height ||
-      resizeChange.width + resizeChange.left > this.workspaceDimensions.width ||
-      resizeChange.width < this.minWidth
-    ) {
-      return false;
-    }
+    // resizeChange.height = Math.min(Math.max(resizeChange.height, this.minHeight), this.workspaceDimensions.height - resizeChange.top);
+    // resizeChange.width = Math.min(Math.max(resizeChange.width, this.minWidth), this.workspaceDimensions.width - resizeChange.left);
+    // resizeChange.top = Math.max(resizeChange.top, 0);
+    // resizeChange.left = Math.max(resizeChange.left, 0);
+
+    // if (
+    //   resizeChange.top < 0 ||
+    //   resizeChange.left < 0 ||
+    //   resizeChange.height < this.minHeight ||
+    //   resizeChange.height + resizeChange.top < 0 ||
+    //   resizeChange.height + resizeChange.top > this.workspaceDimensions.height ||
+    //   resizeChange.width + resizeChange.left > this.workspaceDimensions.width ||
+    //   resizeChange.width < this.minWidth
+    // ) {
+    //   return false;
+    // }
 
     this.setStyleByPixels(resizeChange);
   }
