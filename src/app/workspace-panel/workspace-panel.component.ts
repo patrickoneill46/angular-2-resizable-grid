@@ -201,6 +201,7 @@ export class WorkspacePanelComponent implements OnInit {
 
     this.mouseMoveSub.unsubscribe();
     this.mouseUpSub.unsubscribe();
+    this.setStyleByPercentage(this.calculateRelativeStyle(this.pixelStyle));
     this.handlePanelChanged();
   }
 
