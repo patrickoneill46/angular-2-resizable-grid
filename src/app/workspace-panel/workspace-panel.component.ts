@@ -144,8 +144,8 @@ export class WorkspacePanelComponent implements OnInit {
     };
     let initialStyle = Object.assign({}, this.pixelStyle);
 
-    this.mouseMoveSub = this.mouseMoveObs.subscribe(resizeEvent => this.resize(horizontalDirection, verticalDirection, resizeEvent, resizeStartCoords, initialStyle));
-    this.mouseUpSub = this.mouseUpObs.subscribe(resizeEvent => this.resizeEnd(resizeEvent));
+    this.mouseMoveSub = this.mouseMoveObs.subscribe(event => this.resize(horizontalDirection, verticalDirection, event, resizeStartCoords, initialStyle));
+    this.mouseUpSub = this.mouseUpObs.subscribe(event => this.resizeEnd());
   }
 
   resize(horizontalDirection, verticalDirection, event, resizeStartCoords, initialStyle) {
