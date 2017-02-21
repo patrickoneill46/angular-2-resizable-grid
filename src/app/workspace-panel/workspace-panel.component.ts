@@ -53,7 +53,6 @@ export class WorkspacePanelComponent implements OnInit {
 
   private draggingHeaderItem: boolean = false;
   private draggingPanel: boolean = false;
-  private resizing: boolean = false;
   private mouseMoveSub: Subscription;
   private mouseUpSub: Subscription;
 
@@ -207,7 +206,7 @@ export class WorkspacePanelComponent implements OnInit {
 
   onDrag(event) {
 
-    if (!this.draggingHeaderItem && !this.resizing && this.draggingPanel) {
+    if (!this.draggingHeaderItem && this.draggingPanel) {
 
       let transform: any = {};
       transform.y = event.y - this.pixelStyle.top - this.workspaceDimensions.top;
@@ -247,7 +246,7 @@ export class WorkspacePanelComponent implements OnInit {
 
   onDragStart(event) {
 
-    if (!this.resizing && !this.draggingPanel && !this.draggingHeaderItem) {
+    if (!this.draggingPanel && !this.draggingHeaderItem) {
       this.draggingPanel = true;
       this.setStyleByPixels(this.calculatePixelsStyle(this.relativeStyle));
     }
