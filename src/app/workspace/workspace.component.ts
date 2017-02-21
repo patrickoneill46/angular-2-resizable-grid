@@ -4,7 +4,6 @@ import { DragulaService } from 'ng2-dragula';
 import { Subject } from 'rxjs/Subject';
 
 import { WorkspaceService } from '../workspace.service';
-import { ResizableDirective } from '../resizable.directive';
 
 @Component({
   selector: 'workspace',
