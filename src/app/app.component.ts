@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { ResizeEvent } from 'angular2-resizable';
 
 import { AuthenticationService } from './services/authentication/authentication.service';
 import { StreamingService } from './services/streaming/streaming.service';

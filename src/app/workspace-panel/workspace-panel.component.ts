@@ -11,24 +11,37 @@ import {
   ReflectiveInjector,
   ComponentFactoryResolver
 } from '@angular/core';
-import { ResizeEvent } from 'angular2-resizable';
 import { DragulaService } from 'ng2-dragula';
 
 import { WatchlistComponent } from '../watchlist/watchlist.component';
 import { ChartComponent } from '../chart/chart.component';
 import { NewsComponent } from '../news/news.component';
+import { Subject } from 'rxjs/Subject';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'workspace-panel',
   templateUrl: './workspace-panel.component.html',
   styleUrls: ['./workspace-panel.component.scss'],
-  entryComponents: [ChartComponent, NewsComponent, WatchlistComponent]
+  entryComponents: [ChartComponent, NewsComponent, WatchlistComponent],
+  host: {
+    '[style.height]': 'style.height',
+    '[style.width]': 'style.width',
+    '[style.left]': 'style.left',
+    '[style.top]': 'style.top',
+    '[style.minHeight]': 'minHeight',
+    '[style.minWidth]': 'minWidth',
+    '[style.transform]': 'transform',
+    '[style.zIndex]': 'order'
+  }
 })
 export class WorkspacePanelComponent implements OnInit {
 
   @Input() workspaceDimensions: ClientRect;
   @Input() initalConfig: any;
   @Input() order;
+  @Input() mouseMoveObs: Subject<any>;
+  @Input() mouseUpObs: Subject<any>;
 
   @Output() panelActive: EventEmitter<any> = new EventEmitter();
   @Output() panelChanged: EventEmitter<any> = new EventEmitter();
@@ -40,7 +53,8 @@ export class WorkspacePanelComponent implements OnInit {
 
   private draggingHeaderItem: boolean = false;
   private draggingPanel: boolean = false;
-  private resizing: boolean = false;
+  private mouseMoveSub: Subscription;
+  private mouseUpSub: Subscription;
 
   style: any = {};
   transform: string;
@@ -68,21 +82,6 @@ export class WorkspacePanelComponent implements OnInit {
     dragulaService.dragend.subscribe(event => {
       this.onFinishDragPanelHeader();
     });
-
-    this.validate = function(event: ResizeEvent){
-
-      if (
-        event.rectangle.top < this.workspaceDimensions.top ||
-        event.rectangle.left < 0 ||
-        event.rectangle.right > this.workspaceDimensions.width ||
-        event.rectangle.bottom > this.workspaceDimensions.bottom ||
-        event.rectangle.height < this.minHeight ||
-        event.rectangle.width < this.minWidth
-      ) {
-        return false;
-      }
-      return true;
-    }.bind(this);
   }
 
   // component: Class for the component you want to create
@@ -133,28 +132,81 @@ export class WorkspacePanelComponent implements OnInit {
     this.draggingHeaderItem = false;
   }
 
-  onResizeStart(event: ResizeEvent): void {
+  resizeStart($event, horizontalDirection, verticalDirection) {
 
-    console.log('start resizing');
-    this.resizing = true;
-    this.draggingPanel = false;
+    $event.preventDefault();
+    this.setStyleByPixels(this.pixelStyle);
+    this.setPanelActive();
+    let resizeStartCoords = {
+      x: $event.clientX,
+      y: $event.clientY
+    };
+    let initialStyle = Object.assign({}, this.pixelStyle);
+
+    this.mouseMoveSub = this.mouseMoveObs.subscribe(event => this.resize(horizontalDirection, verticalDirection, event, resizeStartCoords, initialStyle));
+    this.mouseUpSub = this.mouseUpObs.subscribe(event => this.resizeEnd());
   }
 
-  onResizeEnd(event: ResizeEvent): void {
+  resize(horizontalDirection, verticalDirection, event, resizeStartCoords, initialStyle) {
 
-    this.resizing = false;
-    this.setStyleByPixels({
-      left: event.rectangle.left,
-      top: event.rectangle.top - this.workspaceDimensions.top,
-      width: event.rectangle.width,
-      height: event.rectangle.height
-    });
+    let resizeChange: any = {};
+    let yChange = resizeStartCoords.y - event.mouseY;
+    let xChange = resizeStartCoords.x - event.mouseX;
+
+    switch (verticalDirection) {
+
+        case 'n':
+
+          resizeChange.height = Math.max(this.minHeight, Math.min(initialStyle.height + yChange, initialStyle.height + initialStyle.top)),
+          resizeChange.top =  Math.max(0, initialStyle.top + (initialStyle.height + yChange <= this.minHeight ? (initialStyle.height - this.minHeight) : -yChange));
+          break;
+
+        case 's':
+
+          resizeChange.height = Math.max(this.minHeight, Math.min(initialStyle.height - yChange, this.workspaceDimensions.height - initialStyle.top)),
+          resizeChange.top = initialStyle.top;
+          break;
+
+        default:
+
+          resizeChange.height = initialStyle.height;
+          resizeChange.top = initialStyle.top;
+          break;
+    }
+
+    switch (horizontalDirection){
+
+        case 'e':
+
+          resizeChange.width = Math.max(this.minWidth, Math.min(initialStyle.width - xChange, this.workspaceDimensions.width - initialStyle.left)),
+          resizeChange.left = initialStyle.left;
+          break;
+
+        case 'w':
+
+          resizeChange.width = Math.max(this.minWidth, Math.min(initialStyle.width + xChange, initialStyle.width + initialStyle.left));
+          resizeChange.left = Math.max(0, initialStyle.left - (initialStyle.width + xChange <= this.minWidth ? (initialStyle.width - this.minWidth) * -1 : xChange));
+          break;
+
+        default:
+          resizeChange.width = initialStyle.width;
+          resizeChange.left = initialStyle.left;
+    }
+
+    this.setStyleByPixels(resizeChange);
+  }
+
+  resizeEnd() {
+
+    this.mouseMoveSub.unsubscribe();
+    this.mouseUpSub.unsubscribe();
+    this.setStyleByPercentage(this.calculateRelativeStyle(this.pixelStyle));
     this.handlePanelChanged();
   }
 
   onDrag(event) {
 
-    if (!this.draggingHeaderItem && !this.resizing && this.draggingPanel) {
+    if (!this.draggingHeaderItem && this.draggingPanel) {
 
       let transform: any = {};
       transform.y = event.y - this.pixelStyle.top - this.workspaceDimensions.top;
@@ -194,7 +246,7 @@ export class WorkspacePanelComponent implements OnInit {
 
   onDragStart(event) {
 
-    if (!this.resizing && !this.draggingPanel && !this.draggingHeaderItem) {
+    if (!this.draggingPanel && !this.draggingHeaderItem) {
       this.draggingPanel = true;
       this.setStyleByPixels(this.calculatePixelsStyle(this.relativeStyle));
     }
