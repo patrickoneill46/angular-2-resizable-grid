@@ -12,6 +12,7 @@ import {
   ComponentFactoryResolver
 } from '@angular/core';
 import { DragulaService } from 'ng2-dragula';
+import { DragDropService } from '../drag-drop.service';
 
 import { WatchlistComponent } from '../watchlist/watchlist.component';
 import { ChartComponent } from '../chart/chart.component';
@@ -73,15 +74,7 @@ export class WorkspacePanelComponent implements OnInit {
 
   @ViewChild('dynamicComponentContainer', { read: ViewContainerRef }) dynamicComponentContainer: ViewContainerRef;
 
-  constructor(private dragulaService: DragulaService, private resolver: ComponentFactoryResolver) {
-
-    dragulaService.drag.subscribe(event => {
-      this.onDragPanelHeader(event.slice(1));
-    });
-
-    dragulaService.dragend.subscribe(event => {
-      this.onFinishDragPanelHeader();
-    });
+  constructor(private dragDropService: DragDropService, private resolver: ComponentFactoryResolver) {
   }
 
   // component: Class for the component you want to create
@@ -130,29 +123,32 @@ export class WorkspacePanelComponent implements OnInit {
 
   handleHeaderDragStart($event) {
 
-    let data = JSON.stringify({
+    let data = {
       id: this.panelId,
       componentId: $event.target.dataset.componentId,
       panelDimensions: {
         height: this.relativeStyle.height,
         width: this.relativeStyle.width
       }
-    });
-
-    $event.dataTransfer.setData('text/plain', data);
+    };
+    this.dragDropService.setDragData(data)
+    $event.dataTransfer.setData('text/plain', JSON.stringify(data));
     $event.dataTransfer.effectAllowed = 'move';
   }
 
   handleHeaderDragEnd($event) {
     console.log('header drag end');
+    this.dragDropService.handleDragEnd($event);
   }
 
   handleDragOver($event) {
     $event.preventDefault();
+    this.dragDropService.setDraggedOverPanel(this.panelId);
   }
 
   handleDragLeave($event) {
     console.log('drag leave');
+    this.dragDropService.setDraggedOverPanel(null);
   }
 
   handleDrop($event) {

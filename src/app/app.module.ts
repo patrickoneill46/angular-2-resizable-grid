@@ -9,6 +9,7 @@ import { MarketInfoService } from './services/market-info/market-info.service';
 import { MarketPricesService } from './services/market-prices/market-prices.service';
 import { StreamingService } from './services/streaming/streaming.service';
 import { WatchlistService } from './services/watchlist/watchlist.service';
+import { DragDropService } from './drag-drop.service';
 
 import { AppComponent } from './app.component';
 import { DraggableDirective } from './draggable.directive';
@@ -43,6 +44,7 @@ import { PricePipe } from './price.pipe';
   ],
   providers: [
     AuthenticationService,
+    DragDropService,
     MarketInfoService,
     MarketPricesService,
     StreamingService,
