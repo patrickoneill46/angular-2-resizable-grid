@@ -125,24 +125,38 @@ export class WorkspacePanelComponent implements OnInit {
 
   handleHeaderMouseDown($event) {
     console.log('header mouse down');
-    // $event.preventDefault();
     $event.stopPropagation();
   }
 
   handleHeaderDragStart($event) {
-    console.log('header drag start', $event);
+
+    let data = JSON.stringify({
+      id: this.panelId,
+      componentId: $event.target.dataset.componentId,
+      panelDimensions: {
+        height: this.relativeStyle.height,
+        width: this.relativeStyle.width
+      }
+    });
+
+    $event.dataTransfer.setData('text/plain', data);
+    $event.dataTransfer.effectAllowed = 'move';
   }
 
   handleHeaderDragEnd($event) {
-    console.log('header drag end', $event);
+    console.log('header drag end');
   }
 
   handleDragOver($event) {
-    console.log('drag over', $event);
+    $event.preventDefault();
   }
 
   handleDragLeave($event) {
-    console.log('drag leave', $event);
+    console.log('drag leave');
+  }
+
+  handleDrop($event) {
+    console.log('drop', $event.dataTransfer.getData('text/plain'));
   }
 
   onDragPanelHeader(args) {
