@@ -13,6 +13,8 @@
   <workspace-panel
   *ngFor="let config of workspacePanels"
   [workspaceDimensions]="dimensions"
+  [mouseMoveObs]="mouseMoveObs"
+  [mouseUpObs]="mouseUpObs"
   [initalConfig]="config"
   [order]="workspaceZIndexMap[config.id]"
   (panelActive)="updateActivePanel($event)"

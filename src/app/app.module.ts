@@ -2,8 +2,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { ResizableModule } from 'angular2-resizable';
 import { DndModule } from 'ng2-dnd';
+
+import { AuthenticationService } from './services/authentication/authentication.service';
+import { MarketInfoService } from './services/market-info/market-info.service';
+import { MarketPricesService } from './services/market-prices/market-prices.service';
+import { StreamingService } from './services/streaming/streaming.service';
+import { WatchlistService } from './services/watchlist/watchlist.service';
 
 import { AppComponent } from './app.component';
 import { DraggableDirective } from './draggable.directive';
@@ -15,6 +20,7 @@ import { ComponentSelectorComponent } from './component-selector/component-selec
 import { WatchlistComponent } from './watchlist/watchlist.component';
 import { ChartComponent } from './chart/chart.component';
 import { NewsComponent } from './news/news.component';
+import { PricePipe } from './price.pipe';
 
 @NgModule({
   declarations: [
@@ -26,16 +32,21 @@ import { NewsComponent } from './news/news.component';
     ComponentSelectorComponent,
     WatchlistComponent,
     ChartComponent,
-    NewsComponent
+    NewsComponent,
+    PricePipe
   ],
   imports: [
     BrowserModule,
     DndModule.forRoot(),
     FormsModule,
     HttpModule,
-    ResizableModule
   ],
   providers: [
+    AuthenticationService,
+    MarketInfoService,
+    MarketPricesService,
+    StreamingService,
+    WatchlistService,
     WorkspaceService
   ],
   bootstrap: [AppComponent]

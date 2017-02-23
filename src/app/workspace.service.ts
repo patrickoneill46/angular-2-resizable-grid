@@ -99,6 +99,7 @@ export class WorkspaceService {
   constructor() {
 
     this.workspaces = {};
+    console.log('workspace service');
     this.componentSelectorActive = new Subject();
 
     let cachedSettings = JSON.parse(localStorage.getItem(this.localStorageKey));

@@ -1,7 +1,9 @@
+<button value="Connect" (click)="connect()">Connect</button>
 <header
   (componentSelectorToggled)="componentSelectorToggled($event)"
 ></header>
 <workspace
+  *ngIf="isAuthenticated"
   [componentSelectorActive]="componentSelectorActive"
   (componentAdded)="componentSelectorToggled(false)"
 ></workspace>

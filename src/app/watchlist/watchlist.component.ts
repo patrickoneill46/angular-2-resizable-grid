@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { WatchlistService } from '../services/watchlist/watchlist.service';
+
 @Component({
   selector: 'app-watchlist',
   templateUrl: './watchlist.component.html',
@@ -7,9 +9,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WatchlistComponent implements OnInit {
 
-  constructor() { }
+  watchlists: any;
+
+  constructor(private watchlistService: WatchlistService) {
+
+    this.watchlists = [];
+  }
 
   ngOnInit() {
+    this.watchlistService.watchlistSubject.subscribe(watchlists => this.watchlists = watchlists);
   }
 
 }
