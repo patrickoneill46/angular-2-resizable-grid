@@ -123,6 +123,28 @@ export class WorkspacePanelComponent implements OnInit {
     this.showComponent(this.initalConfig.activeComponentId || this.components[0].id);
   }
 
+  handleHeaderMouseDown($event) {
+    console.log('header mouse down');
+    // $event.preventDefault();
+    $event.stopPropagation();
+  }
+
+  handleHeaderDragStart($event) {
+    console.log('header drag start', $event);
+  }
+
+  handleHeaderDragEnd($event) {
+    console.log('header drag end', $event);
+  }
+
+  handleDragOver($event) {
+    console.log('drag over', $event);
+  }
+
+  handleDragLeave($event) {
+    console.log('drag leave', $event);
+  }
+
   onDragPanelHeader(args) {
     this.draggingHeaderItem = true;
     this.draggingPanel = false;

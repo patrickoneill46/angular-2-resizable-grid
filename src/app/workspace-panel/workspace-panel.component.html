@@ -8,18 +8,22 @@
 <div class="resize-handle se" (mousedown)="resizeStart($event, 'e', 's')" (mouseup)="resizeEnd()"></div>
 <div
   class="workspace-item--header"
-  draggable
+  drag-position
   (dragStartEvent)="onDragStart($event)"
   (dragEvent)="onDrag($event)"
   (dragEndEvent)="onDragEnd($event)"
+  (dragover)="handleDragOver($event)"
+  (dragleave)="handleDragLeave($event)"
   >
   <div
     class="workspace-item--header-draggable-container"
-    [dragula]='"bag-one"'
-    [dragulaModel]="components"
   >
     <div
       class="workspace-item--header-draggable-item"
+      draggable="true"
+      (mousedown)="handleHeaderMouseDown($event)"
+      (dragstart)="handleHeaderDragStart($event)"
+      (dragend)="handleHeaderDragEnd($event)"
       *ngFor="let component of components"
       [ngClass]="{ 'active': component.id === activeComponentId }"
       (click)="showComponent(component.id)"
