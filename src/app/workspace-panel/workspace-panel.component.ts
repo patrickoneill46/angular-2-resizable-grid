@@ -127,8 +127,8 @@ export class WorkspacePanelComponent implements OnInit {
     let data = {
       id: this.panelId,
       componentId: $event.target.dataset.componentId,
-      type: this.components.find(component => return component.id === $event.target.dataset.componentId).type,
-      header: this.components.find(component => return component.id === $event.target.dataset.componentId).header,
+      type: this.components.find(component => component.id === $event.target.dataset.componentId).type,
+      header: this.components.find(component => component.id === $event.target.dataset.componentId).header,
       panelDimensions: {
         height: this.relativeStyle.height,
         width: this.relativeStyle.width
