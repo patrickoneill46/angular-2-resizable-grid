@@ -1,9 +1,9 @@
 import { Component, OnInit, ElementRef, HostListener, Input, Output, EventEmitter } from '@angular/core';
-import { DragulaService } from 'ng2-dragula';
 
 import { Subject } from 'rxjs/Subject';
 
 import { WorkspaceService } from '../workspace.service';
+import { DragDropService } from '../drag-drop.service';
 
 @Component({
   selector: 'workspace',
@@ -28,7 +28,7 @@ export class WorkspaceComponent implements OnInit {
   constructor(
     private ref: ElementRef,
     private workspaceService: WorkspaceService,
-    private dragulaService: DragulaService
+    private dragDropService: DragDropService
   ) {
     this.workspacePanels = [];
     this.workspaceZIndexMap = {};
@@ -42,34 +42,17 @@ export class WorkspaceComponent implements OnInit {
     this.workspaceService.componentSelectorActive.subscribe(state => this.componentSelectorActive = state);
     this.setWorkspaceDimensions();
 
-    this.dragulaService.setOptions(this.dragulaBag, {
-      removeOnSpill: true
-    });
-
-    this.dragulaService.remove.subscribe(event => {
-
-      let el = event[1];
-      let panel = this.workspacePanels.find(panel => panel.id === el.dataset.panelId);
-      let component = panel.components.find(component => component.id === el.dataset.componentId);
-
-      let componentIndex = panel.components.indexOf(component);
-      if (componentIndex !== -1) {
-        panel.components.splice(componentIndex, 1);
-      }
-
-      if (!panel.components.length) {
-        this.workspacePanels.splice(this.workspacePanels.indexOf(panel), 1);
-      }
-
-      this.createNewPanelWithCompoonent(Object.assign({}, component));
-    });
-
-    this.dragulaService.dropModel.subscribe(event => {
-      let panel = this.workspacePanels.find(panel => panel.id === event[1].dataset.panelId);
-      if (!panel.components.length) {
-        this.workspacePanels.splice(this.workspacePanels.indexOf(panel), 1);
-        this.saveActiveWorkspace();
-      }
+    this.dragDropService.componentDroppedOutsidePanel.subscribe(config => {
+      this.createNewPanelWithCompoonent({
+        componentId: config.component.componentId,
+        type: config.component.type,
+        header: config.component.header
+      }, {
+        height: config.component.panelDimensions.height,
+        width: config.component.panelDimensions.width,
+        top: Math.round((config.event.clientY - this.dimensions.top) / this.dimensions.height * 100),
+        left: Math.round(config.event.clientX / this.dimensions.width * 100)
+      })
     });
   }
 
@@ -166,18 +149,19 @@ export class WorkspaceComponent implements OnInit {
     }
   }
 
-  private createNewPanelWithCompoonent(component) {
+  private createNewPanelWithCompoonent(component, dimensions = {
+      height: 40,
+      width: 40,
+      top: 20,
+      left: 20
+    }
+  ) {
 
     let panelId = 'panel-' + Math.random();
     let zIndexOrder = this.workspacePanels.length + 1;
 
     this.workspacePanels.push({
-      dimensions: {
-        height: 40,
-        width: 40,
-        top: 20,
-        left: 20
-      },
+      dimensions,
       order: zIndexOrder,
       id: panelId,
       active: 0,

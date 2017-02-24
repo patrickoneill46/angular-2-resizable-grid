@@ -7,7 +7,11 @@ export class DragDropService {
   private dropContainer: any;
   private dropPanel: any;
 
-  constructor() { }
+  componentDroppedOutsidePanel: EventEmitter<any>;
+
+  constructor() {
+    this.componentDroppedOutsidePanel = new EventEmitter();
+  }
 
   setDragData(componentData) {
     this.dragData = componentData;
@@ -21,6 +25,7 @@ export class DragDropService {
 
     if (!this.dropPanel) {
       console.log('dropped outside panel')
+      this.componentDroppedOutsidePanel.emit({component: this.dragData, event: event})
     } else {
       console.log('dropped inside panel');
     }
