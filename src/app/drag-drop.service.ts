@@ -8,9 +8,11 @@ export class DragDropService {
   private dropPanel: any;
 
   componentDroppedOutsidePanel: EventEmitter<any>;
+  componentDroppedInsidePanel: EventEmitter<any>;
 
   constructor() {
     this.componentDroppedOutsidePanel = new EventEmitter();
+    this.componentDroppedInsidePanel = new EventEmitter();
   }
 
   setDragData(componentData) {
@@ -28,6 +30,7 @@ export class DragDropService {
       this.componentDroppedOutsidePanel.emit({component: this.dragData, event: event})
     } else {
       console.log('dropped inside panel');
+      this.componentDroppedInsidePanel.emit({component: this.dragData, panel: this.dropPanel})
     }
   }
 

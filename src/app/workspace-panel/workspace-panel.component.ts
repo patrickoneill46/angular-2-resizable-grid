@@ -56,6 +56,7 @@ export class WorkspacePanelComponent implements OnInit {
   private draggingPanel: boolean = false;
   private mouseMoveSub: Subscription;
   private mouseUpSub: Subscription;
+  private dragOverSub: Subscription;
 
   style: any = {};
   transform: string;
@@ -114,6 +115,13 @@ export class WorkspacePanelComponent implements OnInit {
     this.active = this.initalConfig.active;
     this.components = this.initalConfig.components;
     this.showComponent(this.initalConfig.activeComponentId || this.components[0].id);
+    this.dragDropService.componentDroppedInsidePanel.subscribe(config => {
+
+      if (this.panelId === config.panel) {
+        console.log('component dropped inside panel', this.panelId);
+      }
+
+    });
   }
 
   handleHeaderMouseDown($event) {
