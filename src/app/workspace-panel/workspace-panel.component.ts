@@ -119,6 +119,13 @@ export class WorkspacePanelComponent implements OnInit {
 
       if (this.panelId === config.panel) {
         console.log('component dropped inside panel', this.panelId);
+        this.addComponent({
+          id: config.component.componentId,
+          header: config.component.header,
+          type: config.component.type,
+        });
+      } else if (this.panelId === config.component.id) {
+        this.destroyComponent(config.component.componentId);
       }
 
     });
@@ -315,7 +322,7 @@ export class WorkspacePanelComponent implements OnInit {
 
   destroyComponent(componentId) {
 
-    let component = this.components.find(component => component.id = componentId);
+    let component = this.components.find(component => component.id === componentId);
     this.components.splice(this.components.indexOf(component), 1);
 
     if (this.components.length) {
@@ -327,6 +334,10 @@ export class WorkspacePanelComponent implements OnInit {
 
   addComponent(component) {
 
+    if (!this.components.find(cmpt => cmpt.id === component.id)) {
+      this.components.push(component);
+      this.showComponent(component.id);
+    }
   }
 
   destroyPanel() {
