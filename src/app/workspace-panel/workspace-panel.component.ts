@@ -129,6 +129,13 @@ export class WorkspacePanelComponent implements OnInit {
       }
 
     });
+
+    this.dragDropService.componentDroppedOutsidePanel.subscribe(config => {
+
+      if (this.panelId === config.component.id) {
+        this.destroyComponent(config.component.componentId);
+      }
+    });
   }
 
   handleHeaderMouseDown($event) {
