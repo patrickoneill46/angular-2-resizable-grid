@@ -72,6 +72,7 @@ export class WorkspacePanelComponent implements OnInit {
   };
   minHeight: number = 150;
   minWidth: number = 300;
+  dropping: boolean;
 
   @ViewChild('dynamicComponentContainer', { read: ViewContainerRef }) dynamicComponentContainer: ViewContainerRef;
 
@@ -145,7 +146,6 @@ export class WorkspacePanelComponent implements OnInit {
 
   handleHeaderDragStart($event) {
 
-
     let data = {
       id: this.panelId,
       componentId: $event.target.dataset.componentId,
@@ -168,15 +168,18 @@ export class WorkspacePanelComponent implements OnInit {
 
   handleDragOver($event) {
     $event.preventDefault();
+    this.dropping = true;
     this.dragDropService.setDraggedOverPanel(this.panelId);
   }
 
   handleDragLeave($event) {
     console.log('drag leave');
+    this.dropping = false;
     this.dragDropService.setDraggedOverPanel(null);
   }
 
   handleDrop($event) {
+    this.dropping = false;
     console.log('drop', $event.dataTransfer.getData('text/plain'));
   }
 
