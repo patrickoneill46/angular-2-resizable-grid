@@ -156,8 +156,10 @@ export class WorkspacePanelComponent implements OnInit {
         width: this.relativeStyle.width
       }
     };
-    this.dragDropService.setDragData(data)
+    let clientRect = $event.target.getBoundingClientRect();
+    this.dragDropService.setDragData(data);
     $event.dataTransfer.setData('text/plain', JSON.stringify(data));
+    $event.dataTransfer.setDragImage($event.target, $event.offsetX , $event.offsetY);
     $event.dataTransfer.effectAllowed = 'move';
   }
 
@@ -168,14 +170,21 @@ export class WorkspacePanelComponent implements OnInit {
 
   handleDragOver($event) {
     $event.preventDefault();
-    this.dropping = true;
+    this.setPanelActive();
+    console.log('drag over', this.panelId);
     this.dragDropService.setDraggedOverPanel(this.panelId);
+    this.dropping = true;
   }
 
   handleDragLeave($event) {
-    console.log('drag leave');
     this.dropping = false;
     this.dragDropService.setDraggedOverPanel(null);
+  }
+
+  handleDragEnter($event) {
+    this.dragDropService.setDraggedOverPanel(this.panelId);
+    this.dropping = true;
+    console.log('drag enter', this.panelId);
   }
 
   handleDrop($event) {
