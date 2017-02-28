@@ -133,7 +133,7 @@ export class WorkspacePanelComponent implements OnInit {
 
     this.dragDropService.componentDroppedOutsidePanel.subscribe(config => {
 
-      if (this.panelId === config.component.id) {
+      if (this.panelId === config.panelId) {
         this.destroyComponent(config.component.componentId);
       }
     });
@@ -146,17 +146,20 @@ export class WorkspacePanelComponent implements OnInit {
 
   handleHeaderDragStart($event) {
 
+    let component = this.components.find(component => component.id === $event.target.dataset.componentId);
+
     let data = {
-      id: this.panelId,
-      componentId: $event.target.dataset.componentId,
-      type: this.components.find(component => component.id === $event.target.dataset.componentId).type,
-      header: this.components.find(component => component.id === $event.target.dataset.componentId).header,
+      component: {
+        id: component.id,
+        type: component.type,
+        header: component.header
+      },
+      panelId: this.panelId,
       panelDimensions: {
         height: this.relativeStyle.height,
         width: this.relativeStyle.width
       }
     };
-    let clientRect = $event.target.getBoundingClientRect();
     this.dragDropService.setDragData(data);
     $event.dataTransfer.setData('text/plain', JSON.stringify(data));
     $event.dataTransfer.setDragImage($event.target, $event.offsetX , $event.offsetY);

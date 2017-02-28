@@ -27,7 +27,13 @@ export class DragDropService {
 
     if (!this.dropPanel) {
       console.log('dropped outside panel')
-      this.componentDroppedOutsidePanel.emit({component: this.dragData, event: event})
+      this.componentDroppedOutsidePanel.emit({
+        component: this.dragData.component,
+        panelDimensions: this.dragData.panelDimensions,
+        top: event.clientY,
+        left: event.clientX,
+        panelId: this.dragData.panelId
+      });
     } else {
       console.log('dropped inside panel');
       this.componentDroppedInsidePanel.emit({component: this.dragData, panel: this.dropPanel})

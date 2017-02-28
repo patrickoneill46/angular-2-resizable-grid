@@ -44,22 +44,22 @@ export class WorkspaceComponent implements OnInit {
 
     this.dragDropService.componentDroppedOutsidePanel.subscribe(config => {
 
-      let maxLeft = this.dimensions.width - (config.component.panelDimensions.width / 100 * this.dimensions.width);
+      let maxLeft = this.dimensions.width - (config.panelDimensions.width / 100 * this.dimensions.width);
       let minLeft = 0;
 
-      let maxTop = this.dimensions.height - (config.component.panelDimensions.height / 100 * this.dimensions.height);
+      let maxTop = this.dimensions.height - (config.panelDimensions.height / 100 * this.dimensions.height);
       let minTop = 0;
 
-      let left = Math.max(minLeft, Math.min(config.event.clientX, maxLeft));
-      let top = Math.max(minTop, Math.min(config.event.clientY - this.dimensions.top, maxTop));
+      let left = Math.max(minLeft, Math.min(config.left, maxLeft));
+      let top = Math.max(minTop, Math.min(config.top - this.dimensions.top, maxTop));
 
       this.createNewPanelWithCompoonent({
         componentId: config.component.componentId,
         type: config.component.type,
         header: config.component.header
       }, {
-        height: config.component.panelDimensions.height,
-        width: config.component.panelDimensions.width,
+        height: config.panelDimensions.height,
+        width: config.panelDimensions.width,
         top: top / this.dimensions.height * 100,
         left: left / this.dimensions.width * 100
       })
