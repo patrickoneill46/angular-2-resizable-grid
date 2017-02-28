@@ -125,7 +125,7 @@ export class WorkspacePanelComponent implements OnInit {
           header: config.component.header,
           type: config.component.type,
         });
-      } else if (this.panelId === config.component.id) {
+      } else if (this.panelId === config.previousPanel) {
         this.destroyComponent(config.component.componentId);
       }
 

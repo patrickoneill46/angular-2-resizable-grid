@@ -36,7 +36,7 @@ export class DragDropService {
       });
     } else {
       console.log('dropped inside panel');
-      this.componentDroppedInsidePanel.emit({component: this.dragData, panel: this.dropPanel})
+      this.componentDroppedInsidePanel.emit({component: this.dragData.component, panel: this.dropPanel, previousPanel: this.dragData.panelId})
     }
   }
 
