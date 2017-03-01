@@ -72,12 +72,10 @@ export class WorkspacePanelComponent implements OnInit {
   };
   minHeight: number = 150;
   minWidth: number = 300;
-  dropping: boolean;
 
   @ViewChild('dynamicComponentContainer', { read: ViewContainerRef }) dynamicComponentContainer: ViewContainerRef;
 
   constructor(private dragDropService: DragDropService, private resolver: ComponentFactoryResolver) {
-    this.dropping = false;
   }
 
   // component: Class for the component you want to create
@@ -122,12 +120,12 @@ export class WorkspacePanelComponent implements OnInit {
       if (this.panelId === config.panel) {
         console.log('component dropped inside panel', this.panelId);
         this.addComponent({
-          id: config.component.componentId,
+          id: config.component.id,
           header: config.component.header,
           type: config.component.type,
         });
       } else if (this.panelId === config.previousPanel) {
-        this.destroyComponent(config.component.componentId);
+        this.destroyComponent(config.component.id);
       }
 
     });
@@ -135,7 +133,7 @@ export class WorkspacePanelComponent implements OnInit {
     this.dragDropService.componentDroppedOutsidePanel.subscribe(config => {
 
       if (this.panelId === config.panelId) {
-        this.destroyComponent(config.component.componentId);
+        this.destroyComponent(config.component.id);
       }
     });
   }
@@ -145,6 +143,7 @@ export class WorkspacePanelComponent implements OnInit {
     $event.stopPropagation();
     $event.preventDefault();
     this.dragDropService.setDragStart($event.clientX, $event.clientY - this.workspaceDimensions.top);
+    this.handleHeaderDragStart(event);
     let headerEl = $event.target;
     let firstTime = true;
     this.mouseMoveSub = this.mouseMoveObs.subscribe(event => {
@@ -154,18 +153,16 @@ export class WorkspacePanelComponent implements OnInit {
         firstTime = false;
       }
       this.dragDropService.isDragging = true;
-      console.log('dragging header', event);
       this.dragDropService.handleDrag(event.mouseX, event.mouseY  - this.workspaceDimensions.top);
       headerEl.classList.add('dragging');
     });
     this.mouseUpSub = this.mouseUpObs.subscribe(event => {
-      console.log('dragging end');
-      this.dropping = false;
+
       headerEl.classList.remove('dragging');
       this.dragDropService.isDragging = false;
-      this.dragDropService.handleDragEnd(event);
       this.mouseMoveSub.unsubscribe();
       this.mouseUpSub.unsubscribe();
+      this.handleHeaderDragEnd(event);
     });
   }
 
@@ -186,11 +183,6 @@ export class WorkspacePanelComponent implements OnInit {
       }
     };
     this.dragDropService.setDragData(data);
-    $event.dataTransfer.setData('text/plain', JSON.stringify(data));
-    $event.dataTransfer.setDragImage($event.target, $event.offsetX , $event.offsetY);
-    $event.dataTransfer.effectAllowed = 'move';
-    this.dragDropService.setDraggedOverPanel(this.panelId);
-    this.dropping = false;
   }
 
   handleHeaderDragEnd($event) {

@@ -33,13 +33,6 @@ export class DragDropService {
     };
   }
 
-  handleDragEnd(event) {
-    this.dragStyle = null;
-    this.dragStart = null;
-    this.isDragging = false;
-    this.dropPanelId = false;
-  }
-
   setDragData(componentData) {
     this.dragData = componentData;
   }
@@ -48,21 +41,26 @@ export class DragDropService {
     this.dropPanel = panelId;
   }
 
-  // handleDragEnd(event) {
-  //
-  //   if (!this.dropPanel) {
-  //     console.log('dropped outside panel')
-  //     this.componentDroppedOutsidePanel.emit({
-  //       component: this.dragData.component,
-  //       panelDimensions: this.dragData.panelDimensions,
-  //       top: event.clientY,
-  //       left: event.clientX,
-  //       panelId: this.dragData.panelId
-  //     });
-  //   } else {
-  //     console.log('dropped inside panel');
-  //     this.componentDroppedInsidePanel.emit({component: this.dragData.component, panel: this.dropPanel, previousPanel: this.dragData.panelId})
-  //   }
-  // }
+  handleDragEnd(event) {
+
+    if (!this.dropPanel) {
+      console.log('dropped outside panel')
+      this.componentDroppedOutsidePanel.emit({
+        component: this.dragData.component,
+        panelDimensions: this.dragData.panelDimensions,
+        top: event.clientY,
+        left: event.clientX,
+        panelId: this.dragData.panelId
+      });
+    } else {
+      console.log('dropped inside panel');
+      this.componentDroppedInsidePanel.emit({component: this.dragData.component, panel: this.dropPanel, previousPanel: this.dragData.panelId})
+    }
+
+    this.dragStyle = null;
+    this.dragStart = null;
+    this.isDragging = false;
+    this.dropPanelId = false;
+  }
 
 }
