@@ -10,6 +10,7 @@ export class DragDropService {
   dropPanelId: any;
   dragStart: any;
   dragStyle: any;
+  dragPlaceHolderHTML: any;
 
   componentDroppedOutsidePanel: EventEmitter<any>;
   componentDroppedInsidePanel: EventEmitter<any>;
@@ -20,8 +21,14 @@ export class DragDropService {
     this.isDragging = false;
   }
 
-  setDragStart(x, y) {
-    this.dragStart = {x, y};
+  setDragStart(x, y, target) {
+
+    let rect = target.getBoundingClientRect();
+    let height = rect.height;
+    let width = rect.width;
+
+    this.dragStart = {x, y, height, width};
+    this.dragPlaceHolderHTML = target.innerHTML;
   }
 
   handleDrag(x, y) {
@@ -29,11 +36,13 @@ export class DragDropService {
     this.dragStyle = {
       top: `${this.dragStart.y}px`,
       left: `${this.dragStart.x}px`,
+      height: `${this.dragStart.height}px`,
+      width: `${this.dragStart.width}px`,
       transform: `translate(${x - this.dragStart.x}px, ${y - this.dragStart.y}px)`
     };
   }
 
-  setDragData(componentData) {
+  setDragData(componentData, innerHTML) {
     this.dragData = componentData;
   }
 

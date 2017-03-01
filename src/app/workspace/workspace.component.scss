@@ -7,6 +7,9 @@
 .dragging-placeholder {
   position: absolute;
   z-index: 500;
-  background: pink;
   pointer-events: none;
+  display: flex;
+  box-sizing: border-box;
+  color: #065ed0;
+  font-family: Arial;
 }
