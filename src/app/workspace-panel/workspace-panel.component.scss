@@ -102,6 +102,7 @@
       flex-direction: row;
       border-bottom: solid 1px #eeeeee;
       align-items: center;
+      flex-shrink: 1;
       &.dropping {
         background: red;
       }
@@ -117,6 +118,11 @@
         display: flex;
         box-sizing: border-box;
         color: #065ed0;
+
+        &.dragging {
+          display: none;
+          pointer-events: none;
+        }
 
         &.active {
           color: #1a1a1a;

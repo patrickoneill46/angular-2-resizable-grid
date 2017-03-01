@@ -3,3 +3,10 @@
   flex-flow: row wrap;
   position: relative;
 }
+
+.dragging-placeholder {
+  position: absolute;
+  z-index: 500;
+  background: pink;
+  pointer-events: none;
+}

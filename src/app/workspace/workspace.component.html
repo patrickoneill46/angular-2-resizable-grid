@@ -15,3 +15,6 @@
   (panelDestroyed)="removeWorkspacePanel($event)"
 >
 </workspace-panel>
+<div class="dragging-placeholder" *ngIf="this.dragDropService.isDragging" [ngStyle]="this.dragDropService.dragStyle">
+  Dragging
+</div>

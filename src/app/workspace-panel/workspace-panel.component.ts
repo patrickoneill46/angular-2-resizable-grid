@@ -77,6 +77,7 @@ export class WorkspacePanelComponent implements OnInit {
   @ViewChild('dynamicComponentContainer', { read: ViewContainerRef }) dynamicComponentContainer: ViewContainerRef;
 
   constructor(private dragDropService: DragDropService, private resolver: ComponentFactoryResolver) {
+    this.dropping = false;
   }
 
   // component: Class for the component you want to create
@@ -142,6 +143,30 @@ export class WorkspacePanelComponent implements OnInit {
   handleHeaderMouseDown($event) {
     console.log('header mouse down');
     $event.stopPropagation();
+    $event.preventDefault();
+    this.dragDropService.setDragStart($event.clientX, $event.clientY - this.workspaceDimensions.top);
+    let headerEl = $event.target;
+    let firstTime = true;
+    this.mouseMoveSub = this.mouseMoveObs.subscribe(event => {
+
+      if (firstTime) {
+        this.dropping = true;
+        firstTime = false;
+      }
+      this.dragDropService.isDragging = true;
+      console.log('dragging header', event);
+      this.dragDropService.handleDrag(event.mouseX, event.mouseY  - this.workspaceDimensions.top);
+      headerEl.classList.add('dragging');
+    });
+    this.mouseUpSub = this.mouseUpObs.subscribe(event => {
+      console.log('dragging end');
+      this.dropping = false;
+      headerEl.classList.remove('dragging');
+      this.dragDropService.isDragging = false;
+      this.dragDropService.handleDragEnd(event);
+      this.mouseMoveSub.unsubscribe();
+      this.mouseUpSub.unsubscribe();
+    });
   }
 
   handleHeaderDragStart($event) {
@@ -164,6 +189,8 @@ export class WorkspacePanelComponent implements OnInit {
     $event.dataTransfer.setData('text/plain', JSON.stringify(data));
     $event.dataTransfer.setDragImage($event.target, $event.offsetX , $event.offsetY);
     $event.dataTransfer.effectAllowed = 'move';
+    this.dragDropService.setDraggedOverPanel(this.panelId);
+    this.dropping = false;
   }
 
   handleHeaderDragEnd($event) {
@@ -180,8 +207,12 @@ export class WorkspacePanelComponent implements OnInit {
   }
 
   handleDragLeave($event) {
-    this.dropping = false;
-    this.dragDropService.setDraggedOverPanel(null);
+
+    console.log('drag leave', $event.target, $event.target.getAttribute('drop-container'));
+    if ($event.target.getAttribute('drop-container')) {
+      this.dropping = false;
+      this.dragDropService.setDraggedOverPanel(null);
+    }
   }
 
   handleDragEnter($event) {
@@ -198,6 +229,22 @@ export class WorkspacePanelComponent implements OnInit {
   onDragPanelHeader(args) {
     this.draggingHeaderItem = true;
     this.draggingPanel = false;
+  }
+
+  onMouseEnter($event) {
+    if (this.dragDropService.isDragging && $event.target.getAttribute('drop-container')) {
+      console.log('mouse over', $event.target);
+      this.dropping = true;
+      this.dragDropService.setDraggedOverPanel(this.panelId);
+    }
+  }
+
+  onMouseLeave($event) {
+    console.log('mouse leave', $event.target);
+    if (this.dragDropService.isDragging && $event.target.getAttribute('drop-container')) {
+      this.dropping = false;
+      this.dragDropService.setDraggedOverPanel(null);
+    }
   }
 
   onFinishDragPanelHeader() {
