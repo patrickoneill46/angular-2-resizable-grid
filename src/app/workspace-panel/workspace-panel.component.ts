@@ -142,7 +142,7 @@ export class WorkspacePanelComponent implements OnInit {
     console.log('header mouse down');
     $event.stopPropagation();
     $event.preventDefault();
-    this.dragDropService.setDragStart($event.clientX, $event.clientY - this.workspaceDimensions.top, $event.target);
+    this.dragDropService.setDragStart($event.clientX , $event.clientY - this.workspaceDimensions.top, $event.offsetX, $event.offsetY, $event.target);
     this.handleHeaderDragStart(event);
     let headerEl = $event.target;
     let firstTime = true;

@@ -21,21 +21,21 @@ export class DragDropService {
     this.isDragging = false;
   }
 
-  setDragStart(x, y, target) {
+  setDragStart(x, y, offsetX, offsetY, target) {
 
     let rect = target.getBoundingClientRect();
     let height = rect.height;
     let width = rect.width;
 
-    this.dragStart = {x, y, height, width};
+    this.dragStart = {x, y, height, width, offsetX, offsetY};
     this.dragPlaceHolderHTML = target.innerHTML;
   }
 
   handleDrag(x, y) {
 
     this.dragStyle = {
-      top: `${this.dragStart.y}px`,
-      left: `${this.dragStart.x}px`,
+      top: `${this.dragStart.y - this.dragStart.offsetY}px`,
+      left: `${this.dragStart.x - this.dragStart.offsetX}px`,
       height: `${this.dragStart.height}px`,
       width: `${this.dragStart.width}px`,
       transform: `translate(${x - this.dragStart.x}px, ${y - this.dragStart.y}px)`
@@ -57,8 +57,8 @@ export class DragDropService {
       this.componentDroppedOutsidePanel.emit({
         component: this.dragData.component,
         panelDimensions: this.dragData.panelDimensions,
-        top: event.clientY,
-        left: event.clientX,
+        top: event.clientY - this.dragStart.offsetY,
+        left: event.clientX - this.dragStart.offsetX,
         panelId: this.dragData.panelId
       });
     } else {
