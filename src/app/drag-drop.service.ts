@@ -7,6 +7,7 @@ export class DragDropService {
   private dropContainer: any;
   private dropPanel: any;
   isDragging: boolean;
+  dropPanelId: any;
   dragStart: any;
   dragStyle: any;
 
@@ -36,6 +37,7 @@ export class DragDropService {
     this.dragStyle = null;
     this.dragStart = null;
     this.isDragging = false;
+    this.dropPanelId = false;
   }
 
   setDragData(componentData) {

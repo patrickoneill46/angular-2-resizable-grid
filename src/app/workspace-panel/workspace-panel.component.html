@@ -8,7 +8,7 @@
 <div class="resize-handle se" (mousedown)="resizeStart($event, 'e', 's')"></div>
 <div
   class="workspace-item--header"
-  [ngClass]="{ 'dropping': dropping }"
+  [ngClass]="{ 'dropping': panelId === dragDropService.dropPanelId }"
   drag-position
   (dragStartEvent)="onDragStart($event)"
   (dragEvent)="onDrag($event)"
