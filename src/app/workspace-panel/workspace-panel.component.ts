@@ -151,7 +151,7 @@ export class WorkspacePanelComponent implements OnInit {
     this.mouseMoveSub = this.mouseMoveObs.subscribe(event => {
 
       if (firstTime) {
-        this.dragDropService.dropPanelId = this.panelId;
+        this.dragDropService.setDraggedOverPanel(this.panelId);
         firstTime = false;
         this.dragHeaderIndex = headerIndex;
         this.dragHeaderTransform = `translate(${this.dragDropService.getDraggingHeaderWidth()}px)`;
@@ -253,15 +253,13 @@ export class WorkspacePanelComponent implements OnInit {
 
     if (this.dragDropService.isDragging && $event.target.getAttribute('drop-container')) {
       this.setPanelActive();
-      this.dragDropService.dropPanelId = this.panelId;
       this.dragDropService.setDraggedOverPanel(this.panelId);
     }
   }
 
   onMouseLeave($event) {
-    
+
     if (this.dragDropService.isDragging && $event.target.getAttribute('drop-container')) {
-      this.dragDropService.dropPanelId = null;
       this.dragDropService.setDraggedOverPanel(null);
       this.dragHeaderIndex = null;
       this.dragHeaderTransform = null;
