@@ -139,7 +139,7 @@ export class WorkspacePanelComponent implements OnInit {
   }
 
   handleHeaderMouseDown($event) {
-    console.log('header mouse down');
+
     $event.stopPropagation();
     $event.preventDefault();
     this.dragDropService.setDragStart($event.clientX , $event.clientY - this.workspaceDimensions.top, $event.offsetX, $event.offsetY, $event.target);
@@ -199,7 +199,6 @@ export class WorkspacePanelComponent implements OnInit {
 
   handleDragLeave($event) {
 
-    console.log('drag leave', $event.target, $event.target.getAttribute('drop-container'));
     if ($event.target.getAttribute('drop-container')) {
       this.dragDropService.setDraggedOverPanel(null);
     }
@@ -220,8 +219,9 @@ export class WorkspacePanelComponent implements OnInit {
   }
 
   onMouseEnter($event) {
+
     if (this.dragDropService.isDragging && $event.target.getAttribute('drop-container')) {
-      console.log('mouse over', $event.target);
+      this.setPanelActive();
       this.dragDropService.dropPanelId = this.panelId;
       this.dragDropService.setDraggedOverPanel(this.panelId);
     }
