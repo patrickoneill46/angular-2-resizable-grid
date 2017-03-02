@@ -162,13 +162,17 @@ export class WorkspacePanelComponent implements OnInit {
     });
     this.mouseUpSub = this.mouseUpObs.subscribe(event => {
 
-      headerEl.classList.remove('dragging');
-      this.dragHeaderTransform = null;
-      this.dragHeaderIndex = null;
-      this.dragDropService.isDragging = false;
       this.mouseMoveSub.unsubscribe();
       this.mouseUpSub.unsubscribe();
-      this.handleHeaderDragEnd(event);
+
+      
+      if (this.dragDropService.isDragging) {
+        headerEl.classList.remove('dragging');
+        this.dragHeaderTransform = null;
+        this.dragHeaderIndex = null;
+        this.dragDropService.isDragging = false;
+        this.handleHeaderDragEnd(event);
+      };
     });
   }
 
@@ -195,6 +199,10 @@ export class WorkspacePanelComponent implements OnInit {
 
     if (this.dragDropService.isDragging) {
 
+      this.dragOverSub = this.mouseMoveObs.subscribe(event => {
+        console.log('dragging over', event);
+      });
+
       this.dragHeaderIndex = headerIndex;
       this.dragHeaderTransform = `translate(${this.dragDropService.getDraggingHeaderWidth()}px)`;
       $event.target.classList.add('dragging-over');
@@ -218,6 +226,9 @@ export class WorkspacePanelComponent implements OnInit {
 
   handleHeaderDragEnd($event) {
     console.log('header drag end');
+    if (this.dragOverSub) {
+      this.dragOverSub.unsubscribe();
+    }
     this.dragDropService.handleDragEnd($event);
   }
 
