@@ -105,6 +105,10 @@
       flex-shrink: 1;
       &.dropping {
         background: red;
+
+        .workspace-item-draggable-item--destroy {
+          pointer-events: none;
+        }
       }
 
       &-draggable-container {

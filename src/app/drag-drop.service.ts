@@ -31,6 +31,10 @@ export class DragDropService {
     this.dragPlaceHolderHTML = target.innerHTML;
   }
 
+  getDraggingHeaderWidth () {
+    return this.dragStart.width;
+  }
+
   handleDrag(x, y) {
 
     this.dragStyle = {

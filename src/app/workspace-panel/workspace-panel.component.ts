@@ -72,6 +72,8 @@ export class WorkspacePanelComponent implements OnInit {
   };
   minHeight: number = 150;
   minWidth: number = 300;
+  dragHeaderIndex: number;
+  dragHeaderTransform: string;
 
   @ViewChild('dynamicComponentContainer', { read: ViewContainerRef }) dynamicComponentContainer: ViewContainerRef;
 
@@ -159,6 +161,8 @@ export class WorkspacePanelComponent implements OnInit {
     this.mouseUpSub = this.mouseUpObs.subscribe(event => {
 
       headerEl.classList.remove('dragging');
+      this.dragHeaderTransform = null;
+      this.dragHeaderIndex = null;
       this.dragDropService.isDragging = false;
       this.mouseMoveSub.unsubscribe();
       this.mouseUpSub.unsubscribe();
@@ -183,6 +187,35 @@ export class WorkspacePanelComponent implements OnInit {
       }
     };
     this.dragDropService.setDragData(data, $event.target);
+  }
+
+  handleHeaderMouseOver($event, headerIndex) {
+
+    if (this.dragDropService.isDragging) {
+
+      this.dragHeaderIndex = headerIndex;
+      this.dragHeaderTransform = `translate(${this.dragDropService.getDraggingHeaderWidth()}px)`;
+      console.log('dragheader transform', this.dragHeaderTransform);
+      $event.target.classList.add('dragging-over');
+
+      // if ($event.offsetX < $event.target.getBoundingClientRect().width / 2) {
+      //   $event.target.classList.add('left');
+      //   $event.target.classList.remove('right');
+      // } else {
+      //   $event.target.classList.add('right');
+      //   $event.target.classList.remove('left');
+      // }
+    }
+  }
+
+  handleHeaderMouseLeave($event) {
+
+    if (this.dragDropService.isDragging) {
+
+      $event.target.classList.remove('dragging-over');
+      $event.target.classList.remove('right');
+      $event.target.classList.remove('left');
+    }
   }
 
   handleHeaderDragEnd($event) {
@@ -232,6 +265,8 @@ export class WorkspacePanelComponent implements OnInit {
     if (this.dragDropService.isDragging && $event.target.getAttribute('drop-container')) {
       this.dragDropService.dropPanelId = null;
       this.dragDropService.setDraggedOverPanel(null);
+      this.dragHeaderIndex = null;
+      this.dragHeaderTransform = null;
     }
   }
 
