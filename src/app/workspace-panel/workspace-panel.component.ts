@@ -140,7 +140,7 @@ export class WorkspacePanelComponent implements OnInit {
     });
   }
 
-  handleHeaderMouseDown($event) {
+  handleHeaderMouseDown($event, headerIndex) {
 
     $event.stopPropagation();
     $event.preventDefault();
@@ -153,6 +153,8 @@ export class WorkspacePanelComponent implements OnInit {
       if (firstTime) {
         this.dragDropService.dropPanelId = this.panelId;
         firstTime = false;
+        this.dragHeaderIndex = headerIndex;
+        this.dragHeaderTransform = `translate(${this.dragDropService.getDraggingHeaderWidth()}px)`;
       }
       this.dragDropService.isDragging = true;
       this.dragDropService.handleDrag(event.mouseX, event.mouseY  - this.workspaceDimensions.top);
@@ -195,16 +197,12 @@ export class WorkspacePanelComponent implements OnInit {
 
       this.dragHeaderIndex = headerIndex;
       this.dragHeaderTransform = `translate(${this.dragDropService.getDraggingHeaderWidth()}px)`;
-      console.log('dragheader transform', this.dragHeaderTransform);
       $event.target.classList.add('dragging-over');
-
-      // if ($event.offsetX < $event.target.getBoundingClientRect().width / 2) {
-      //   $event.target.classList.add('left');
-      //   $event.target.classList.remove('right');
-      // } else {
-      //   $event.target.classList.add('right');
-      //   $event.target.classList.remove('left');
-      // }
+      if ($event.offsetX < $event.target.getBoundingClientRect().width) {
+        this.dragHeaderIndex = headerIndex - 1;
+      } else {
+        this.dragHeaderIndex = headerIndex;
+      }
     }
   }
 
@@ -261,7 +259,7 @@ export class WorkspacePanelComponent implements OnInit {
   }
 
   onMouseLeave($event) {
-    console.log('mouse leave', $event.target);
+    
     if (this.dragDropService.isDragging && $event.target.getAttribute('drop-container')) {
       this.dragDropService.dropPanelId = null;
       this.dragDropService.setDraggedOverPanel(null);

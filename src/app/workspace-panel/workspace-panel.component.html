@@ -29,14 +29,14 @@
       draggable="true"
       (mouseover)="handleHeaderMouseOver($event, i)"
       (mouseleave)="handleHeaderMouseLeave($event, i)"
-      (mousedown)="handleHeaderMouseDown($event)"
+      (mousedown)="handleHeaderMouseDown($event, i)"
       (dragstart)="handleHeaderDragStart($event)"
       (dragend)="handleHeaderDragEnd($event)"
       [ngClass]="{ 'active': component.id === activeComponentId }"
       (click)="showComponent(component.id)"
       [attr.data-component-id]="component.id"
       [attr.data-panel-id]="panelId"
-      [style.transform]="i >= dragHeaderIndex ? dragHeaderTransform : ''"
+      [style.transform]="i > dragHeaderIndex ? dragHeaderTransform : ''"
       >
       {{ component.header }}
       <div class="workspace-item--header-draggable-item--destroy" (click)="destroyComponent(component.id, component.type)">
