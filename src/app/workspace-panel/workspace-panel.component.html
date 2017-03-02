@@ -39,9 +39,11 @@
       [style.transform]="i > dragHeaderIndex ? dragHeaderTransform : ''"
       >
       {{ component.header }}
-      <div class="workspace-item--header-draggable-item--destroy" (click)="destroyComponent(component.id, component.type)">
+      <div class="workspace-item--header-draggable-item--destroy" (click)="destroyComponent(component.id, component.type)" (mousedown)="$event.stopPropagation()">
         x
       </div>
+    </div>
+    <div class="workspace-item--header-drop-placeholder" *ngIf="dragHeaderIndex === components.length - 1">
     </div>
   </div>
   <div class="workspace-item--destroy" (click)="destroyPanel()">

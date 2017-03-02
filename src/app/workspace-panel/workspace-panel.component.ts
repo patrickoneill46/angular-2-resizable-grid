@@ -145,12 +145,12 @@ export class WorkspacePanelComponent implements OnInit {
     $event.stopPropagation();
     $event.preventDefault();
     this.dragDropService.setDragStart($event.clientX , $event.clientY - this.workspaceDimensions.top, $event.offsetX, $event.offsetY, $event.target);
-    this.handleHeaderDragStart(event);
     let headerEl = $event.target;
     let firstTime = true;
     this.mouseMoveSub = this.mouseMoveObs.subscribe(event => {
 
       if (firstTime) {
+        this.handleHeaderDragStart($event);
         this.dragDropService.setDraggedOverPanel(this.panelId);
         firstTime = false;
         this.dragHeaderIndex = headerIndex;
@@ -165,7 +165,6 @@ export class WorkspacePanelComponent implements OnInit {
       this.mouseMoveSub.unsubscribe();
       this.mouseUpSub.unsubscribe();
 
-      
       if (this.dragDropService.isDragging) {
         headerEl.classList.remove('dragging');
         this.dragHeaderTransform = null;
@@ -198,10 +197,6 @@ export class WorkspacePanelComponent implements OnInit {
   handleHeaderMouseOver($event, headerIndex) {
 
     if (this.dragDropService.isDragging) {
-
-      this.dragOverSub = this.mouseMoveObs.subscribe(event => {
-        console.log('dragging over', event);
-      });
 
       this.dragHeaderIndex = headerIndex;
       this.dragHeaderTransform = `translate(${this.dragDropService.getDraggingHeaderWidth()}px)`;
@@ -263,6 +258,7 @@ export class WorkspacePanelComponent implements OnInit {
   onMouseEnter($event) {
 
     if (this.dragDropService.isDragging && $event.target.getAttribute('drop-container')) {
+      this.dragHeaderIndex = this.components.length - 1;
       this.setPanelActive();
       this.dragDropService.setDraggedOverPanel(this.panelId);
     }
@@ -425,10 +421,17 @@ export class WorkspacePanelComponent implements OnInit {
     this.components.splice(this.components.indexOf(component), 1);
 
     if (this.components.length) {
+      this.showComponent(this.components[this.components.length - 1].id);
       this.handlePanelChanged();
     } else {
       this.destroyPanel();
     }
+  }
+
+  handleDestroyComponent($event, componentId) {
+    $event.stopPropagation();
+    $event.preventDefault();
+    this.destroyComponent(componentId);
   }
 
   addComponent(component) {

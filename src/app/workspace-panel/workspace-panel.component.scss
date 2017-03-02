@@ -104,7 +104,6 @@
       align-items: center;
       flex-shrink: 1;
       &.dropping {
-        background: red;
 
         .workspace-item-draggable-item--destroy {
           pointer-events: none;
@@ -137,6 +136,12 @@
           color: black;
           margin: 0 10px 0 5px;
         }
+      }
+
+      &-drop-placeholder {
+        height: 30px;
+        width: 150px;
+        background: grey;
       }
     }
 
