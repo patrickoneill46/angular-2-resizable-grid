@@ -345,8 +345,7 @@ export class WorkspacePanelComponent implements OnInit {
       },
       activeComponentId: this.activeComponentId,
       components: this.components,
-      id: this.panelId,
-      active: 1
+      id: this.panelId
     })
   }
 }

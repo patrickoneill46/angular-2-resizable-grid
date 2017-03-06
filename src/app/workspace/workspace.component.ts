@@ -155,7 +155,6 @@ export class WorkspaceComponent implements OnInit {
   private createNewPanelWithCompoonent(component) {
 
     let panelId = 'panel-' + Math.random();
-    let zIndexOrder = this.workspacePanels.length + 1;
 
     this.workspacePanels.push({
       dimensions: {
@@ -164,9 +163,7 @@ export class WorkspaceComponent implements OnInit {
         top: 20,
         left: 20
       },
-      order: zIndexOrder,
       id: panelId,
-      active: 0,
       components: [
         component
       ]
