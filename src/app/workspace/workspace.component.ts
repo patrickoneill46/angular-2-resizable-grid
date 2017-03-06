@@ -96,6 +96,7 @@ export class WorkspaceComponent implements OnInit {
         return 0;
       }
     });
+    this.saveActiveWorkspace();
   }
 
   removeWorkspacePanel(panelId) {

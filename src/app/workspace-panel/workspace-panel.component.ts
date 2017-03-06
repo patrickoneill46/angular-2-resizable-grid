@@ -246,6 +246,7 @@ export class WorkspacePanelComponent implements OnInit {
 
     if (!this.draggingPanel && !this.draggingHeaderItem) {
       this.draggingPanel = true;
+      this.setPanelActive();
       this.setStyleByPixels(this.calculatePixelsStyle(this.relativeStyle));
     }
   }
