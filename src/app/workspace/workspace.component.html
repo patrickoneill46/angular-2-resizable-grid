@@ -9,7 +9,6 @@
   [mouseMoveObs]="mouseMoveObs"
   [mouseUpObs]="mouseUpObs"
   [initalConfig]="config"
-  [order]="workspaceZIndexMap[config.id]"
   (panelActive)="updateActivePanel($event)"
   (panelChanged)="onWorkspacePanelChanged($event)"
   (panelDestroyed)="removeWorkspacePanel($event)"

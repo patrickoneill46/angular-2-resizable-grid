@@ -32,14 +32,12 @@ import { Subscription } from 'rxjs/Subscription';
     '[style.minHeight]': 'minHeight',
     '[style.minWidth]': 'minWidth',
     '[style.transform]': 'transform',
-    '[style.zIndex]': 'order'
   }
 })
 export class WorkspacePanelComponent implements OnInit {
 
   @Input() workspaceDimensions: ClientRect;
   @Input() initalConfig: any;
-  @Input() order;
   @Input() mouseMoveObs: Subject<any>;
   @Input() mouseUpObs: Subject<any>;
 
@@ -253,7 +251,7 @@ export class WorkspacePanelComponent implements OnInit {
   }
 
   setPanelActive() {
-    this.panelActive.emit({ panelId: this.panelId, order: this.order});
+    this.panelActive.emit({ panelId: this.panelId});
   }
 
   showComponent(componentId) {
@@ -347,7 +345,6 @@ export class WorkspacePanelComponent implements OnInit {
       },
       activeComponentId: this.activeComponentId,
       components: this.components,
-      order: this.order,
       id: this.panelId,
       active: 1
     })
