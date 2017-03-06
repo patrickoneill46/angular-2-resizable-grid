@@ -144,9 +144,9 @@ export class WorkspacePanelComponent implements OnInit {
 
     $event.stopPropagation();
     $event.preventDefault();
-    this.dragDropService.setDragStart($event.clientX , $event.clientY - this.workspaceDimensions.top, $event.offsetX, $event.offsetY, $event.target);
     let headerEl = $event.target;
     let firstTime = true;
+
     this.mouseMoveSub = this.mouseMoveObs.subscribe(event => {
 
       if (firstTime) {
@@ -156,21 +156,17 @@ export class WorkspacePanelComponent implements OnInit {
         this.dragHeaderIndex = headerIndex;
         this.dragHeaderTransform = `translate(${this.dragDropService.getDraggingHeaderWidth()}px)`;
       }
-      this.dragDropService.isDragging = true;
-      this.dragDropService.handleDrag(event.mouseX, event.mouseY  - this.workspaceDimensions.top);
+      this.dragDropService.handleDrag(event.mouseX, event.mouseY - this.workspaceDimensions.top);
       headerEl.classList.add('dragging');
     });
+
     this.mouseUpSub = this.mouseUpObs.subscribe(event => {
 
       this.mouseMoveSub.unsubscribe();
       this.mouseUpSub.unsubscribe();
 
       if (this.dragDropService.isDragging) {
-        headerEl.classList.remove('dragging');
-        this.dragHeaderTransform = null;
-        this.dragHeaderIndex = null;
-        this.dragDropService.isDragging = false;
-        this.handleHeaderDragEnd(event);
+        this.handleHeaderDragEnd(event, headerEl);
       };
     });
   }
@@ -191,7 +187,7 @@ export class WorkspacePanelComponent implements OnInit {
         width: this.relativeStyle.width
       }
     };
-    this.dragDropService.setDragData(data, $event.target);
+    this.dragDropService.setDragStart(data, $event.clientX , $event.clientY - this.workspaceDimensions.top, $event.offsetX, $event.offsetY, $event.target);
   }
 
   handleHeaderMouseOver($event, headerIndex) {
@@ -219,12 +215,16 @@ export class WorkspacePanelComponent implements OnInit {
     }
   }
 
-  handleHeaderDragEnd($event) {
-    console.log('header drag end');
+  handleHeaderDragEnd($event, draggedHeaderEl) {
+    
+    draggedHeaderEl.classList.remove('dragging');
+    this.dragHeaderTransform = null;
+    this.dragHeaderIndex = null;
+    this.dragDropService.handleDragEnd($event);
+
     if (this.dragOverSub) {
       this.dragOverSub.unsubscribe();
     }
-    this.dragDropService.handleDragEnd($event);
   }
 
   handleDragOver($event) {
