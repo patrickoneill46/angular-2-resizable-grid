@@ -30,8 +30,8 @@ import { Subscription } from 'rxjs/Subscription';
     '[style.width]': 'style.width',
     '[style.left]': 'style.left',
     '[style.top]': 'style.top',
-    '[style.minHeight]': 'minHeight',
-    '[style.minWidth]': 'minWidth',
+    '[style.minHeight.px]': 'minHeight',
+    '[style.minWidth.px]': 'minWidth',
     '[style.transform]': 'transform',
     '[style.zIndex]': 'order'
   }
@@ -244,10 +244,6 @@ export class WorkspacePanelComponent implements OnInit {
   handleDragEnter($event) {
     this.dragDropService.setDraggedOverPanel(this.panelId);
     console.log('drag enter', this.panelId);
-  }
-
-  handleDrop($event) {
-    console.log('drop', $event.dataTransfer.getData('text/plain'));
   }
 
   onDragPanelHeader(args) {
