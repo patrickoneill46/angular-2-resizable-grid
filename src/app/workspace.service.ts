@@ -15,9 +15,7 @@ let defaultWorkspaceConfig = {
         top: 10,
         left: 10
       },
-      order: 3,
       id: 'panel1',
-      active: 1,
       activePanelId: 'firstComponent',
       components: [
         {
@@ -44,9 +42,7 @@ let defaultWorkspaceConfig = {
         top: 80,
         left: 70
       },
-      order: 2,
       id: 'panel2',
-      active: 0,
       components: [
         {
           header: 'Watchlist Component',
@@ -72,9 +68,7 @@ let defaultWorkspaceConfig = {
         top: 21,
         left: 11
       },
-      order: 1,
       id: 'panel3',
-      active: 0,
       components: [
         {
           header: 'Watchlist Component',

@@ -17,7 +17,6 @@ export class WorkspaceComponent implements OnInit {
   private activeWorkspace: any;
 
   workspacePanels: Array<any>;
-  workspaceZIndexMap: any;
   dragulaBag = 'bag-one';
   mouseMoveObs: Subject<any>;
   mouseUpObs: Subject<any>;
@@ -31,7 +30,6 @@ export class WorkspaceComponent implements OnInit {
     private dragulaService: DragulaService
   ) {
     this.workspacePanels = [];
-    this.workspaceZIndexMap = {};
     this.mouseMoveObs = new Subject();
     this.mouseUpObs = new Subject();
   }
@@ -90,18 +88,15 @@ export class WorkspaceComponent implements OnInit {
 
   updateActivePanel(activePanel) {
 
-    if (this.activePanel !== activePanel.panelId) {
+    this.workspacePanels.sort((a,b) => {
 
-      this.activePanel = activePanel.panelId;
-      Object.keys(this.workspaceZIndexMap).forEach(panelKey => {
-
-        if (panelKey === activePanel.panelId) {
-          this.workspaceZIndexMap[panelKey] = this.workspacePanels.length;
-        } else if (this.workspaceZIndexMap[panelKey] >= activePanel.order) {
-          --this.workspaceZIndexMap[panelKey]
-        }
-      });
-    }
+      if (a.id === activePanel.panelId) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    this.saveActiveWorkspace();
   }
 
   removeWorkspacePanel(panelId) {
@@ -113,7 +108,6 @@ export class WorkspaceComponent implements OnInit {
 
   changeWorkspace(workspaceConfig) {
 
-    this.activePanel = null;
     this.workspacePanels = [];
     this.activeWorkspace = null;
     this.initalizeWorkspacePanels(workspaceConfig);
@@ -138,13 +132,6 @@ export class WorkspaceComponent implements OnInit {
 
     this.activeWorkspace = workspaceConfig;
     this.workspacePanels = workspaceConfig.panels;
-    this.workspacePanels.forEach(panel => {
-      this.workspaceZIndexMap[panel.id] = panel.order;
-
-      if (panel.active){
-        this.activePanel = panel.id;
-      }
-    });
   }
 
   private onWorkspacePanelChanged(panelChanged): void {
@@ -169,7 +156,6 @@ export class WorkspaceComponent implements OnInit {
   private createNewPanelWithCompoonent(component) {
 
     let panelId = 'panel-' + Math.random();
-    let zIndexOrder = this.workspacePanels.length + 1;
 
     this.workspacePanels.push({
       dimensions: {
@@ -178,15 +164,12 @@ export class WorkspaceComponent implements OnInit {
         top: 20,
         left: 20
       },
-      order: zIndexOrder,
       id: panelId,
-      active: 0,
       components: [
         component
       ]
     });
 
-    this.workspaceZIndexMap[panelId] = zIndexOrder;
     this.saveActiveWorkspace();
   }
 

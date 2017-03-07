@@ -4,12 +4,12 @@
 >
 </component-selector>
 <workspace-panel
-  *ngFor="let config of workspacePanels"
+  *ngFor="let config of workspacePanels; let i = index"
+  [ngClass]="{ 'active': i === workspacePanels.length - 1}"
   [workspaceDimensions]="dimensions"
   [mouseMoveObs]="mouseMoveObs"
   [mouseUpObs]="mouseUpObs"
   [initalConfig]="config"
-  [order]="workspaceZIndexMap[config.id]"
   (panelActive)="updateActivePanel($event)"
   (panelChanged)="onWorkspacePanelChanged($event)"
   (panelDestroyed)="removeWorkspacePanel($event)"
