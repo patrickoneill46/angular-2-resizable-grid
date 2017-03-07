@@ -69,9 +69,9 @@ export class WorkspaceComponent implements OnInit {
     this.setWorkspaceDimensions();
   }
 
-  @HostListener('window:mousemove', ['$event.clientX', '$event.clientY'])
-  onMouseMove(mouseX: number, mouseY: number): void {
-    this.mouseMoveObs.next({ mouseX, mouseY });
+  @HostListener('window:mousemove', ['$event.clientX', '$event.clientY', '$event.offsetX', '$event.offsetY', '$event.target'])
+  onMouseMove(mouseX: number, mouseY: number, offsetX: number, offsetY: number, target: HTMLElement): void {
+    this.mouseMoveObs.next({ mouseX, mouseY, offsetX, offsetY, target });
   }
 
   @HostListener('window:mouseup', ['$event'])

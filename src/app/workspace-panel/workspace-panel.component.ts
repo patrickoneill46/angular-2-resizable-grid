@@ -162,6 +162,9 @@ export class WorkspacePanelComponent implements OnInit {
 
       this.mouseMoveSub.unsubscribe();
       this.mouseUpSub.unsubscribe();
+      if (this.dragOverSub) {
+        this.dragOverSub.unsubscribe();
+      }
 
       if (this.dragDropService.isDragging) {
         this.handleHeaderDragEnd(event, headerEl);
@@ -192,29 +195,41 @@ export class WorkspacePanelComponent implements OnInit {
 
     if (this.dragDropService.isDragging) {
 
-      this.dragHeaderIndex = headerIndex;
-      this.dragHeaderTransform = `translate(${this.dragDropService.getDraggingHeaderWidth()}px)`;
-      $event.target.classList.add('dragging-over');
-      if ($event.offsetX < $event.target.getBoundingClientRect().width) {
-        this.dragHeaderIndex = headerIndex - 1;
-      } else {
-        this.dragHeaderIndex = headerIndex;
-      }
+      let headerWidth = $event.target.getBoundingClientRect().width;
+
+      this.dragOverSub = this.mouseMoveObs.subscribe(mouseMoveEvent => {
+
+        if ($event.target === mouseMoveEvent.target) {
+
+          this.dragHeaderIndex = headerIndex;
+          this.dragHeaderTransform = `translate(${this.dragDropService.getDraggingHeaderWidth()}px)`;
+          $event.target.classList.add('dragging-over');
+          console.log('dragging over header', $event.offsetX, headerWidth / 2)
+          if (mouseMoveEvent.offsetX < headerWidth / 2) {
+            this.dragHeaderIndex = headerIndex - 1;
+          } else {
+            this.dragHeaderIndex = headerIndex;
+          }
+        }
+      });
     }
   }
 
   handleHeaderMouseLeave($event) {
 
     if (this.dragDropService.isDragging) {
-
       $event.target.classList.remove('dragging-over');
       $event.target.classList.remove('right');
       $event.target.classList.remove('left');
     }
+
+    if (this.dragOverSub) {
+      this.dragOverSub.unsubscribe();
+    }
   }
 
   handleHeaderDragEnd($event, draggedHeaderEl) {
-    
+
     draggedHeaderEl.classList.remove('dragging');
     this.dragHeaderTransform = null;
     this.dragHeaderIndex = null;
@@ -274,7 +289,7 @@ export class WorkspacePanelComponent implements OnInit {
   resizeStart($event, horizontalDirection, verticalDirection) {
 
     $event.preventDefault();
-    this.setStyleByPixels(this.pixelStyle);
+    this.setStyleByPixels(this.calculatePixelsStyle(this.relativeStyle));
     this.setPanelActive();
     let resizeStartCoords = {
       x: $event.clientX,
