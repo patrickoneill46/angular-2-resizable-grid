@@ -239,23 +239,8 @@ export class WorkspacePanelComponent implements OnInit {
     }
   }
 
-  handleDragOver($event) {
-    $event.preventDefault();
-    this.setPanelActive();
-    console.log('drag over', this.panelId);
-    this.dragDropService.setDraggedOverPanel(this.panelId);
-  }
-
-  handleDragLeave($event) {
-
-    if ($event.target.getAttribute('drop-container')) {
-      this.dragDropService.setDraggedOverPanel(null);
-    }
-  }
-
   handleDragEnter($event) {
     this.dragDropService.setDraggedOverPanel(this.panelId);
-    console.log('drag enter', this.panelId);
   }
 
   onDragPanelHeader(args) {
