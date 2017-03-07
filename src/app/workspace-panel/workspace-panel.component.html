@@ -31,7 +31,7 @@
       (click)="showComponent(component.id)"
       [attr.data-component-id]="component.id"
       [attr.data-panel-id]="panelId"
-      [style.transform]="i > dragHeaderIndex ? dragHeaderTransform : ''"
+      [style.transform]="i >= dragHeaderIndex ? dragHeaderTransform : ''"
       >
       {{ component.header }}
       <div class="workspace-item--header-draggable-item--destroy" (click)="destroyComponent(component.id, component.type)" (mousedown)="$event.stopPropagation()">

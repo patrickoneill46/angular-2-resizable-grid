@@ -7,6 +7,7 @@ export class DragDropService {
   private dropContainer: any;
   isDragging: boolean;
   dropPanelId: any;
+  dropPanelComponentIndex: any;
   dragStart: any;
   dragStyle: any;
   dragPlaceHolderHTML: any;
@@ -47,11 +48,16 @@ export class DragDropService {
     };
   }
 
-  setDraggedOverPanel(panelId) {
+  setDraggedOverPanel(panelId, componentIndex) {
     this.dropPanelId = panelId;
+    this.dropPanelComponentIndex = componentIndex;
   }
 
-  handleDragEnd(event) {
+  setDropHeaderIndex(componentIndex) {
+    this.dropPanelComponentIndex = componentIndex;
+  }
+
+  handleDragEnd(event, dragHeaderIndex) {
 
     if (!this.dropPanelId) {
       console.log('dropped outside panel')
@@ -66,7 +72,7 @@ export class DragDropService {
       console.log('same panel');
     } else {
       console.log('dropped inside panel');
-      this.componentDroppedInsidePanel.emit({component: this.dragData.component, panel: this.dropPanelId, previousPanel: this.dragData.panelId})
+      this.componentDroppedInsidePanel.emit({component: this.dragData.component, panel: this.dropPanelId, previousPanel: this.dragData.panelId, index: this.dropPanelComponentIndex})
     }
 
     this.dragStyle = null;
