@@ -204,7 +204,6 @@ export class WorkspacePanelComponent implements OnInit {
           this.dragHeaderIndex = headerIndex;
           this.dragHeaderTransform = `translate(${this.dragDropService.getDraggingHeaderWidth()}px)`;
           $event.target.classList.add('dragging-over');
-          console.log('dragging over header', $event.offsetX, headerWidth / 2)
           if (mouseMoveEvent.offsetX < headerWidth / 2) {
             this.dragHeaderIndex = headerIndex - 1;
           } else {
