@@ -127,7 +127,7 @@ export class WorkspacePanelComponent implements OnInit {
       } else if (this.panelId === config.previousPanel) {
         this.destroyComponent(config.component.id);
       }
-
+      this.dragHeaderTransform = null;
     });
 
     this.dragDropService.componentDroppedOutsidePanel.subscribe(config => {
