@@ -102,6 +102,13 @@
       flex-direction: row;
       border-bottom: solid 1px #eeeeee;
       align-items: center;
+      flex-shrink: 1;
+      &.dropping {
+
+        .workspace-item--header-draggable-item--destroy, .workspace-item--destroy {
+          pointer-events: none;
+        }
+      }
 
       &-draggable-container {
         display: flex;
@@ -115,6 +122,11 @@
         box-sizing: border-box;
         color: #065ed0;
 
+        &.dragging {
+          display: none;
+          pointer-events: none;
+        }
+
         &.active {
           color: #1a1a1a;
           border-bottom: 1px black solid;
@@ -124,6 +136,12 @@
           color: black;
           margin: 0 10px 0 5px;
         }
+      }
+
+      &-drop-placeholder {
+        height: 30px;
+        width: 150px;
+        background: grey;
       }
     }
 

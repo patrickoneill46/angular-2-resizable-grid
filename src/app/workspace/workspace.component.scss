@@ -3,3 +3,14 @@
   flex-flow: row wrap;
   position: relative;
 }
+
+.dragging-placeholder {
+  position: absolute;
+  background: white;
+  z-index: 500;
+  pointer-events: none;
+  display: flex;
+  box-sizing: border-box;
+  color: #065ed0;
+  font-family: Arial;
+}

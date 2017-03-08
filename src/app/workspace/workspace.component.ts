@@ -1,9 +1,9 @@
 import { Component, OnInit, ElementRef, HostListener, Input, Output, EventEmitter } from '@angular/core';
-import { DragulaService } from 'ng2-dragula';
 
 import { Subject } from 'rxjs/Subject';
 
 import { WorkspaceService } from '../workspace.service';
+import { DragDropService } from '../drag-drop.service';
 
 @Component({
   selector: 'workspace',
@@ -27,7 +27,7 @@ export class WorkspaceComponent implements OnInit {
   constructor(
     private ref: ElementRef,
     private workspaceService: WorkspaceService,
-    private dragulaService: DragulaService
+    private dragDropService: DragDropService
   ) {
     this.workspacePanels = [];
     this.mouseMoveObs = new Subject();
@@ -40,34 +40,27 @@ export class WorkspaceComponent implements OnInit {
     this.workspaceService.componentSelectorActive.subscribe(state => this.componentSelectorActive = state);
     this.setWorkspaceDimensions();
 
-    this.dragulaService.setOptions(this.dragulaBag, {
-      removeOnSpill: true
-    });
+    this.dragDropService.componentDroppedOutsidePanel.subscribe(config => {
 
-    this.dragulaService.remove.subscribe(event => {
+      let maxLeft = this.dimensions.width - (config.panelDimensions.width / 100 * this.dimensions.width);
+      let minLeft = 0;
 
-      let el = event[1];
-      let panel = this.workspacePanels.find(panel => panel.id === el.dataset.panelId);
-      let component = panel.components.find(component => component.id === el.dataset.componentId);
+      let maxTop = this.dimensions.height - (config.panelDimensions.height / 100 * this.dimensions.height);
+      let minTop = 0;
 
-      let componentIndex = panel.components.indexOf(component);
-      if (componentIndex !== -1) {
-        panel.components.splice(componentIndex, 1);
-      }
+      let left = Math.max(minLeft, Math.min(config.left, maxLeft));
+      let top = Math.max(minTop, Math.min(config.top - this.dimensions.top, maxTop));
 
-      if (!panel.components.length) {
-        this.workspacePanels.splice(this.workspacePanels.indexOf(panel), 1);
-      }
-
-      this.createNewPanelWithCompoonent(Object.assign({}, component));
-    });
-
-    this.dragulaService.dropModel.subscribe(event => {
-      let panel = this.workspacePanels.find(panel => panel.id === event[1].dataset.panelId);
-      if (!panel.components.length) {
-        this.workspacePanels.splice(this.workspacePanels.indexOf(panel), 1);
-        this.saveActiveWorkspace();
-      }
+      this.createNewPanelWithCompoonent({
+        componentId: config.component.componentId,
+        type: config.component.type,
+        header: config.component.header
+      }, {
+        height: config.panelDimensions.height,
+        width: config.panelDimensions.width,
+        top: top / this.dimensions.height * 100,
+        left: left / this.dimensions.width * 100
+      })
     });
   }
 
@@ -76,9 +69,9 @@ export class WorkspaceComponent implements OnInit {
     this.setWorkspaceDimensions();
   }
 
-  @HostListener('window:mousemove', ['$event.clientX', '$event.clientY'])
-  onMouseMove(mouseX: number, mouseY: number): void {
-    this.mouseMoveObs.next({ mouseX, mouseY });
+  @HostListener('window:mousemove', ['$event.clientX', '$event.clientY', '$event.offsetX', '$event.offsetY', '$event.target'])
+  onMouseMove(mouseX: number, mouseY: number, offsetX: number, offsetY: number, target: HTMLElement): void {
+    this.mouseMoveObs.next({ mouseX, mouseY, offsetX, offsetY, target });
   }
 
   @HostListener('window:mouseup', ['$event'])
@@ -153,17 +146,18 @@ export class WorkspaceComponent implements OnInit {
     }
   }
 
-  private createNewPanelWithCompoonent(component) {
+  private createNewPanelWithCompoonent(component, dimensions = {
+      height: 40,
+      width: 40,
+      top: 20,
+      left: 20
+    }
+  ) {
 
     let panelId = 'panel-' + Math.random();
 
     this.workspacePanels.push({
-      dimensions: {
-        height: 40,
-        width: 40,
-        top: 20,
-        left: 20
-      },
+      dimensions,
       id: panelId,
       components: [
         component

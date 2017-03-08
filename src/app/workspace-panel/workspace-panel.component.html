@@ -1,35 +1,44 @@
-<div class="resize-handle n" (mousedown)="resizeStart($event, null, 'n')" (mouseup)="resizeEnd()"></div>
-<div class="resize-handle s" (mousedown)="resizeStart($event, null, 's')" (mouseup)="resizeEnd()"></div>
-<div class="resize-handle e" (mousedown)="resizeStart($event, 'e', null)" (mouseup)="resizeEnd()"></div>
-<div class="resize-handle w" (mousedown)="resizeStart($event, 'w', null)" (mouseup)="resizeEnd()"></div>
-<div class="resize-handle nw" (mousedown)="resizeStart($event, 'w', 'n')" (mouseup)="resizeEnd()"></div>
-<div class="resize-handle ne" (mousedown)="resizeStart($event, 'e', 'n')" (mouseup)="resizeEnd()"></div>
-<div class="resize-handle sw" (mousedown)="resizeStart($event, 'w', 's')" (mouseup)="resizeEnd()"></div>
-<div class="resize-handle se" (mousedown)="resizeStart($event, 'e', 's')" (mouseup)="resizeEnd()"></div>
+<div class="resize-handle n" (mousedown)="resizeStart($event, null, 'n')"></div>
+<div class="resize-handle s" (mousedown)="resizeStart($event, null, 's')"></div>
+<div class="resize-handle e" (mousedown)="resizeStart($event, 'e', null)"></div>
+<div class="resize-handle w" (mousedown)="resizeStart($event, 'w', null)"></div>
+<div class="resize-handle nw" (mousedown)="resizeStart($event, 'w', 'n')"></div>
+<div class="resize-handle ne" (mousedown)="resizeStart($event, 'e', 'n')"></div>
+<div class="resize-handle sw" (mousedown)="resizeStart($event, 'w', 's')"></div>
+<div class="resize-handle se" (mousedown)="resizeStart($event, 'e', 's')"></div>
 <div
   class="workspace-item--header"
-  draggable
+  [ngClass]="{ 'dropping': panelId === dragDropService.dropPanelId }"
+  drag-position
   (dragStartEvent)="onDragStart($event)"
   (dragEvent)="onDrag($event)"
   (dragEndEvent)="onDragEnd($event)"
+  (mouseenter)="onMouseEnter($event)"
+  (mouseleave)="onMouseLeave($event)"
+  drop-container="true"
   >
   <div
     class="workspace-item--header-draggable-container"
-    [dragula]='"bag-one"'
-    [dragulaModel]="components"
   >
     <div
       class="workspace-item--header-draggable-item"
-      *ngFor="let component of components"
+      *ngFor="let component of components; let i = index"
+      draggable="true"
+      (mouseover)="handleHeaderMouseOver($event, i)"
+      (mouseleave)="handleHeaderMouseLeave($event, i)"
+      (mousedown)="handleHeaderMouseDown($event, i)"
       [ngClass]="{ 'active': component.id === activeComponentId }"
       (click)="showComponent(component.id)"
       [attr.data-component-id]="component.id"
       [attr.data-panel-id]="panelId"
+      [style.transform]="i >= dragHeaderIndex ? dragHeaderTransform : ''"
       >
       {{ component.header }}
-      <div class="workspace-item--header-draggable-item--destroy" (click)="destroyComponent(component.id, component.type)">
+      <div class="workspace-item--header-draggable-item--destroy" (click)="destroyComponent(component.id, component.type)" (mousedown)="$event.stopPropagation()">
         x
       </div>
+    </div>
+    <div class="workspace-item--header-drop-placeholder" *ngIf="dragHeaderIndex === components.length - 1">
     </div>
   </div>
   <div class="workspace-item--destroy" (click)="destroyPanel()">

@@ -12,6 +12,7 @@ import {
   ComponentFactoryResolver
 } from '@angular/core';
 import { DragulaService } from 'ng2-dragula';
+import { DragDropService } from '../drag-drop.service';
 
 import { WatchlistComponent } from '../watchlist/watchlist.component';
 import { ChartComponent } from '../chart/chart.component';
@@ -29,8 +30,8 @@ import { Subscription } from 'rxjs/Subscription';
     '[style.width]': 'style.width',
     '[style.left]': 'style.left',
     '[style.top]': 'style.top',
-    '[style.minHeight]': 'minHeight',
-    '[style.minWidth]': 'minWidth',
+    '[style.minHeight.px]': 'minHeight',
+    '[style.minWidth.px]': 'minWidth',
     '[style.transform]': 'transform',
   }
 })
@@ -53,6 +54,7 @@ export class WorkspacePanelComponent implements OnInit {
   private draggingPanel: boolean = false;
   private mouseMoveSub: Subscription;
   private mouseUpSub: Subscription;
+  private dragOverSub: Subscription;
 
   style: any = {};
   transform: string;
@@ -68,18 +70,12 @@ export class WorkspacePanelComponent implements OnInit {
   };
   minHeight: number = 150;
   minWidth: number = 300;
+  dragHeaderIndex: number;
+  dragHeaderTransform: string;
 
   @ViewChild('dynamicComponentContainer', { read: ViewContainerRef }) dynamicComponentContainer: ViewContainerRef;
 
-  constructor(private dragulaService: DragulaService, private resolver: ComponentFactoryResolver) {
-
-    dragulaService.drag.subscribe(event => {
-      this.onDragPanelHeader(event.slice(1));
-    });
-
-    dragulaService.dragend.subscribe(event => {
-      this.onFinishDragPanelHeader();
-    });
+  constructor(private dragDropService: DragDropService, private resolver: ComponentFactoryResolver) {
   }
 
   // component: Class for the component you want to create
@@ -119,11 +115,162 @@ export class WorkspacePanelComponent implements OnInit {
     this.active = this.initalConfig.active;
     this.components = this.initalConfig.components;
     this.showComponent(this.initalConfig.activeComponentId || this.components[0].id);
+    this.dragDropService.componentDroppedInsidePanel.subscribe(config => {
+
+      if (this.panelId === config.panel) {
+
+        if (this.panelId === config.previousPanel) {
+          this.updateComponentHeaderIndex(config);
+        } else {
+          this.addComponent({
+            id: config.component.id,
+            header: config.component.header,
+            type: config.component.type,
+          }, config.index);
+        }
+      } else if (this.panelId === config.previousPanel) {
+        this.destroyComponent(config.component.id);
+      }
+      this.dragHeaderTransform = null;
+    });
+
+    this.dragDropService.componentDroppedOutsidePanel.subscribe(config => {
+
+      if (this.panelId === config.panelId) {
+        this.destroyComponent(config.component.id);
+      }
+    });
+  }
+
+  handleHeaderMouseDown($event, headerIndex) {
+
+    $event.stopPropagation();
+    $event.preventDefault();
+    let headerEl = $event.target;
+    let firstTime = true;
+
+    this.mouseMoveSub = this.mouseMoveObs.subscribe(event => {
+
+      if (firstTime) {
+        this.handleHeaderDragStart($event);
+        this.dragDropService.setDraggedOverPanel(this.panelId, headerIndex);
+        firstTime = false;
+        this.dragHeaderIndex = headerIndex;
+        this.dragHeaderTransform = `translate(${this.dragDropService.getDraggingHeaderWidth()}px)`;
+      }
+      this.dragDropService.handleDrag(event.mouseX, event.mouseY - this.workspaceDimensions.top);
+      headerEl.classList.add('dragging');
+    });
+
+    this.mouseUpSub = this.mouseUpObs.subscribe(event => {
+
+      this.mouseMoveSub.unsubscribe();
+      this.mouseUpSub.unsubscribe();
+      if (this.dragOverSub) {
+        this.dragOverSub.unsubscribe();
+      }
+
+      if (this.dragDropService.isDragging) {
+        this.handleHeaderDragEnd(event, headerEl);
+      };
+    });
+  }
+
+  handleHeaderDragStart($event) {
+
+    let component = this.components.find(component => component.id === $event.target.dataset.componentId);
+
+    let data = {
+      component: {
+        id: component.id,
+        type: component.type,
+        header: component.header
+      },
+      panelId: this.panelId,
+      panelDimensions: {
+        height: this.relativeStyle.height,
+        width: this.relativeStyle.width
+      }
+    };
+    this.dragDropService.setDragStart(data, $event.clientX , $event.clientY - this.workspaceDimensions.top, $event.offsetX, $event.offsetY, $event.target);
+  }
+
+  handleHeaderMouseOver($event, headerIndex) {
+
+    if (this.dragDropService.isDragging) {
+
+      let headerWidth = $event.target.getBoundingClientRect().width;
+
+      this.dragOverSub = this.mouseMoveObs.subscribe(mouseMoveEvent => {
+
+        if ($event.target === mouseMoveEvent.target) {
+
+          this.dragHeaderIndex = headerIndex;
+          this.dragDropService.setDropHeaderIndex(headerIndex);
+          this.dragHeaderTransform = `translate(${this.dragDropService.getDraggingHeaderWidth()}px)`;
+          $event.target.classList.add('dragging-over');
+          if (mouseMoveEvent.offsetX < headerWidth / 2) {
+            this.dragDropService.setDropHeaderIndex(headerIndex);
+            this.dragHeaderIndex = headerIndex;
+          } else {
+            this.dragHeaderIndex = headerIndex + 1;
+            this.dragDropService.setDropHeaderIndex(headerIndex + 1);
+          }
+        }
+      });
+    }
+  }
+
+  handleHeaderMouseLeave($event) {
+
+    if (this.dragDropService.isDragging) {
+      $event.target.classList.remove('dragging-over');
+      $event.target.classList.remove('right');
+      $event.target.classList.remove('left');
+    }
+
+    if (this.dragOverSub) {
+      this.dragOverSub.unsubscribe();
+    }
+  }
+
+  handleHeaderDragEnd($event, draggedHeaderEl) {
+
+    draggedHeaderEl.classList.remove('dragging');
+    this.dragDropService.handleDragEnd($event);
+    this.dragHeaderTransform = null;
+    this.dragHeaderIndex = null;
+
+    if (this.dragOverSub) {
+      this.dragOverSub.unsubscribe();
+    }
+  }
+
+  handleDragEnter($event) {
+    this.dragDropService.setDraggedOverPanel(this.panelId);
   }
 
   onDragPanelHeader(args) {
     this.draggingHeaderItem = true;
     this.draggingPanel = false;
+  }
+
+  onMouseEnter($event) {
+
+    if (this.dragDropService.isDragging && $event.target.getAttribute('drop-container')) {
+      this.dragHeaderIndex = this.components.length;
+      this.setPanelActive();
+      this.dragDropService.setDraggedOverPanel(this.panelId, this.components.length);
+    }
+  }
+
+  onMouseLeave($event) {
+
+    if (this.dragDropService.isDragging && $event.target.getAttribute('drop-container')) {
+      this.dragDropService.setDraggedOverPanel(null, null);
+      this.dragHeaderIndex = null;
+      this.dragHeaderTransform = null;
+    }
   }
 
   onFinishDragPanelHeader() {
@@ -133,7 +280,7 @@ export class WorkspacePanelComponent implements OnInit {
   resizeStart($event, horizontalDirection, verticalDirection) {
 
     $event.preventDefault();
-    this.setStyleByPixels(this.pixelStyle);
+    this.setStyleByPixels(this.calculatePixelsStyle(this.relativeStyle));
     this.setPanelActive();
     let resizeStartCoords = {
       x: $event.clientX,
@@ -271,22 +418,44 @@ export class WorkspacePanelComponent implements OnInit {
 
   destroyComponent(componentId) {
 
-    let component = this.components.find(component => component.id = componentId);
+    let component = this.components.find(component => component.id === componentId);
     this.components.splice(this.components.indexOf(component), 1);
 
     if (this.components.length) {
+      this.showComponent(this.components[this.components.length - 1].id);
       this.handlePanelChanged();
     } else {
       this.destroyPanel();
     }
   }
 
-  addComponent(component) {
+  handleDestroyComponent($event, componentId) {
+    $event.stopPropagation();
+    $event.preventDefault();
+    this.destroyComponent(componentId);
+  }
 
+  addComponent(component, index?) {
+
+    if (!this.components.find(cmpt => cmpt.id === component.id)) {
+
+      if (!index) {
+        this.components.push(component);
+      } else {
+        this.components.splice(index, 0, component);
+      }
+      this.showComponent(component.id);
+    }
   }
 
   destroyPanel() {
     this.panelDestroyed.emit(this.panelId);
+  }
+
+  private updateComponentHeaderIndex(componentConfig) {
+
+    let previousIndex = this.components.findIndex(cmpt => cmpt.id === componentConfig.component.id);
+    this.components.splice(componentConfig.index, 0, this.components.splice(previousIndex, 1)[0]);
   }
 
   private calculateRelativeStyle(style) {

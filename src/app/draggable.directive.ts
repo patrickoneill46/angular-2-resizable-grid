@@ -1,7 +1,7 @@
 import { Directive, Input, OnInit, HostListener, EventEmitter, ElementRef, Renderer, Output } from '@angular/core';
 
 @Directive({
-  selector: '[draggable]'
+  selector: '[drag-position]'
 })
 export class DraggableDirective implements OnInit {
   private dragging = false;
