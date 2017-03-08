@@ -118,12 +118,16 @@ export class WorkspacePanelComponent implements OnInit {
     this.dragDropService.componentDroppedInsidePanel.subscribe(config => {
 
       if (this.panelId === config.panel) {
-        console.log('component dropped inside panel', this.panelId);
-        this.addComponent({
-          id: config.component.id,
-          header: config.component.header,
-          type: config.component.type,
-        }, config.index);
+
+        if (this.panelId === config.previousPanel) {
+          this.updateComponentHeaderIndex(config);
+        } else {
+          this.addComponent({
+            id: config.component.id,
+            header: config.component.header,
+            type: config.component.type,
+          }, config.index);
+        }
       } else if (this.panelId === config.previousPanel) {
         this.destroyComponent(config.component.id);
       }
@@ -446,6 +450,12 @@ export class WorkspacePanelComponent implements OnInit {
 
   destroyPanel() {
     this.panelDestroyed.emit(this.panelId);
+  }
+
+  private updateComponentHeaderIndex(componentConfig) {
+
+    let previousIndex = this.components.findIndex(cmpt => cmpt.id === componentConfig.component.id);
+    this.components.splice(componentConfig.index, 0, this.components.splice(previousIndex, 1)[0]);
   }
 
   private calculateRelativeStyle(style) {

@@ -68,10 +68,8 @@ export class DragDropService {
         left: event.clientX - this.dragStart.offsetX,
         panelId: this.dragData.panelId
       });
-    } else if (this.dropPanelId === this.dragData.panelId) {
-      console.log('same panel');
     } else {
-      console.log('dropped inside panel');
+      console.log('dropped inside panel', this.dropPanelId);
       this.componentDroppedInsidePanel.emit({component: this.dragData.component, panel: this.dropPanelId, previousPanel: this.dragData.panelId, index: this.dropPanelComponentIndex})
     }
 
